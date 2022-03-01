@@ -16,7 +16,14 @@ const {
   CTF_CDA_ACCESS_TOKEN,
 } = process.env
 require('dotenv').config()
-const routes = JSON.parse(fs.readFileSync('assets/json/routes.json'))
+
+// route情報の取得
+const administrativefinancial = JSON.parse(
+  fs.readFileSync('assets/routes/administrativefinancial_routes.json')
+)
+const agriculture = JSON.parse(
+  fs.readFileSync('assets/routes/agriculture_routes.json')
+)
 
 const config: NuxtConfig = {
   ssr: true,
@@ -144,15 +151,32 @@ const config: NuxtConfig = {
     'nuxt-leaflet',
     '@nuxtjs/sitemap',
   ],
+  // sitemap: {
+  //   path: '/sitemap.xml',
+  //   hostname: 'https://statistics-hyogo.com',
+  //   cacheTime: 1000 * 60 * 30,
+  //   gzip: true,
+  //   generate: false,
+  //   routes() {
+  //     return routes
+  //   },
+  // },
   sitemap: {
-    path: '/sitemap.xml',
     hostname: 'https://statistics-hyogo.com',
-    cacheTime: 1000 * 60 * 30,
-    gzip: true,
-    generate: false,
-    routes() {
-      return routes
-    },
+    sitemaps: [
+      {
+        path: '/administrativefinancial.xml',
+        routes: administrativefinancial,
+        // gzip: true,
+        // generate: false,
+      },
+      {
+        path: '/agriculture.xml',
+        routes: agriculture,
+        // gzip: true,
+        // generate: false,
+      },
+    ],
   },
   highcharts: {},
   axios: {
