@@ -86,14 +86,21 @@ import {
   PropType,
   useContext,
   useFetch,
+  inject,
 } from '@nuxtjs/composition-api'
 import { useEstatPrefRankChart } from '@/composition/useEstatPrefRankChart'
 import { useEstatApi } from '@/composition/useEstatApi'
 import { useGeojson } from '@/composition/useGeojson'
-import { EstatSeries, EstatState, EstatTimes } from '~/types/estat'
-import { usePrefecture } from '~/composition/usePrefecture'
+import {
+  EstatResponse,
+  EstatSeries,
+  EstatState,
+  EstatTimes,
+} from '~/types/estat'
 import { useTotalPopulation } from '~/composition/useTotalPopulation'
 import { useTotalArea } from '~/composition/useTotalArea'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { convertPrefCodeToCode } from '~/composition/utils/formatResas'
 
 // MapChart
 const MapChart = () => {
@@ -113,7 +120,8 @@ export default defineComponent({
   },
   setup(props) {
     // 都道府県リストの取得
-    const { prefList } = usePrefecture()
+    const { getCurrentPrefList } = inject(StateKey) as GlobalState
+    const prefList = getCurrentPrefList()
 
     // reactive値
     const estatResponse = ref<EstatResponse>()
@@ -126,13 +134,12 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       // estat-APIの取得
       const params = Object.assign({}, props.estatState.params)
-      params.cdArea = prefList.value.map(
-        (d) => ('0000000000' + d.prefCode).slice(-2) + '000'
-      )
+      params.cdArea = prefList.map((d) => convertPrefCodeToCode(d.prefCode))
       estatResponse.value = await useEstatApi($axios, params).getData()
 
       // geojsonの取得
-      prefMap.value = await useGeojson($axios).prefMap.value
+      const { getPrefMap } = useGeojson($axios)
+      prefMap.value = await getPrefMap()
 
       totalPopulationData.value = await useTotalPopulation(
         $axios

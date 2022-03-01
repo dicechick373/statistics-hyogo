@@ -9,7 +9,7 @@ import { EstatState } from '@/types/estat'
 export default defineComponent({
   setup() {
     // cardコンポーネントの設定
-    const cardComponent = 'estat-column-card'
+    const cardComponent = 'estat-column-card-all-break'
 
     // State
     const estatState: EstatState = {

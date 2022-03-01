@@ -14,12 +14,24 @@
                 "cardId": "total-area"
               },
               {
+                "cardTitle": "総面積ランキング",
+                "cardId": "total-area-rank"
+              },
+              {
                 "cardTitle": "可住地面積",
                 "cardId": "habitable-area"
               },
               {
+                "cardTitle": "可住地面積ランキング",
+                "cardId": "habitable-area-rank"
+              },
+              {
                 "cardTitle": "評価総地積",
                 "cardId": "evaluation-total-cadastral"
+              },
+              {
+                "cardTitle": "評価総地積ランキング",
+                "cardId": "evaluation-total-cadastral-rank"
               }
             ]
           },
@@ -32,8 +44,16 @@
                 "cardId": "nature-park"
               },
               {
+                "cardTitle": "自然公園面積ランキング",
+                "cardId": "nature-park-rank"
+              },
+              {
                 "cardTitle": "自然環境保全地域面積",
                 "cardId": "natural-environment-conservation-area"
+              },
+              {
+                "cardTitle": "自然環境保全地域面積ランキング",
+                "cardId": "natural-environment-conservation-area-rank"
               }
             ]
           },
@@ -60,6 +80,10 @@
               {
                 "cardTitle": "総面積",
                 "cardId": "total-area"
+              },
+              {
+                "cardTitle": "総面積ランキング",
+                "cardId": "total-area-rank"
               }
             ]
           }
@@ -130,8 +154,16 @@
                 "cardId": "household"
               },
               {
+                "cardTitle": "一般世帯数ランキング",
+                "cardId": "household-rank"
+              },
+              {
                 "cardTitle": "母子世帯数",
                 "cardId": "single-mother-household"
+              },
+              {
+                "cardTitle": "母子世帯数ランキング",
+                "cardId": "single-mother-household-rank"
               }
             ]
           },
@@ -236,6 +268,10 @@
               {
                 "cardTitle": "労働力人口",
                 "cardId": "labor-force-population"
+              },
+              {
+                "cardTitle": "労働力人口ランキング",
+                "cardId": "labor-force-population-rank"
               }
             ]
           }

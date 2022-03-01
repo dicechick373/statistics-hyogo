@@ -1,11 +1,11 @@
 <template>
   <v-app class="app">
-    <v-overlay :value="loading" color="#F8F9FA" opacity="1" z-index="9999">
+    <!-- <v-overlay :value="loading" color="#F8F9FA" opacity="1" z-index="9999">
       <div class="loader">
         <img src="/logo.svg" alt="兵庫県" />
         <scale-loader color="#01A0C7" />
       </div>
-    </v-overlay>
+    </v-overlay> -->
     <div v-if="hasNavigation" class="appContainer">
       <div class="naviContainer">
         <side-navigation
@@ -37,14 +37,18 @@ import {
   onMounted,
   reactive,
   toRef,
-  // inject,
   useMeta,
   useRoute,
   computed,
   provide,
+  inject,
 } from '@nuxtjs/composition-api'
 import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
-import { useGlobalState, StateKey } from '@/composition/useGlobalState'
+import {
+  useGlobalState,
+  StateKey,
+  GlobalState,
+} from '@/composition/useGlobalState'
 
 type LocalData = {
   hasNavigation: boolean
@@ -60,8 +64,8 @@ export default defineComponent({
   setup() {
     // provide
     provide(StateKey, useGlobalState())
-    // const State = inject(StateKey)
-    // State.setState()
+    const { setInitState } = inject(StateKey) as GlobalState
+    setInitState()
 
     const data = reactive<LocalData>({
       hasNavigation: true,

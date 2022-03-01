@@ -6,13 +6,28 @@ import { NuxtConfig } from '@nuxt/types'
  **NuxtConfigのenv: {}に定義すること
  */
 const environment = process.env.NODE_ENV || 'development'
-const { PREF_CODE, API_KEY, ESTAT_APPID, GOOGLE_ANALYTICS_ID, BASE_URL } =
-  process.env
+const {
+  PREF_CODE,
+  API_KEY,
+  ESTAT_APPID,
+  GOOGLE_ANALYTICS_ID,
+  BASE_URL,
+  CTF_SPACE_ID,
+  CTF_CDA_ACCESS_TOKEN,
+} = process.env
 require('dotenv').config()
-const routes = JSON.parse(fs.readFileSync('assets/json/routes.json'))
+
+// route情報の取得
+const administrativefinancial = JSON.parse(
+  fs.readFileSync('assets/routes/administrativefinancial_routes.json')
+)
+const agriculture = JSON.parse(
+  fs.readFileSync('assets/routes/agriculture_routes.json')
+)
 
 const config: NuxtConfig = {
-  target: 'static',
+  ssr: true,
+  target: 'server',
   /*
    ** Headers of the page
    */
@@ -20,12 +35,6 @@ const config: NuxtConfig = {
     htmlAttrs: {
       prefix: 'og: http://ogp.me/ns#',
     },
-    // script: [
-    //   {
-    //     'data-ad-client': 'ca-pub-4511811306180988',
-    //     src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-    //   },
-    // ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -94,10 +103,6 @@ const config: NuxtConfig = {
       ssr: true,
     },
     {
-      src: '@/plugins/estat',
-      ssr: true,
-    },
-    {
       src: '@/plugins/highcharts-vue',
       mode: 'client',
     },
@@ -145,19 +150,33 @@ const config: NuxtConfig = {
     '@nuxtjs/proxy',
     'nuxt-leaflet',
     '@nuxtjs/sitemap',
-    // ['@nuxtjs/google-adsense', { id: 'ca-pub-4511811306180988' }],
-    ['@nuxtjs/google-gtag'],
-    ['nuxt-canonical', { baseUrl: 'https://statistics-hyogo.com' }],
   ],
+  // sitemap: {
+  //   path: '/sitemap.xml',
+  //   hostname: 'https://statistics-hyogo.com',
+  //   cacheTime: 1000 * 60 * 30,
+  //   gzip: true,
+  //   generate: false,
+  //   routes() {
+  //     return routes
+  //   },
+  // },
   sitemap: {
-    path: '/sitemap.xml',
     hostname: 'https://statistics-hyogo.com',
-    cacheTime: 1000 * 60 * 30,
-    gzip: true,
-    generate: false,
-    routes() {
-      return routes
-    },
+    sitemaps: [
+      {
+        path: '/administrativefinancial.xml',
+        routes: administrativefinancial,
+        // gzip: true,
+        // generate: false,
+      },
+      {
+        path: '/agriculture.xml',
+        routes: agriculture,
+        // gzip: true,
+        // generate: false,
+      },
+    ],
   },
   highcharts: {},
   axios: {
@@ -197,10 +216,6 @@ const config: NuxtConfig = {
       families: ['Roboto:100,300,400,500,700,900&display=swap'],
     },
   },
-  'google-gtag': {
-    id: 'G-0ENS8E4461', // サイトのID
-    debug: false, // 開発環境でも表示したい場合
-  },
   /*
    ** @nuxtjs/gtm config
    */
@@ -210,7 +225,6 @@ const config: NuxtConfig = {
     enabled: true,
   },
   build: {
-    // vendor: ['@/plugins/highcharts-vue'],
     postcss: {
       preset: {
         autoprefixer: {
@@ -239,14 +253,14 @@ const config: NuxtConfig = {
     start_url: '/',
     splash_pages: null,
   },
-  generate: {
-    interval: 100,
-    crawler: false,
-    concurrency: 1,
-    routes() {
-      return routes
-    },
-  },
+  // generate: {
+  //   interval: 50,
+  //   crawler: false,
+  //   concurrency: 10,
+  //   routes() {
+  //     return routes
+  //   },
+  // },
   // /*
   // ** hot read configuration for docker
   // */
@@ -255,9 +269,14 @@ const config: NuxtConfig = {
       poll: true,
     },
   },
-  env: { PREF_CODE, API_KEY, ESTAT_APPID, GOOGLE_ANALYTICS_ID, BASE_URL },
-  router: {
-    // middleware: 'vuex',
+  env: {
+    PREF_CODE,
+    API_KEY,
+    ESTAT_APPID,
+    GOOGLE_ANALYTICS_ID,
+    BASE_URL,
+    CTF_SPACE_ID,
+    CTF_CDA_ACCESS_TOKEN,
   },
   components: [
     {
