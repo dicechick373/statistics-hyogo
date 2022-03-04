@@ -284,6 +284,9 @@ const config: NuxtConfig = {
       pathPrefix: false,
     },
   ],
+  googleAnalytics: {
+    id: 'UA-XXX-X',
+  },
 }
 
 export default config
