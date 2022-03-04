@@ -126,7 +126,7 @@ const config: NuxtConfig = {
         typeCheck: false,
       },
     ],
-    '@nuxtjs/google-analytics',
+    // '@nuxtjs/google-analytics',
     '@nuxtjs/gtm',
     'nuxt-purgecss',
   ],

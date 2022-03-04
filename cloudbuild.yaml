@@ -1,0 +1,19 @@
+steps:
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: Deploy
+    entrypoint: gcloud
+    args:
+      - app
+      - deploy
+      - "--appyaml=${_APP_YAML}"
+      - "--project=${PROJECT_ID}"
+      - "--version=${_VERSION}"
+      - "--quiet"
+
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _APP_YAML: "app.yaml"
+  _VERSION: "${COMMIT_SHA}"
+tags:
+  - gcp-cloud-build-deploy-gae
