@@ -3,7 +3,7 @@ name: Google App Engine Deploy
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -23,10 +23,6 @@ jobs:
           service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
           # The service account key which will be used for authentication.
           service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
-      - name: Run tests with ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: npm install, build
         run: |
           npm install
@@ -34,11 +30,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.FIREBASE_APIKEY }}
           AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
-          DATABASEURL: ${{ secrets.FIREBASE_DATABASEURL }}
-          PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
-          STORAGEBUCKET: ${{ secrets.FIREBASE_STORAGEBUCKET }}
-          MESSAGINGSENDERID: ${{ secrets.FIREBASE_MESSAGINGSENDERID }}
-          APPID: ${{ secrets.FIREBASE_APPID }}
-          MEASUREMENTID: ${{ secrets.FIREBASE_MEASUREMENTID }}
       - name: GAE deploy
         run: gcloud app deploy app.yaml --project {プロジェクト名}
