@@ -10,7 +10,11 @@ steps:
           ESTAT_APPID: $_ESTAT_APPID
           RESAS_API_KEY: $_RESAS_API_KEY
         EOF
-  - name: node
+  - name: node:14
+    entrypoint: yarn
+    args:
+      - 'install'
+  - name: node:14
     entrypoint: yarn
     args:
       - 'build'
