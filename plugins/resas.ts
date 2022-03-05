@@ -4,7 +4,7 @@ export default function ({ $axios, $config }, inject) {
       common: {
         Accept: 'application/json',
       },
-      'X-API-KEY': $config.RESAS_API_KEY,
+      'X-API-KEY': $config.RESAS_RESAS_API_KEY,
       'Content-Type': 'application/json',
     },
     data: {},

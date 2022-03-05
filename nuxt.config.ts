@@ -7,8 +7,7 @@ import { NuxtConfig } from '@nuxt/types'
  */
 const environment = process.env.NODE_ENV || 'development'
 const {
-  PREF_CODE,
-  API_KEY,
+  RESAS_API_KEY,
   ESTAT_APPID,
   GOOGLE_ANALYTICS_ID,
   BASE_URL,
@@ -270,8 +269,7 @@ const config: NuxtConfig = {
     },
   },
   env: {
-    PREF_CODE,
-    API_KEY,
+    RESAS_API_KEY,
     ESTAT_APPID,
     GOOGLE_ANALYTICS_ID,
     BASE_URL,

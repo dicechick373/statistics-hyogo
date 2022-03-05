@@ -15,7 +15,7 @@ export const useResasApi = (axios) => {
         common: {
           Accept: 'application/json',
         },
-        'X-API-KEY': process.env.API_KEY,
+        'X-API-KEY': process.env.RESAS_API_KEY,
         'Content-Type': 'application/json',
       },
       mode: 'cors',

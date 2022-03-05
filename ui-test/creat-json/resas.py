@@ -30,7 +30,7 @@ PREF_CODE = os.getenv('PREF_CODE')
 # 環境変数からRESAS-API-KEYを取得
 from dotenv import load_dotenv
 load_dotenv()
-API_KEY = os.getenv('API_KEY')
+RESAS_API_KEY = os.getenv('RESAS_API_KEY')
 
 def setResasParams(params,type):
     p = params
@@ -49,7 +49,7 @@ def getResasResponse(contents,prefCode,cityCode):
     url = 'https://opendata.resas-portal.go.jp/' + contents['resasUrl'] + '?'
     url += urllib.parse.urlencode(params)
 
-    req = urllib.request.Request(url, headers={'X-API-KEY': API_KEY})
+    req = urllib.request.Request(url, headers={'X-API-KEY': RESAS_API_KEY})
     with urllib.request.urlopen(req) as response:
         res = json.loads(response.read().decode())
 
