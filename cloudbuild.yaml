@@ -28,7 +28,7 @@ steps:
       - '--project=${PROJECT_ID}'
       - '--version=${_VERSION}'
       - '--quiet'
-
+timeout: 1200s
 options:
   substitutionOption: ALLOW_LOOSE
 substitutions:

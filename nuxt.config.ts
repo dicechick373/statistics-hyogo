@@ -224,6 +224,7 @@ const config: NuxtConfig = {
     enabled: true,
   },
   build: {
+    parallel: true,
     postcss: {
       preset: {
         autoprefixer: {
