@@ -186,14 +186,12 @@ const config: NuxtConfig = {
       pathRewrite: {
         '^/json/': '/',
       },
-      followRedirects: true,
     },
     '/api/': {
       target: 'https://opendata.resas-portal.go.jp/api',
       pathRewrite: {
         '^/api/': '/',
       },
-      followRedirects: true,
     },
   },
   /*
