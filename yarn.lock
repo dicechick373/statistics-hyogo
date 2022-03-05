@@ -1731,6 +1731,11 @@
     "eslint-plugin-unicorn" "^21.0.0"
     "eslint-plugin-vue" "^6.2.2"
 
+"@nuxtjs/google-gtag@^1.0.4":
+  "integrity" "sha512-0Xgbx1uQ9pKeV2QdU9xoxJVdgH66qyGQJ0l8pzVxz5X476qvJunj6fbcjWk0gT+MEX/VOAhfT/zw0Z1z9q9oNg=="
+  "resolved" "https://registry.npmjs.org/@nuxtjs/google-gtag/-/google-gtag-1.0.4.tgz"
+  "version" "1.0.4"
+
 "@nuxtjs/gtm@2.4.0":
   "integrity" "sha512-Of5KuBBFwRjyJ6AuRrIQsh8J6ksIN2UegJDE8nBiTAanbwQBsAJ0hZibV9SjhKdGvGvWpbShQ4yR2bmQgY6XKA=="
   "resolved" "https://registry.npmjs.org/@nuxtjs/gtm/-/gtm-2.4.0.tgz"
