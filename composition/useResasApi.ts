@@ -22,7 +22,7 @@ export const useResasApi = (axios) => {
       withCredentials: true,
       data: {},
     })
-    resasApi.setBaseURL(`${process.env.BASE_URL}/api/`)
+    resasApi.setBaseURL(`${process.env.SITE_URL}/api/`)
 
     state.isLoading = true
 

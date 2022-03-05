@@ -28,8 +28,8 @@ export const useEstatApi = (axios, params) => {
       withCredentials: true,
       data: {},
     })
-    // api.setBaseURL(`${process.env.BASE_URL}/json/`)
-    api.setBaseURL(`https://statistics-hyogo.com/json/`)
+    api.setBaseURL(`${process.env.SITE_URL}/json/`)
+    // api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
     state.isLoading = true
 
