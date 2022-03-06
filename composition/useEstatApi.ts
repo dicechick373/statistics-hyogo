@@ -28,10 +28,10 @@ export const useEstatApi = (axios, params) => {
       withCredentials: true,
       data: {},
     })
-    // api.setBaseURL(`${process.env.SITE_URL}/json/`)
-    api.setBaseURL(`https://statistics-hyogo.com/json/`)
+    api.setBaseURL(`${process.env.SITE_URL}/json/`)
+    // api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
-    console.log(process.env.SITE_URL)
+    // console.log(process.env.SITE_URL)
 
     // api.interceptors.request.use(request => {
     //   console.log('Starting Request: ', request)

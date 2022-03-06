@@ -28,6 +28,19 @@ steps:
       - '--project=${PROJECT_ID}'
       - '--version=${_VERSION}'
       - '--quiet'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - gcloud
+      - functions
+      - deploy
+      - seleniumSample
+      - --region=asia-northeast2
+      - --runtime=python39
+      - --source=functions/ogp-selenium/
+      - --trigger-http
+      - --allow-unauthenticated
+      - --entry-point seleniumSample
+      - --memory 1GB
 timeout: 1200s
 options:
   substitutionOption: ALLOW_LOOSE
