@@ -31,6 +31,18 @@ export const useEstatApi = (axios, params) => {
     api.setBaseURL(`${process.env.SITE_URL}/json/`)
     // api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
+    console.log(process.env.SITE_URL)
+
+    // api.interceptors.request.use(request => {
+    //   console.log('Starting Request: ', request)
+    //   return request
+    // })
+
+    // api.interceptors.response.use(response => {
+    //   console.log('Response: ', response)
+    //   return response
+    // })
+
     state.isLoading = true
 
     const res = await api.$get(url, { params })
