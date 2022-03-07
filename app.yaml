@@ -16,8 +16,8 @@ handlers:
     script: auto
     secure: always
 
-# includes:
-#   - secret.yaml
+includes:
+  - secret.yaml
 
 env_variables:
   HOST: '0.0.0.0'
