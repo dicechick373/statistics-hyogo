@@ -31,14 +31,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - id: 'deploy'
-        uses: 'google-github-actions/deploy-appengine@v0'
-
       - name: 'Setup Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
         with:
           project_id: '${{ secrets.GCP_PROJECT }}'
           service_account_key: '${{ secrets.GCP_SA_KEY }}'
+      
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-appengine@v0'
 
-      - name: 'Deploy to App Engine'
-        run: 'gcloud app deploy app.yaml --quiet --version v1'
+      # - name: 'Deploy to App Engine'
+      #   run: 'gcloud app deploy app.yaml --quiet --version v1'
