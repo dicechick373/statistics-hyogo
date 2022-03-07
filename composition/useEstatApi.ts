@@ -31,7 +31,7 @@ export const useEstatApi = (axios, params) => {
     // api.setBaseURL(`${process.env.SITE_URL}/json/`)
     api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
-    // console.log(process.env.SITE_URL)
+    console.log(process.env.ESTAT_APPID)
 
     api.interceptors.request.use((request) => {
       console.log('Starting Request: ', request)
