@@ -6,7 +6,7 @@ import { NuxtConfig } from '@nuxt/types'
  **NuxtConfigのenv: {}に定義すること
  */
 const environment = process.env.NODE_ENV || 'development'
-const { RESAS_API_KEY, ESTAT_APPID } = process.env
+const { RESAS_API_KEY, ESTAT_APPID, SITE_URL } = process.env
 require('dotenv').config()
 
 // route情報の取得
@@ -269,6 +269,7 @@ const config: NuxtConfig = {
   env: {
     RESAS_API_KEY,
     ESTAT_APPID,
+    SITE_URL,
   },
   components: [
     {
