@@ -21,7 +21,3 @@ handlers:
 
 env_variables:
   HOST: '0.0.0.0'
-  NODE_ENV: "production"
-  ESTAT_APPID: '724e5b90772a3e9289f41a253e4e7e32438f4fff'
-  RESAS_API_KEY: '02JYzLqUOfTNVfiTWjLlR2g0YwEQPQ7caYxcnZaZ'
-  SITE_URL: '02JYzLqUOfTNVfiTWjLlR2g0YwEQPQ7caYxcnZaZ'

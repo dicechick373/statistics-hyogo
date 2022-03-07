@@ -17,6 +17,8 @@ steps:
     entrypoint: yarn
     args:
       - 'build'
+    env:
+      - 'ESTAT_APPID=$_ESTAT_APPID'
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: Deploy
     entrypoint: gcloud

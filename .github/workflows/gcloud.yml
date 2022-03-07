@@ -1,0 +1,36 @@
+name: Google App Engine Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    env:
+      SITE_URL: ${{ secrets.SITE_URL }}
+      ESTAT_APPID: ${{ secrets.ESTAT_APPID }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
+      - run: npm run build
+      - run: npm run generate
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build
+
+      - name: 'Setup Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          project_id: '${{ env.PROJECT_ID }}'
+          service_account_key: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Deploy to App Engine'
+        run: 'gcloud app deploy app.yaml --quiet --no-promote --version v1'
