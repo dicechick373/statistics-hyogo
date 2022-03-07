@@ -6,7 +6,6 @@ steps:
       - |
         cat << EOF > secret.yaml
         env_variables:
-          SITE_URL: $_SITE_URL
           ESTAT_APPID: $_ESTAT_APPID
           RESAS_API_KEY: $_RESAS_API_KEY
         EOF
