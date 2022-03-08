@@ -31,17 +31,17 @@ export const useEstatApi = (axios, params) => {
     api.setBaseURL(`${process.env.SITE_URL}/json/`)
     // api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
-    console.log(process.env.ESTAT_APPID)
+    // console.log(process.env.ESTAT_APPID)
 
-    api.interceptors.request.use((request) => {
-      console.log('Starting Request: ', request)
-      return request
-    })
+    // api.interceptors.request.use((request) => {
+    //   console.log('Starting Request: ', request)
+    //   return request
+    // })
 
-    api.interceptors.response.use((response) => {
-      console.log('Response: ', response)
-      return response
-    })
+    // api.interceptors.response.use((response) => {
+    //   console.log('Response: ', response)
+    //   return response
+    // })
 
     state.isLoading = true
 

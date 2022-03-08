@@ -39,10 +39,14 @@ export default defineComponent({
 
     // メタ
     const url = 'https://statistics-hyogo.com'
+    const puppeteerFunction =
+      'https://asia-northeast2-primal-buttress-342908.cloudfunctions.net/puppeteerSample'
+
     const ogpImage = computed(() => {
-      return `${url}/ogp/_${govType}_${code}_${fieldId}_${menuId}_${cardId}_.png`
+      return `${puppeteerFunction}?url=${url}${route.value.path}?ogp=true`
     })
-    console.log(ogpImage)
+    // console.log(ogpImage)
+    // console.log(ogpImage)
     const { getCardTitle } = useContents()
     const ogpTitle = computed(() => {
       return `${getCardTitle.value(cardId)} | 統計で見る兵庫県のすがた`
