@@ -16,6 +16,39 @@ const administrativefinancial = JSON.parse(
 const agriculture = JSON.parse(
   fs.readFileSync('assets/routes/agriculture_routes.json')
 )
+const commercial = JSON.parse(
+  fs.readFileSync('assets/routes/commercial_routes.json')
+)
+const construction = JSON.parse(
+  fs.readFileSync('assets/routes/construction_routes.json')
+)
+const economy = JSON.parse(fs.readFileSync('assets/routes/economy_routes.json'))
+const educationsports = JSON.parse(
+  fs.readFileSync('assets/routes/educationsports_routes.json')
+)
+const energy = JSON.parse(fs.readFileSync('assets/routes/energy_routes.json'))
+const international = JSON.parse(
+  fs.readFileSync('assets/routes/international_routes.json')
+)
+const laborwage = JSON.parse(
+  fs.readFileSync('assets/routes/laborwage_routes.json')
+)
+const landweather = JSON.parse(
+  fs.readFileSync('assets/routes/landweather_routes.json')
+)
+const miningindustry = JSON.parse(
+  fs.readFileSync('assets/routes/miningindustry_routes.json')
+)
+const population = JSON.parse(
+  fs.readFileSync('assets/routes/population_routes.json')
+)
+const safetyenvironment = JSON.parse(
+  fs.readFileSync('assets/routes/safetyenvironment_routes.json')
+)
+const socialsecurity = JSON.parse(
+  fs.readFileSync('assets/routes/socialsecurity_routes.json')
+)
+const tourism = JSON.parse(fs.readFileSync('assets/routes/tourism_routes.json'))
 
 const config: NuxtConfig = {
   ssr: true,
@@ -158,16 +191,64 @@ const config: NuxtConfig = {
     hostname: 'https://statistics-hyogo.com',
     sitemaps: [
       {
-        path: '/administrativefinancial.xml',
+        path: '/sitemap_administrativefinancial.xml',
         routes: administrativefinancial,
-        // gzip: true,
-        // generate: false,
       },
       {
-        path: '/agriculture.xml',
+        path: '/sitemap_agriculture.xml',
         routes: agriculture,
-        // gzip: true,
-        // generate: false,
+      },
+      {
+        path: '/sitemap_commercial.xml',
+        routes: commercial,
+      },
+      {
+        path: '/sitemap_construction.xml',
+        routes: construction,
+      },
+      {
+        path: '/sitemap_economy.xml',
+        routes: economy,
+      },
+      {
+        path: '/sitemap_educationsports.xml',
+        routes: educationsports,
+      },
+      {
+        path: '/sitemap_energy.xml',
+        routes: energy,
+      },
+      {
+        path: '/sitemap_international.xml',
+        routes: international,
+      },
+      {
+        path: '/sitemap_laborwage.xml',
+        routes: laborwage,
+      },
+      {
+        path: '/sitemap_landweather.xml',
+        routes: landweather,
+      },
+      {
+        path: '/sitemap_miningindustry.xml',
+        routes: miningindustry,
+      },
+      {
+        path: '/sitemap_population.xml',
+        routes: population,
+      },
+      {
+        path: '/sitemap_safetyenvironment.xml',
+        routes: safetyenvironment,
+      },
+      {
+        path: '/sitemap_socialsecurity.xml',
+        routes: socialsecurity,
+      },
+      {
+        path: '/sitemap_tourism.xml',
+        routes: tourism,
       },
     ],
   },
