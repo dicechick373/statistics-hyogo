@@ -18,7 +18,7 @@ export const useChangeRouter = () => {
   // パスパラメータの取得
   const route = useRoute()
   const params = route.value.params
-  const { govType, fieldId, menuId } = params
+  const { govType, code, fieldId, menuId } = params
 
   // inject
   const {
@@ -43,6 +43,10 @@ export const useChangeRouter = () => {
       router.push(`/${govType}/${newCity.value.cityCode}/${fieldId}/${menuId}`)
     }
   })
+
+  const changeRouteByMenu = (menuId: string): void => {
+    router.push(`/${govType}/${code}/${currentFieldId.value}/${menuId}`)
+  }
 
   const changeRoute = (code: string): void => {
     const govType = convertCodeToGovType(code)
@@ -78,6 +82,7 @@ export const useChangeRouter = () => {
   return {
     changeRouterCity,
     changeRoute,
+    changeRouteByMenu,
     getSideNaviLink,
     getGovTabLink,
   }

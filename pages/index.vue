@@ -26,7 +26,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .v-slide-group__content {
   border-bottom: 1px solid $gray-2;
   background: $gray-5;

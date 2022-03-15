@@ -1,4 +1,10 @@
-import { computed, inject, useRoute } from '@nuxtjs/composition-api'
+import {
+  computed,
+  inject,
+  reactive,
+  toRefs,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from './useGlobalState'
 import contents from '~/assets/json/contentsSetting.json'
 
@@ -12,10 +18,10 @@ interface Menu {
   menuId: string
 }
 
-interface State {
-  fieldList: Field[]
-  menuList: Menu[]
-}
+// interface State {
+//   fieldList: Field[]
+//   menuList: Menu[]
+// }
 
 // Menuの初期値リスト
 const initMenuList = () => {
@@ -26,6 +32,10 @@ const initMenuList = () => {
       city: d.menu.city[0].menuId,
     }
   })
+}
+
+interface State {
+  currentMenu: Menu
 }
 
 export const useContents = () => {
@@ -48,10 +58,33 @@ export const useContents = () => {
   const menuList = computed(() => {
     const menu = contents.list.filter((f) => f.fieldId === fieldId)[0].menu
     if (govType === 'prefecture') {
-      return menu.prefecture
+      return menu.prefecture.map((d) => {
+        return {
+          menuId: d.menuId,
+          menuTitle: d.menuTitle,
+        }
+      })
     } else {
-      return menu.city
+      return menu.city.map((d) => {
+        return {
+          menuId: d.menuId,
+          menuTitle: d.menuTitle,
+        }
+      })
     }
+  })
+
+  // 選択中の統計項目
+  const setCurrentMenu = (menu: Menu): void => {
+    state.currentMenu = menu
+  }
+
+  const getMenu = (menuId: string): Menu => {
+    return menuList.value.find((f) => f.menuId === menuId)
+  }
+
+  const state = reactive<State>({
+    currentMenu: getMenu(menuId),
   })
 
   // 統計項目リンク SelectMenuで使用
@@ -101,11 +134,13 @@ export const useContents = () => {
   })
 
   return {
-    // ...toRefs(state),
+    ...toRefs(state),
     fieldList,
     menuList,
     // getInitMenuTitles,
     cardList,
+    // selectedMenu,
+    setCurrentMenu,
     getCardTitle,
     getMenuTitle,
     getInitMenuId,
