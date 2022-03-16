@@ -5,39 +5,22 @@ import {
   toRefs,
   useRoute,
 } from '@nuxtjs/composition-api'
+// import {
+//   getFieldList,
+//   getMenuList,
+//   getInitialMenu,
+// } from '@/composition/utils/contentful'
 import { GlobalState, StateKey } from './useGlobalState'
 import contents from '~/assets/json/contentsSetting.json'
-// import { getFieldList } from '@/composition/utils/contentful'
-
-interface Field {
-  fieldTitle: string
-  fieldId: string
-}
-
-interface Menu {
-  menuTitle: string
-  menuId: string
-}
-
-// Menuの初期値リスト
-// const initialMenuList = () => {
-//   return contents.list.map((d) => {
-//     return {
-//       fieldId: d.fieldId,
-//       prefecture: d.menu.prefecture[0].menuId,
-//       city: d.menu.city[0].menuId,
-//     }
-//   })
-// }
 
 const getInitMenu = (fieldId: string, govType: string): Menu => {
   // const checks = await content.getContentTypes()
-  // const test: Field[] = await getFieldList()
-  // console.log(test)
-  // console.log(checks)
-  // console.log(process.env.CTF_SPACE_ID)
-  // console.log(process.env.CTF_ACCESS_TOKEN)
-  // const menuList = contents.list.filter((f) => f.fieldId === fieldId)[0].menu
+  // const fieldList = await getFieldList()
+  // // console.log(fieldList)
+  // const menuList = await getMenuList('population', 'city')
+  // // console.log(menuList)
+  // const initialMenu = await getInitialMenu('population', 'city')
+  // console.log(initialMenu)
   return contents.list
     .filter((f) => f.fieldId === fieldId)[0]
     .menu[govType].map((d) => {
