@@ -45,12 +45,10 @@ export default defineComponent({
       return [
         {
           label: `都道府県の統計`,
-          govType: 'prefecture',
           path: getGovTabLink.value('prefecture'),
         },
         {
           label: `市区町村の統計`,
-          govType: 'city',
           path: getGovTabLink.value('city'),
         },
       ]

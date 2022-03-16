@@ -5,9 +5,7 @@ import {
   useAsync,
   useRoute,
   useRouter,
-  watch,
 } from '@nuxtjs/composition-api'
-// import { useContents } from '@/composition/useContents'
 import { getInitialMenuList } from '@/composition/utils/contentful'
 import {
   convertCodeToGovType,
@@ -32,11 +30,9 @@ export const useChangeRouter = () => {
     currentCity,
   } = inject(StateKey) as GlobalState
 
-  // console.log({ currentGovType, currentCode, currentPref, currentCity })
-
-  watch(currentGovType, () => {
-    // console.log({ currentGovType })
-  })
+  // 都道府県コード、市区町村コード
+  const prefCode = convertPrefCodeToCode(currentPref.value.prefCode)
+  const cityCode = currentCity.value.cityCode
 
   const router = useRouter()
 
@@ -57,28 +53,29 @@ export const useChangeRouter = () => {
     )
   }
 
+  // 統計項目（Menu）の初期値設定
+  const initialMenuList = useAsync(() => getInitialMenuList())
+  const initialMenu = (fieldId: string, govType: string) => {
+    return initialMenuList.value
+      .filter((f) => f.fieldId === fieldId)
+      .find((f) => f.govType === govType)
+  }
+
   // SideNavigationのリンク設定
-  const initialMenuList = useAsync(() => getInitialMenuList(govType))
   const getSideNaviLink = computed(() => {
     return function (fieldId: string) {
-      const initialMenu = initialMenuList.value.find(
-        (f) => f.fieldId === fieldId
-      )
-
       const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
-      return `${path}/${initialMenu?.menuId}`
+      const menuId = initialMenu(fieldId, govType).menuId
+      return `${path}/${menuId}`
     }
   })
 
-  const prefCode = convertPrefCodeToCode(currentPref.value.prefCode)
-  const cityCode = currentCity.value.cityCode
-
-  // 都道府県・市区町村タブのpath設定
+  // 都道府県・市区町村タブのリンク設定
   const getGovTabLink = computed(() => {
     return function (govType: string) {
-      return govType === 'prefecture'
-        ? `/prefecture/${prefCode}/${fieldId}/${menuId}`
-        : `/city/${cityCode}/${fieldId}/${menuId}`
+      const code = govType === 'city' ? cityCode : prefCode
+      const menuId = initialMenu(fieldId, govType).menuId
+      return `/${govType}/${code}/${fieldId}/${menuId}`
     }
   })
 

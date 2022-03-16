@@ -73,7 +73,7 @@ export const getMenuList = async (
  * 地方公共団体区分に合致する統計項目の初期値リストを取得する関数
  * @returns - Menu[]
  */
-export const getInitialMenuList = async (govType: GovType): Promise<Menu[]> => {
+export const getInitialMenu = async (govType: GovType): Promise<Menu[]> => {
   const menuList = await getMenuListAll()
 
   return menuList
@@ -93,11 +93,11 @@ export const getInitialMenuList = async (govType: GovType): Promise<Menu[]> => {
  * 統計項目の初期値リストを取得する関数（都道府県＋市区町村）
  * @returns - Menu[]
  */
-// export const getInitialMenuList = async (): Promise<Menu[]> => {
-//   const [prefecture, city] = await Promise.all([
-//     getInitialMenu('prefecture'),
-//     getInitialMenu('city'),
-//   ])
+export const getInitialMenuList = async (): Promise<Menu[]> => {
+  const [prefecture, city] = await Promise.all([
+    getInitialMenu('prefecture'),
+    getInitialMenu('city'),
+  ])
 
-//   return prefecture.concat(city)
-// }
+  return prefecture.concat(city)
+}
