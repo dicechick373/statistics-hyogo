@@ -6,7 +6,8 @@ import { NuxtConfig } from '@nuxt/types'
  **NuxtConfigのenv: {}に定義すること
  */
 const environment = process.env.NODE_ENV || 'development'
-const { RESAS_API_KEY, ESTAT_APPID, SITE_URL } = process.env
+const { RESAS_API_KEY, ESTAT_APPID, SITE_URL, CTF_SPACE_ID, CTF_ACCESS_TOKEN } =
+  process.env
 require('dotenv').config()
 
 // route情報の取得
@@ -122,7 +123,7 @@ const config: NuxtConfig = {
    */
   plugins: [
     { src: '@/plugins/composition-api', ssr: true },
-
+    { src: '@/plugins/contentful', ssr: true },
     {
       src: '@/plugins/topojson-client',
       ssr: true,
@@ -177,16 +178,6 @@ const config: NuxtConfig = {
     '@nuxtjs/sitemap',
     '@nuxtjs/google-gtag',
   ],
-  // sitemap: {
-  //   path: '/sitemap.xml',
-  //   hostname: 'https://statistics-hyogo.com',
-  //   cacheTime: 1000 * 60 * 30,
-  //   gzip: true,
-  //   generate: false,
-  //   routes() {
-  //     return routes
-  //   },
-  // },
   sitemap: {
     hostname: 'https://statistics-hyogo.com',
     sitemaps: [
@@ -331,14 +322,6 @@ const config: NuxtConfig = {
     start_url: '/',
     splash_pages: null,
   },
-  // generate: {
-  //   interval: 50,
-  //   crawler: false,
-  //   concurrency: 10,
-  //   routes() {
-  //     return routes
-  //   },
-  // },
   // /*
   // ** hot read configuration for docker
   // */
@@ -351,6 +334,8 @@ const config: NuxtConfig = {
     RESAS_API_KEY,
     ESTAT_APPID,
     SITE_URL,
+    CTF_SPACE_ID,
+    CTF_ACCESS_TOKEN,
   },
   components: [
     {

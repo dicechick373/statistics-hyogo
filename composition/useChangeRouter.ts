@@ -58,9 +58,10 @@ export const useChangeRouter = () => {
   const getSideNaviLink = computed(() => {
     return function (fieldId: string) {
       // console.log(currentCode.value)
-      const { getInitMenuId } = useContents()
+      const { initialMenu } = useContents()
       const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
-      const menuId = getInitMenuId.value(fieldId)
+      const menuId = initialMenu.value
+      // console.log(menuId)
       return currentGovType.value === 'prefecture'
         ? `${path}/${menuId.prefecture}`
         : `${path}/${menuId.city}`

@@ -7,6 +7,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from './useGlobalState'
 import contents from '~/assets/json/contentsSetting.json'
+// import { getFieldList } from '@/composition/utils/contentful'
 
 interface Field {
   fieldTitle: string
@@ -18,31 +19,45 @@ interface Menu {
   menuId: string
 }
 
-// interface State {
-//   fieldList: Field[]
-//   menuList: Menu[]
+// Menuの初期値リスト
+// const initialMenuList = () => {
+//   return contents.list.map((d) => {
+//     return {
+//       fieldId: d.fieldId,
+//       prefecture: d.menu.prefecture[0].menuId,
+//       city: d.menu.city[0].menuId,
+//     }
+//   })
 // }
 
-// Menuの初期値リスト
-const initMenuList = () => {
-  return contents.list.map((d) => {
-    return {
-      fieldId: d.fieldId,
-      prefecture: d.menu.prefecture[0].menuId,
-      city: d.menu.city[0].menuId,
-    }
-  })
+const getInitMenu = (fieldId: string, govType: string): Menu => {
+  // const checks = await content.getContentTypes()
+  // const test: Field[] = await getFieldList()
+  // console.log(test)
+  // console.log(checks)
+  // console.log(process.env.CTF_SPACE_ID)
+  // console.log(process.env.CTF_ACCESS_TOKEN)
+  // const menuList = contents.list.filter((f) => f.fieldId === fieldId)[0].menu
+  return contents.list
+    .filter((f) => f.fieldId === fieldId)[0]
+    .menu[govType].map((d) => {
+      return {
+        menuId: d.menuId,
+        menuTitle: d.menuTitle,
+      }
+    })
 }
 
 interface State {
   currentMenu: Menu
+  initialMenu: Menu
 }
 
 export const useContents = () => {
   // パスパラメータの取得
   const route = useRoute()
   const params = route.value.params
-  const { govType, code, fieldId, menuId } = params
+  const { govType, fieldId, menuId } = params
 
   // 統計分野リスト
   const fieldList = computed(() => {
@@ -85,22 +100,7 @@ export const useContents = () => {
 
   const state = reactive<State>({
     currentMenu: getMenu(menuId),
-  })
-
-  // 統計項目リンク SelectMenuで使用
-  const menuLinks = computed(() => {
-    return menuList.value.map((d) => {
-      return {
-        label: d.menuTitle,
-        path: `/${govType}/${code}/${fieldId}/${d.menuId}/`,
-      }
-    })
-  })
-
-  const getInitMenuId = computed(() => {
-    return function (fieldId: string) {
-      return initMenuList().find((f) => f.fieldId === fieldId)
-    }
+    initialMenu: getInitMenu(fieldId, govType),
   })
 
   // カードリスト
@@ -137,13 +137,10 @@ export const useContents = () => {
     ...toRefs(state),
     fieldList,
     menuList,
-    // getInitMenuTitles,
     cardList,
-    // selectedMenu,
     setCurrentMenu,
     getCardTitle,
     getMenuTitle,
-    getInitMenuId,
-    menuLinks,
+    // getInitMenu,
   }
 }

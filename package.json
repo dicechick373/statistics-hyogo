@@ -54,6 +54,7 @@
     "@types/topojson": "^3.2.3",
     "@vue/composition-api": "^1.4.0-beta.0",
     "chromedriver": "^92.0.1",
+    "contentful": "^9.1.13",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
