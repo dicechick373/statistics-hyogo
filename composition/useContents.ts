@@ -5,31 +5,9 @@ import {
   toRefs,
   useRoute,
 } from '@nuxtjs/composition-api'
-// import {
-//   getFieldList,
-//   getMenuList,
-//   getInitialMenu,
-// } from '@/composition/utils/contentful'
+
 import { GlobalState, StateKey } from './useGlobalState'
 import contents from '~/assets/json/contentsSetting.json'
-
-const getInitMenu = (fieldId: string, govType: string): Menu => {
-  // const checks = await content.getContentTypes()
-  // const fieldList = await getFieldList()
-  // // console.log(fieldList)
-  // const menuList = await getMenuList('population', 'city')
-  // // console.log(menuList)
-  // const initialMenu = await getInitialMenu('population', 'city')
-  // console.log(initialMenu)
-  return contents.list
-    .filter((f) => f.fieldId === fieldId)[0]
-    .menu[govType].map((d) => {
-      return {
-        menuId: d.menuId,
-        menuTitle: d.menuTitle,
-      }
-    })
-}
 
 interface State {
   currentMenu: Menu
@@ -83,7 +61,7 @@ export const useContents = () => {
 
   const state = reactive<State>({
     currentMenu: getMenu(menuId),
-    initialMenu: getInitMenu(fieldId, govType),
+    initialMenu: {},
   })
 
   // カードリスト

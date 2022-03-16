@@ -2,11 +2,13 @@ import {
   computed,
   inject,
   Ref,
+  useAsync,
   useRoute,
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
-import { useContents } from '@/composition/useContents'
+// import { useContents } from '@/composition/useContents'
+import { getInitialMenuList } from '@/composition/utils/contentful'
 import {
   convertCodeToGovType,
   convertPrefCodeToCode,
@@ -55,16 +57,16 @@ export const useChangeRouter = () => {
     )
   }
 
+  // SideNavigationのリンク設定
+  const initialMenuList = useAsync(() => getInitialMenuList(govType))
   const getSideNaviLink = computed(() => {
     return function (fieldId: string) {
-      // console.log(currentCode.value)
-      const { initialMenu } = useContents()
+      const initialMenu = initialMenuList.value.find(
+        (f) => f.fieldId === fieldId
+      )
+
       const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
-      const menuId = initialMenu.value
-      // console.log(menuId)
-      return currentGovType.value === 'prefecture'
-        ? `${path}/${menuId.prefecture}`
-        : `${path}/${menuId.city}`
+      return `${path}/${initialMenu?.menuId}`
     }
   })
 
