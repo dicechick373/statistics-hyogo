@@ -20,7 +20,7 @@ export const useChangeRouter = () => {
   const params = route.value.params
   const { govType, code, fieldId, menuId } = params
 
-  // inject
+  // GlobalState
   const {
     currentGovType,
     currentCode,
@@ -55,7 +55,7 @@ export const useChangeRouter = () => {
 
   // 統計項目（Menu）の初期値設定
   const initialMenuList = useAsync(() => getInitialMenuList())
-  const initialMenu = (fieldId: string, govType: string) => {
+  const initialMenu = (fieldId: string, govType: string = 'prefecture') => {
     return initialMenuList.value
       .filter((f) => f.fieldId === fieldId)
       .find((f) => f.govType === govType)

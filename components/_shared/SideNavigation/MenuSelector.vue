@@ -39,7 +39,7 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // 市区町村リストの設定
+    // 統計項目リスト
     const { menuList, currentMenu } = useContents()
     const selectedMenu = ref<Menu>(currentMenu)
 
