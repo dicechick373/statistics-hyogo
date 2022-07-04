@@ -8,16 +8,25 @@ import client from '~/plugins/contentful'
 type Field = {
   fieldTitle: string
   fieldId: string
+  menuPrefecture: []
+  menuCity: []
 }
 
 type Menu = {
   menuTitle: string
   menuId: string
-  fieldId: string
-  govType: GovType
 }
 
 type GovType = 'prefecture' | 'city'
+
+type Card = {
+  cardTitle: string
+  cardId: string
+  govType: GovType
+  menuId: string
+  annotation: string | undefined
+  cardComponent: string
+}
 
 /**
  * contentfulから統計分野（statisticsField）の一覧を取得する関数
@@ -35,7 +44,7 @@ export const getFieldList = async (): Promise<Field[]> => {
  * contentfulから統計項目（statisticsMenu）の一覧を取得する関数
  * @returns - IStatisticsFieldFields[]
  */
-const getMenuListAll = async () => {
+export const getMenuListAll = async () => {
   const entries: EntryCollection<IStatisticsMenuFields> =
     await client.getEntries({
       content_type: 'statisticsMenu',
@@ -43,7 +52,36 @@ const getMenuListAll = async () => {
   const menuList = entries.items.map(
     (d: Entry<IStatisticsMenuFields>) => d.fields
   )
+
   return menuList
+}
+
+/**
+ * 都道府県のMenuList一覧を取得する関数
+ * @returns - Menu[]
+ */
+export const getMenuListPrefecture = async (
+  fieldId: string
+): Promise<Menu[]> => {
+  const fieldList = await getFieldList()
+  return fieldList
+    .find((f) => f.fieldId === fieldId)
+    .menuPrefecture.map((d: Entry<IStatisticsMenuFields>) => {
+      return { menuId: d.fields.menuId, menuTitle: d.fields.menuTitle }
+    })
+}
+
+/**
+ * 市区町村のMenuList一覧を取得する関数
+ * @returns - Menu[]
+ */
+export const getMenuListCity = async (fieldId: string): Promise<Menu[]> => {
+  const fieldList = await getFieldList()
+  return fieldList
+    .find((f) => f.fieldId === fieldId)
+    .menuCity.map((d: Entry<IStatisticsMenuFields>) => {
+      return { menuId: d.fields.menuId, menuTitle: d.fields.menuTitle }
+    })
 }
 
 /**
@@ -54,19 +92,11 @@ export const getMenuList = async (
   fieldId: string,
   govType: GovType
 ): Promise<Menu[]> => {
-  const menuList = await getMenuListAll()
-
-  return menuList
-    .filter((f) => f.fieldId === fieldId)
-    .filter((f) => f.govType.includes(govType))
-    .map((d) => {
-      return {
-        menuId: d.menuId,
-        menuTitle: d.menuTitle,
-        fieldId: d.fieldId,
-        govType,
-      }
-    })
+  if (govType === 'prefecture') {
+    return await getMenuListPrefecture(fieldId)
+  } else {
+    return await getMenuListCity(fieldId)
+  }
 }
 
 /**
@@ -75,7 +105,6 @@ export const getMenuList = async (
  */
 export const getInitialMenu = async (govType: GovType): Promise<Menu[]> => {
   const menuList = await getMenuListAll()
-
   return menuList
     .filter((f) => f.govType.includes(govType))
     .filter((f) => f.initialMenu === true)
