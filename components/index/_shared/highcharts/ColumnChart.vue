@@ -49,13 +49,20 @@ export default defineComponent({
           },
           crosshair: true,
         },
-        yAxis: {
-          opposite: true,
-          // format: '{value}',
-          title: {
-            text: '',
+        yAxis: [
+          {
+            opposite: true,
+            title: {
+              text: '',
+            },
           },
-        },
+          {
+            opposite: true,
+            title: {
+              text: '',
+            },
+          },
+        ],
         plotOptions: {
           series: {
             pointWidth: 12,

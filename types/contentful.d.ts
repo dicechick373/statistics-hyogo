@@ -31,11 +31,11 @@ export interface ICardComponent extends Entry<ICardComponentFields> {
 }
 
 export interface IEstatCardConfigFields {
-  /** estatTitle */
-  estatTitle: string
+  /** cardTitle */
+  cardTitle: string
 
-  /** estatTitleId */
-  estatTitleId: string
+  /** cardTitleId */
+  cardTitleId: string
 
   /** statsDataId */
   statsDataId: string
@@ -58,8 +58,17 @@ export interface IEstatCardConfigFields {
   /** govementType */
   govementType: IGovernmentType
 
+  /** govType */
+  govType: 'prefecture' | 'city'
+
   /** cardComponent */
   cardComponent: ICardComponent
+
+  /** chartComponent */
+  chartComponent: 'TimeChart' | 'PyramidChart'
+
+  /** isBreak */
+  isBreak: boolean
 
   /** annotation */
   annotation?: Document | undefined
@@ -176,10 +185,10 @@ export interface IStatisticsMenuFields {
   initialMenu: boolean
 
   /** cardsPrefecture */
-  cardsPrefecture?: Entry<{ [fieldId: string]: unknown }>[] | undefined
+  cardsPrefecture?: Entry<IEstatCardConfigFields>[] | undefined
 
   /** cardsCity */
-  cardsCity?: Entry<{ [fieldId: string]: unknown }>[] | undefined
+  cardsCity?: Entry<IEstatCardConfigFields>[] | undefined
 }
 
 /** 統計項目 */

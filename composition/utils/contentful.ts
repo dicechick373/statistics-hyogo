@@ -1,5 +1,6 @@
 import { Entry, EntryCollection } from 'contentful'
 import {
+  // IEstatCardConfigFields,
   IStatisticsFieldFields,
   IStatisticsMenuFields,
 } from '@/types/contentful'
@@ -21,11 +22,7 @@ type GovType = 'prefecture' | 'city'
 
 type Card = {
   cardTitle: string
-  cardId: string
-  govType: GovType
-  menuId: string
-  annotation: string | undefined
-  cardComponent: string
+  cardTitleId: string
 }
 
 /**
@@ -129,4 +126,73 @@ export const getInitialMenuList = async (): Promise<Menu[]> => {
   ])
 
   return prefecture.concat(city)
+}
+
+/**
+ * 統計項目に合致するCard情報を取得する関数
+ * @param menuId - string
+ * @returns - IStatisticsMenuFields
+ */
+const getCardListAll = async (menuId: string) => {
+  const entries: EntryCollection<IStatisticsMenuFields> =
+    await client.getEntries({
+      content_type: 'statisticsMenu',
+      'fields.menuId': menuId,
+    })
+  return entries.items.map((d) => d.fields)[0]
+}
+
+/**
+ * 都道府県のCard一覧を取得する関数
+ * @param menuId - string
+ * @returns - Card[]
+ */
+const getCardListPrefecture = async (menuId: string): Promise<Card[]> => {
+  const cardList = await getCardListAll(menuId)
+  return cardList.cardsPrefecture.map((d) => {
+    return {
+      cardTitle: d.fields.cardTitle,
+      cardTitleId: d.fields.cardTitleId,
+    }
+  })
+}
+
+/**
+ * 市区町村のCard一覧を取得する関数
+ * @param menuId - string
+ * @returns - Card[]
+ */
+const getCardListCity = async (menuId: string): Promise<Card[]> => {
+  const cardList = await getCardListAll(menuId)
+  return cardList.cardsCity.map((d) => {
+    return {
+      cardTitle: d.fields.cardTitle,
+      cardTitleId: d.fields.cardTitleId,
+    }
+  })
+}
+
+/**
+ * 統計分野、地方公共団体区分に合致するCardListを取得する関数
+ * @returns - Card[]
+ */
+export const getCardList = async (menuId: string, govType: string) => {
+  if (govType === 'prefecture') {
+    return await getCardListPrefecture(menuId)
+  } else {
+    return await getCardListCity(menuId)
+  }
+}
+
+/**
+ * estatの統計情報を取得する関数
+ * @returns - Field[]
+ */
+export const getEstatCard = async (cardTitleId: string) => {
+  // console.log(cardTitleId)
+  const entries = await client.getEntries({
+    content_type: 'estatCardConfig',
+    'fields.cardTitleId': cardTitleId,
+  })
+  return entries.items.map((d) => d.fields)
 }

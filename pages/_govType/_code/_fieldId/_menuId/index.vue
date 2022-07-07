@@ -44,11 +44,12 @@ export default defineComponent({
 
     // カードコンポーネントの設定
     const cardComponent = computed((): string => {
-      if (govType === 'prefecture') {
-        return `lazy-cards-${menuId}-prefecture`
-      } else {
-        return `lazy-cards-${menuId}-city`
-      }
+      // if (govType === 'prefecture') {
+      //   return `lazy-cards-${menuId}-prefecture`
+      // } else {
+      //   return `lazy-cards-${menuId}-city`
+      // }
+      return `lazy-cards`
     })
 
     // メタ

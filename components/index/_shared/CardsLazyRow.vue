@@ -11,7 +11,12 @@
       min-width="50%"
     >
       <card-row v-if="actives[i]">
-        <component :is="component" v-for="(component, j) in row" :key="j" />
+        <component
+          :is="component"
+          v-for="(component, j) in row"
+          :key="j"
+          :cards="cards"
+        />
       </card-row>
     </v-lazy>
   </div>
@@ -22,7 +27,7 @@ import { mdiChevronRight } from '@mdi/js'
 import Vue from 'vue'
 
 import CardRow from '@/components/index/_shared/CardRow.vue'
-// import { component } from 'vue/types/umd'
+// import { defineComponent, reactive } from '@nuxtjs/composition-api'
 
 type Data = {
   actives: boolean[]
@@ -40,7 +45,47 @@ type Methods = {
 type Computed = {}
 type Props = {
   rows: Vue[][]
+  cards: {}
 }
+
+// export default defineComponent({
+//   props: {
+//     rows: {},
+//   },
+//   components: {
+//     CardRow,
+//   },
+//   setup(props) {
+//     const data = reactive<Data>({
+//       actives: Array.from({ length: props.rows.length }, () => false),
+//       scroll: false,
+//       mdiChevronRight,
+//     })
+
+//     const onScroll = () => {
+//       if (data.scroll) return
+//       data.scroll = true
+//       data.actives[0] = true
+//       data.actives[1] = true
+//     }
+
+//     const handler = (
+//       _entries: IntersectionObserverEntry[],
+//       _observer: IntersectionObserver,
+//       isIntersecting: boolean
+//     ) => {
+//       if (!isIntersecting) return
+//       data.actives.indexOf(false) = true
+//     }
+
+//     return {
+//       onScroll,
+//       handler,
+//       data,
+//     }
+//   },
+// })
+
 export default Vue.extend<Data, Methods, Computed, Props>({
   components: {
     CardRow,
@@ -48,6 +93,10 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   props: {
     rows: {
       type: Array,
+      required: true,
+    },
+    cards: {
+      type: Object,
       required: true,
     },
   },
@@ -60,6 +109,7 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   },
   methods: {
     handler(_entries, _observer, isIntersecting) {
+      // console.log(this.cards)
       if (!isIntersecting) return
       this.$set(this.actives, this.actives.indexOf(false), true)
     },

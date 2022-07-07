@@ -1,13 +1,16 @@
 <template>
-  <cards-lazy-row :rows="rows" :cards="cards" />
+  <p v-if="$fetchState.pending" />
+  <div v-else />
 </template>
 
 <script lang="ts">
+// <cards-lazy-row :rows="rows" :cards="cards" />
 import CardsLazyRow from '@/components/index/_shared/CardsLazyRow.vue'
 import {
   defineComponent,
   ref,
-  useAsync,
+  // useAsync,
+  useFetch,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { getCardList } from '@/composition/utils/contentful'
@@ -36,7 +39,16 @@ export default defineComponent({
     const params = route.value.params
     const { govType, menuId } = params
 
-    const cards = useAsync(() => getCardList(menuId, govType))
+    const cards = ref<Promise<Card[]>>()
+    const { fetch } = useFetch(async () => {
+      cards.value = await getCardList(menuId, govType)
+      // console.log({ govType, menuId })
+      // console.log({ test })
+    })
+    fetch()
+
+    // const cards = useAsync(() => getCardList(menuId, govType))
+    // console.log({ test, cards })
 
     return {
       rows,

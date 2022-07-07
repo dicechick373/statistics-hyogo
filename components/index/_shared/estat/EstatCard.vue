@@ -5,6 +5,7 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
 import { EstatState } from '@/types/estat'
+// import { getEstatCard } from '@/composition/utils/contentful'
 
 export default defineComponent({
   props: {
