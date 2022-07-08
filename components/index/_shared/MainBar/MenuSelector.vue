@@ -1,32 +1,50 @@
 <template>
-  <div class="LanguageSelector">
-    <div class="LanguageSelector-Background">
-      <earth-icon class="EarthIcon" aria-hidden="true" />
-      <select-menu-icon class="SelectMenuIcon" aria-hidden="true" />
-    </div>
-    <select
-      id="LanguageSelector"
-      v-model="selectedMenu"
-      class="LanguageSelector-Menu"
+  <p v-if="$fetchState.pending" />
+  <div v-else class="SideNavigation-Language">
+    <label
+      ref="LanguageLabel"
+      class="SideNavigation-LanguageLabel"
+      for="LanguageSelector"
+      tabindex="-1"
     >
-      <option
-        v-for="item in menuList"
-        :key="item.menuId"
-        :value="item"
-        :title="`Switch to ${item.menuTitle}`"
+      {{ '統計分野を選択' }}
+    </label>
+    <div class="LanguageSelector">
+      <div class="LanguageSelector-Background">
+        <earth-icon class="EarthIcon" aria-hidden="true" />
+        <select-menu-icon class="SelectMenuIcon" aria-hidden="true" />
+      </div>
+      <select
+        id="LanguageSelector"
+        v-model="selectedMenu"
+        class="LanguageSelector-Menu"
       >
-        {{ item.menuTitle }}
-      </option>
-    </select>
+        <option
+          v-for="item in menuList"
+          :key="item.menuId"
+          :value="item"
+          :title="`Switch to ${item.menuTitle}`"
+        >
+          {{ item.menuTitle }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  useFetch,
+  useRoute,
+  watch,
+} from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { useContents } from '@/composition/useContents'
 import { useChangeRouter } from '~/composition/useChangeRouter'
+import { getMenuList } from '~/composition/utils/contentful'
 
 type Menu = {
   menuId: string
@@ -39,9 +57,21 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // 統計項目リスト
-    const { menuList, currentMenu } = useContents()
+    // 統計項目の初期値セット
+    const { currentMenu } = useContents()
     const selectedMenu = ref<Menu>(currentMenu)
+
+    // パスパラメータの取得
+    const route = useRoute()
+    const params = route.value.params
+    const { govType, fieldId } = params
+
+    // 統計項目リストの取得
+    const menuList = ref<any>()
+    const { fetch } = useFetch(async () => {
+      menuList.value = await getMenuList(fieldId, govType)
+    })
+    fetch()
 
     // 選択時の処理
     watch(selectedMenu, () => change())

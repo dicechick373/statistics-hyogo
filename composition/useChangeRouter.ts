@@ -6,7 +6,7 @@ import {
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
-import { getInitialMenuList } from '@/composition/utils/contentful'
+import { getInitMenuList } from '@/composition/utils/contentful'
 import {
   convertCodeToGovType,
   convertPrefCodeToCode,
@@ -54,18 +54,21 @@ export const useChangeRouter = () => {
   }
 
   // 統計項目（Menu）の初期値設定
-  const initialMenuList = useAsync(() => getInitialMenuList())
-  const initialMenu = (fieldId: string, govType: string = 'prefecture') => {
-    return initialMenuList.value
-      .filter((f) => f.fieldId === fieldId)
-      .find((f) => f.govType === govType)
+  const initMenuList = useAsync(() => getInitMenuList())
+  const initMenu = (fieldId: string, govType: string) => {
+    const menu = initMenuList.value.find((f) => f.fieldId === fieldId)
+    if (govType === 'prefecture') {
+      return menu.prefecture
+    } else {
+      return menu.city
+    }
   }
 
   // SideNavigationのリンク設定
   const getSideNaviLink = computed(() => {
     return function (fieldId: string) {
       const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
-      const menuId = initialMenu(fieldId, govType).menuId
+      const menuId = initMenu(fieldId, govType).menuId
       return `${path}/${menuId}`
     }
   })
@@ -74,7 +77,7 @@ export const useChangeRouter = () => {
   const getGovTabLink = computed(() => {
     return function (govType: string) {
       const code = govType === 'city' ? cityCode : prefCode
-      const menuId = initialMenu(fieldId, govType).menuId
+      const menuId = initMenu(fieldId, govType).menuId
       return `/${govType}/${code}/${fieldId}/${menuId}`
     }
   })
