@@ -31,5 +31,14 @@ Visual Studio Codeを利用する場合は、以下の拡張機能をインス�
 
 
 ## Contentul設定
+コンテンツは全てヘッドレスCMSの「contentful」で作成している。
+
+### 統計分野（StatisticsField）
+SideNavigationの項目（国土・気象、人口・世帯など）
+
+
+### 統計項目（StatisticsMenu）
+統計分野の更に細かな分類（面積、気候など）
+
 
 
