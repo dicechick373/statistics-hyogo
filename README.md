@@ -28,4 +28,8 @@ Visual Studio Codeを利用する場合は、以下の拡張機能をインス�
 |[Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)|任意|
 |[Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)|Visual Studio CodeでRemote Developmentを利用する場合|
 
----
+
+
+## Contentul設定
+
+
