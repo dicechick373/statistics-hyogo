@@ -35,6 +35,8 @@
 <script lang="ts">
 import {
   defineComponent,
+  inject,
+  // onBeforeMount,
   ref,
   useFetch,
   useRoute,
@@ -42,14 +44,13 @@ import {
 } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
-import { useContents } from '@/composition/useContents'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-import { getMenuList } from '~/composition/utils/contentful'
-
-type Menu = {
-  menuId: string
-  menuTitle: string
-}
+import {
+  // getContentfulMenu,
+  getContentfulMenuList,
+  Menu,
+} from '~/composition/utils/contentful'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
 export default defineComponent({
   components: {
@@ -57,9 +58,8 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // 統計項目の初期値セット
-    const { currentMenu } = useContents()
-    const selectedMenu = ref<Menu>(currentMenu)
+    // globalState
+    const { getCurrentMenu } = inject(StateKey) as GlobalState
 
     // パスパラメータの取得
     const route = useRoute()
@@ -67,18 +67,21 @@ export default defineComponent({
     const { govType, fieldId } = params
 
     // 統計項目リストの取得
-    const menuList = ref<any>()
+    const menuList = ref<Menu[]>()
+    const selectedMenu = ref<Menu>()
+
     const { fetch } = useFetch(async () => {
-      menuList.value = await getMenuList(fieldId, govType)
+      menuList.value = await getContentfulMenuList(fieldId, govType)
+      selectedMenu.value = getCurrentMenu()
     })
     fetch()
 
     // 選択時の処理
     watch(selectedMenu, () => change())
-    const { changeRouteByMenu } = useChangeRouter()
+    const { changeRouterMenu } = useChangeRouter()
     const change = () => {
-      const menuId = selectedMenu.value.menuId
-      changeRouteByMenu(menuId)
+      changeRouterMenu.value(selectedMenu)
+      // }
     }
 
     return {

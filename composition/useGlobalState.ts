@@ -2,25 +2,33 @@ import {
   reactive,
   toRefs,
   InjectionKey,
-  Ref,
-  ref,
-  isRef,
+  // useRoute,
 } from '@nuxtjs/composition-api'
 import {
-  convertCodeToGovType,
-  convertCodeToPrefCode,
-  getCity,
-  getCityList,
-  getPref,
-  getPrefList,
+  // convertCodeToGovType,
+  getResasCityList,
+  getResasPrefList,
 } from '@/composition/utils/formatResas'
-import { Pref, City, GovType } from '~/types/resas'
+// import { Field } from 'contentful'
+import { Dictionary } from 'router'
+import {
+  getContentfulMenu,
+  // getContentfulMenuList,
+  Menu,
+} from './utils/contentful'
+import { Pref, City } from '~/types/resas'
+
+interface Field {
+  fieldTitle: string
+  fieldId: string
+}
 
 interface State {
-  currentGovType: GovType
+  currentGovType: string
   currentCode: string
-  currentFieldId: string
-  currentMenuId: string
+  currentField: Field
+  currentMenuList: Menu[]
+  currentMenu: Menu
   currentPref: Pref
   currentCity: City
   prefList: Pref[]
@@ -28,62 +36,59 @@ interface State {
 }
 
 export const useGlobalState = () => {
+  // 初期値をセット
   const state = reactive<State>({
-    currentGovType: '',
-    currentCode: '',
-    currentFieldId: '',
-    currentMenuId: '',
-    currentPref: {
-      prefCode: 28,
-      prefName: '兵庫県',
-    },
+    currentGovType: 'prefecture',
+    currentCode: '28000',
+    currentField: { fieldId: '', fieldTitle: '' },
+    currentMenuList: [],
+    currentMenu: { menuId: '', menuTitle: '' },
+    currentPref: { prefCode: 28, prefName: '兵庫県' },
     currentCity: {
       prefCode: 28,
       cityCode: '28100',
       cityName: '神戸市',
       bigCityFlag: '2',
     },
-    prefList: getPrefList(),
-    cityList: getCityList(28),
+    prefList: getResasPrefList(),
+    cityList: getResasCityList(28),
   })
 
-  const setCurrentCode = (code: string): void => {
-    state.currentCode = code
-  }
-  const setCurrentCity = (newCity: Ref<City> | City): void => {
-    state.currentCity = isRef(newCity) ? newCity : ref(newCity)
+  // 地方公共団体区分（都道府県／市区町村）のセット
+  // const setCurrentGovType = (newCode: string): void => {
+  //   state.currentGovType = convertCodeToGovType(newCode)
+  // }
+
+  // 選択中の統計分野（Field）のセット
+  // const setCurrentField = (newField: Menu): void => {
+  //   state.currentField = newField
+  // }
+
+  // 選択中の統計項目（Menu）のセット
+  const setCurrentMenu = (newMenu: Menu): void => {
+    state.currentMenu = newMenu
   }
 
   // stateの一括設定
-  const setState = (params): void => {
-    const { code, fieldId, menuId } = params
-    const prefCode = convertCodeToPrefCode(code)
-    const govType = convertCodeToGovType(code)
-    state.currentGovType = govType
-    state.currentCode = code
-    state.currentFieldId = fieldId
-    state.currentMenuId = menuId
-    state.currentPref = getPref(prefCode)
-    state.currentCity = getCity(code)
-    state.cityList = getCityList(prefCode)
-    state.prefList = getPrefList()
+  const setState = async (params: Dictionary<string>): Promise<void> => {
+    const { menuId } = params
+    // state.currentMenuList = await getContentfulMenuList(fieldId, govType)
+    state.currentMenu = await getContentfulMenu(menuId)
   }
 
-  const setPrefecture = (code: string): void => {
-    const prefCode = convertCodeToPrefCode(code)
-    state.currentCode = code
-    state.currentPref = getPref(prefCode)
+  // 都道府県リストの取得
+  const getPrefList = (): Pref[] => {
+    return state.prefList
   }
 
-  // stateの初期設定
-  const initParams = {
-    govType: 'city',
-    code: '28100',
-    fieldId: 'landweather',
-    menuId: 'area',
+  // 選択中の都道府県の取得
+  const getCurrentPref = (): Pref => {
+    return state.currentPref
   }
-  const setInitState = (): void => {
-    setState(initParams)
+
+  // 選択中の統計項目（Menu）の取得
+  const getCurrentMenu = (): Menu => {
+    return state.currentMenu
   }
 
   const getTitle = (title: string): string => {
@@ -93,23 +98,19 @@ export const useGlobalState = () => {
   }
 
   const getCurrentCityList = (kind: string): City[] => {
-    return getCityList(state.currentPref.prefCode, kind)
-  }
-
-  const getCurrentPrefList = (): Pref[] => {
-    return state.prefList
+    return getResasCityList(state.currentPref.prefCode, kind)
   }
 
   return {
     ...toRefs(state),
-    setInitState,
-    setCurrentCode,
-    setCurrentCity,
+    // setInitState,
+    setCurrentMenu,
     getTitle,
     setState,
-    setPrefecture,
     getCurrentCityList,
-    getCurrentPrefList,
+    getPrefList,
+    getCurrentMenu,
+    getCurrentPref,
   }
 }
 

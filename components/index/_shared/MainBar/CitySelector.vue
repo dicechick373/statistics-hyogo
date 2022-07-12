@@ -36,8 +36,9 @@ import { defineComponent, inject, ref, watch } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-// import { getMenu, getMenuList } from '~/composition/utils/contentful'
+// import { getMenu, getContentfulMenuList } from '~/composition/utils/contentful'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { City } from '~/types/resas'
 
 type Menu = {
   menuId: string

@@ -1,4 +1,5 @@
 <template>
+  <!-- <p v-if="$fetchState.pending" /> -->
   <div>
     <main-bar />
     <!-- <v-row>
@@ -9,43 +10,44 @@
         <select-city />
       </v-col>
     </v-row> -->
-    <component :is="cardComponent" />
+    <!-- <component :is="cardComponent" /> -->
   </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  computed,
+  // computed,
   useRoute,
-  // useMeta,
-  // reactive,
   inject,
+  useFetch,
 } from '@nuxtjs/composition-api'
-// import { useContents } from '~/composition/useContents'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
+/**
+ * --役割----------------------
+ * ①Routerのparamsを取得
+ * ②GlobalStateの設定
+ * ③Metaの設定
+ */
 export default defineComponent({
   head: {},
   setup() {
-    // パスパラメータの取得
+    // paramsの取得
     const route = useRoute()
-    const { govType } = route.value.params
     const params = route.value.params
 
-    // globalState
+    // GlobalStateの設定
     const { setState } = inject(StateKey) as GlobalState
-    setState(params)
-
-    // 市区町村判定フラグ
-    const isCity = computed(() => {
-      return govType === 'city'
+    const { fetch } = useFetch(async () => {
+      await setState(params)
     })
+    fetch()
 
     // カードコンポーネントの設定
-    const cardComponent = computed((): string => {
-      return `lazy-cards`
-    })
+    // const cardComponent = computed((): string => {
+    //   return `lazy-cards`
+    // })
 
     // // メタ
     // const url = 'https://statistics-hyogo.com'
@@ -92,8 +94,8 @@ export default defineComponent({
     // meta.value = mInfo
 
     return {
-      isCity,
-      cardComponent,
+      // isCity,
+      // cardComponent,
     }
   },
 })

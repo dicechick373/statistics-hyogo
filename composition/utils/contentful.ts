@@ -12,7 +12,7 @@ type Field = {
   menuCity: []
 }
 
-type Menu = {
+export type Menu = {
   menuTitle: string
   menuId: string
 }
@@ -74,7 +74,7 @@ export const getInitMenuList = async () => {
  * @param govType - string
  * @returns - Menu[]
  */
-export const getMenuList = async (
+export const getContentfulMenuList = async (
   fieldId: string,
   govType: string
 ): Promise<Menu[]> => {
@@ -104,7 +104,7 @@ export const getMenuList = async (
  * @param menuId - string
  * @returns - Menu
  */
-export const getMenu = async (menuId: string): Promise<Menu[]> => {
+export const getContentfulMenu = async (menuId: string): Promise<Menu> => {
   // contentfulからデータ取得
   const entries: EntryCollection<IStatisticsMenuFields> =
     await client.getEntries({
@@ -112,12 +112,10 @@ export const getMenu = async (menuId: string): Promise<Menu[]> => {
       'fields.menuId': menuId,
     })
 
-  return entries.items.map((d) => {
-    return {
-      menuId: d.fields.menuId,
-      menuTitle: d.fields.menuTitle,
-    }
-  })
+  return {
+    menuId: entries.items[0].fields.menuId,
+    menuTitle: entries.items[0].fields.menuTitle,
+  }
 }
 
 /**

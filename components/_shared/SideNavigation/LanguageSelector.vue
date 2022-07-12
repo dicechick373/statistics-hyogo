@@ -41,19 +41,17 @@ export default defineComponent({
   },
   setup() {
     // globalState
-    const { currentPref, setPrefecture, getCurrentPrefList } = inject(
-      StateKey
-    ) as GlobalState
+    const { getCurrentPref, getPrefList } = inject(StateKey) as GlobalState
 
     // 市区町村リストの設定
-    const prefList = getCurrentPrefList()
-    const selectedPref = ref<Pref>(currentPref)
+    const prefList = getPrefList()
+    const selectedPref = ref<Pref>(getCurrentPref())
 
     watch(selectedPref, () => changePref())
     const { changeRoute } = useChangeRouter()
     const changePref = () => {
       const code = convertPrefCodeToCode(selectedPref.value.prefCode)
-      setPrefecture(code)
+
       changeRoute(code)
     }
 
