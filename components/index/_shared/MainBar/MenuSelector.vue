@@ -1,6 +1,5 @@
 <template>
-  <p v-if="$fetchState.pending" />
-  <div v-else class="SideNavigation-Language">
+  <div class="SideNavigation-Language">
     <label
       ref="LanguageLabel"
       class="SideNavigation-LanguageLabel"
@@ -36,20 +35,14 @@
 import {
   defineComponent,
   inject,
-  // onBeforeMount,
+  onBeforeMount,
   ref,
-  useFetch,
-  useRoute,
   watch,
 } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-import {
-  // getContentfulMenu,
-  getContentfulMenuList,
-  Menu,
-} from '~/composition/utils/contentful'
+import { Menu } from '~/composition/utils/contentful'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
 export default defineComponent({
@@ -58,23 +51,18 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // globalState
-    const { getCurrentMenu } = inject(StateKey) as GlobalState
-
-    // パスパラメータの取得
-    const route = useRoute()
-    const params = route.value.params
-    const { govType, fieldId } = params
-
-    // 統計項目リストの取得
+    // セレクトメニューのアイテム
     const menuList = ref<Menu[]>()
     const selectedMenu = ref<Menu>()
 
-    const { fetch } = useFetch(async () => {
-      menuList.value = await getContentfulMenuList(fieldId, govType)
+    // GlobalStateからアイテムを取得
+    const { getCurrentMenuList, getCurrentMenu } = inject(
+      StateKey
+    ) as GlobalState
+    onBeforeMount(() => {
+      menuList.value = getCurrentMenuList()
       selectedMenu.value = getCurrentMenu()
     })
-    fetch()
 
     // 選択時の処理
     watch(selectedMenu, () => change())

@@ -1,6 +1,6 @@
 <template>
-  <!-- <p v-if="$fetchState.pending" /> -->
-  <div>
+  <p v-if="$fetchState.pending" />
+  <div v-else>
     <main-bar />
     <!-- <v-row>
       <v-col cols="12" md="6">

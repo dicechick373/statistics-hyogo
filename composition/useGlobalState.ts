@@ -13,6 +13,7 @@ import {
 import { Dictionary } from 'router'
 import {
   getContentfulMenu,
+  getContentfulMenuList,
   // getContentfulMenuList,
   Menu,
 } from './utils/contentful'
@@ -42,7 +43,7 @@ export const useGlobalState = () => {
     currentCode: '28000',
     currentField: { fieldId: '', fieldTitle: '' },
     currentMenuList: [],
-    currentMenu: { menuId: '', menuTitle: '' },
+    currentMenu: { menuId: null, menuTitle: null },
     currentPref: { prefCode: 28, prefName: '兵庫県' },
     currentCity: {
       prefCode: 28,
@@ -65,14 +66,14 @@ export const useGlobalState = () => {
   // }
 
   // 選択中の統計項目（Menu）のセット
-  const setCurrentMenu = (newMenu: Menu): void => {
-    state.currentMenu = newMenu
-  }
+  // const setCurrentMenu = (newMenu: Menu): void => {
+  //   state.currentMenu = newMenu
+  // }
 
   // stateの一括設定
   const setState = async (params: Dictionary<string>): Promise<void> => {
-    const { menuId } = params
-    // state.currentMenuList = await getContentfulMenuList(fieldId, govType)
+    const { fieldId, govType, menuId } = params
+    state.currentMenuList = await getContentfulMenuList(govType, fieldId)
     state.currentMenu = await getContentfulMenu(menuId)
   }
 
@@ -86,7 +87,12 @@ export const useGlobalState = () => {
     return state.currentPref
   }
 
-  // 選択中の統計項目（Menu）の取得
+  // currentMenuListの取得
+  const getCurrentMenuList = (): Menu[] => {
+    return state.currentMenuList
+  }
+
+  // currentMenuの取得
   const getCurrentMenu = (): Menu => {
     return state.currentMenu
   }
@@ -104,9 +110,10 @@ export const useGlobalState = () => {
   return {
     ...toRefs(state),
     // setInitState,
-    setCurrentMenu,
+    // setCurrentMenu,
     getTitle,
     setState,
+    getCurrentMenuList,
     getCurrentCityList,
     getPrefList,
     getCurrentMenu,

@@ -75,8 +75,8 @@ export const getInitMenuList = async () => {
  * @returns - Menu[]
  */
 export const getContentfulMenuList = async (
-  fieldId: string,
-  govType: string
+  govType: string,
+  fieldId: string
 ): Promise<Menu[]> => {
   const entries: EntryCollection<IStatisticsFieldFields> =
     await client.getEntries({
