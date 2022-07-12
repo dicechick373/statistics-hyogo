@@ -2,14 +2,6 @@
   <p v-if="$fetchState.pending" />
   <div v-else>
     <main-bar />
-    <!-- <v-row>
-      <v-col cols="12" md="6">
-        <select-menu />
-      </v-col>
-      <v-col v-if="isCity" cols="12" md="6">
-        <select-city />
-      </v-col>
-    </v-row> -->
     <!-- <component :is="cardComponent" /> -->
   </div>
 </template>
