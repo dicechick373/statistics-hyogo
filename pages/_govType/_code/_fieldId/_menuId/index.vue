@@ -24,8 +24,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
-/**
- * --役割----------------------
+/** 役割
  * ①Routerのparamsを取得
  * ②GlobalStateの設定
  * ③Metaの設定

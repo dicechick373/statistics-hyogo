@@ -69,7 +69,6 @@ export default defineComponent({
     const { changeRouterMenu } = useChangeRouter()
     const change = () => {
       changeRouterMenu.value(selectedMenu)
-      // }
     }
 
     return {

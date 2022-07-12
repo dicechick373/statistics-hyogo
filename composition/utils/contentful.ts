@@ -8,8 +8,8 @@ import client from '~/plugins/contentful'
 type Field = {
   fieldTitle: string
   fieldId: string
-  menuPrefecture: []
-  menuCity: []
+  menuPrefecture?: []
+  menuCity?: []
 }
 
 export type Menu = {
@@ -34,6 +34,25 @@ export const getFieldList = async (): Promise<Field[]> => {
       content_type: 'statisticsField',
     })
   return entries.items.map((d) => d.fields)
+}
+
+/**
+ * 統計分野を取得する関数
+ * @param fieldId - string
+ * @returns - Field
+ */
+export const getContentfulField = async (fieldId: string): Promise<Field> => {
+  // contentfulからデータ取得
+  const entries: EntryCollection<IStatisticsFieldFields> =
+    await client.getEntries({
+      content_type: 'statisticsField',
+      'fields.fieldId': fieldId,
+    })
+
+  return {
+    fieldId: entries.items[0].fields.fieldId,
+    fieldTitle: entries.items[0].fields.fieldTitle,
+  }
 }
 
 /**

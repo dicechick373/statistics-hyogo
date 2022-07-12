@@ -12,9 +12,9 @@ import {
 // import { Field } from 'contentful'
 import { Dictionary } from 'router'
 import {
+  getContentfulField,
   getContentfulMenu,
   getContentfulMenuList,
-  // getContentfulMenuList,
   Menu,
 } from './utils/contentful'
 import { Pref, City } from '~/types/resas'
@@ -72,9 +72,16 @@ export const useGlobalState = () => {
 
   // stateの一括設定
   const setState = async (params: Dictionary<string>): Promise<void> => {
-    const { fieldId, govType, menuId } = params
+    const { govType, fieldId, menuId } = params
+    state.currentGovType = govType
+    state.currentField = await getContentfulField(fieldId)
     state.currentMenuList = await getContentfulMenuList(govType, fieldId)
     state.currentMenu = await getContentfulMenu(menuId)
+  }
+
+  // 地方公共団体区分の取得
+  const getCurrentGovType = (): string => {
+    return state.currentGovType
   }
 
   // 都道府県リストの取得
@@ -85,6 +92,16 @@ export const useGlobalState = () => {
   // 選択中の都道府県の取得
   const getCurrentPref = (): Pref => {
     return state.currentPref
+  }
+
+  // 市区町村リストの取得
+  const getCurrentCityList = (kind: string): City[] => {
+    return getResasCityList(state.currentPref.prefCode, kind)
+  }
+
+  // 選択中の都道府県の取得
+  const getCurrentCity = (): City => {
+    return state.currentCity
   }
 
   // currentMenuListの取得
@@ -103,21 +120,19 @@ export const useGlobalState = () => {
       : `${state.currentCity.cityName}の${title}`
   }
 
-  const getCurrentCityList = (kind: string): City[] => {
-    return getResasCityList(state.currentPref.prefCode, kind)
-  }
-
   return {
     ...toRefs(state),
     // setInitState,
     // setCurrentMenu,
     getTitle,
     setState,
+    getCurrentGovType,
     getCurrentMenuList,
     getCurrentCityList,
     getPrefList,
     getCurrentMenu,
     getCurrentPref,
+    getCurrentCity,
   }
 }
 

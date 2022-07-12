@@ -32,11 +32,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  inject,
+  onBeforeMount,
+  ref,
+  watch,
+} from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-// import { getMenu, getContentfulMenuList } from '~/composition/utils/contentful'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { City } from '~/types/resas'
 
@@ -51,12 +56,18 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // globalState
-    const { currentCity, getCurrentCityList } = inject(StateKey) as GlobalState
+    // セレクトメニューのアイテム
+    const cityList = ref<City[]>()
+    const selectedCity = ref<City>()
 
-    const cityList = getCurrentCityList('join')
-
-    const selectedCity = ref<City>(currentCity)
+    // GlobalStateからアイテムを取得
+    const { getCurrentCity, getCurrentCityList } = inject(
+      StateKey
+    ) as GlobalState
+    onBeforeMount(() => {
+      cityList.value = getCurrentCityList('join')
+      selectedCity.value = getCurrentCity()
+    })
 
     // 選択時の処理
     watch(selectedCity, () => change())
