@@ -2,7 +2,7 @@
   <p v-if="$fetchState.pending" />
   <div v-else>
     <main-bar />
-    <!-- <component :is="cardComponent" /> -->
+    <cards />
   </div>
 </template>
 

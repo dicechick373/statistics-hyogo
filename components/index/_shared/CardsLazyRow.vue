@@ -12,10 +12,10 @@
     >
       <card-row v-if="actives[i]">
         <component
-          :is="component"
-          v-for="(component, j) in row"
+          :is="r.component"
+          v-for="(r, j) in row"
           :key="j"
-          :cards="cards"
+          :card="r.card"
         />
       </card-row>
     </v-lazy>
@@ -95,10 +95,10 @@ export default Vue.extend<Data, Methods, Computed, Props>({
       type: Array,
       required: true,
     },
-    cards: {
-      type: Object,
-      required: true,
-    },
+    // cards: {
+    //   type: Object,
+    //   required: true,
+    // },
   },
   data() {
     return {

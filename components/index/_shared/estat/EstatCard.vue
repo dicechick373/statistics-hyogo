@@ -3,21 +3,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useFetch } from '@nuxtjs/composition-api'
 import { EstatState } from '@/types/estat'
-// import { getEstatCard } from '@/composition/utils/contentful'
+import { getContentfulCard } from '@/composition/utils/contentful'
 
 export default defineComponent({
   props: {
-    cards: {
+    card: {
       type: Object,
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     // cardコンポーネントの設定
     const cardComponent = 'estat-column-card-all-break'
 
+    const test = ref<any>()
+    const { fetch } = useFetch(async () => {
+      test.value = await getContentfulCard(props.card.cardId)
+    })
+    fetch()
+    // console.log(test)
+
+    // console.log(props.card)
     // State
     const estatState: EstatState = {
       title: '総人口',

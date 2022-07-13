@@ -4,25 +4,7 @@ import {
   IStatisticsMenuFields,
 } from '@/types/contentful'
 import client from '~/plugins/contentful'
-
-type Field = {
-  fieldTitle: string
-  fieldId: string
-  menuPrefecture?: []
-  menuCity?: []
-}
-
-export type Menu = {
-  menuTitle: string
-  menuId: string
-}
-
-type GovType = 'prefecture' | 'city'
-
-type Card = {
-  cardTitle: string
-  cardTitleId: string
-}
+import { Card, Field, Menu } from '~/types/main'
 
 /**
  * contentfulから統計分野一覧を取得する関数
@@ -138,72 +120,47 @@ export const getContentfulMenu = async (menuId: string): Promise<Menu> => {
 }
 
 /**
- * 統計項目に合致するCard情報を取得する関数
+ * 統計分野、地方公共団体区分に合致するCardListを取得する関数
+ * @param govType -string
  * @param menuId - string
- * @returns - IStatisticsMenuFields
+ * @returns - Card[]
  */
-const getCardListAll = async (menuId: string) => {
+export const getContentfulCardList = async (
+  govType: string,
+  menuId: string
+): Promise<Card[]> => {
   const entries: EntryCollection<IStatisticsMenuFields> =
     await client.getEntries({
       content_type: 'statisticsMenu',
       'fields.menuId': menuId,
     })
-  return entries.items.map((d) => d.fields)[0]
-}
 
-/**
- * 都道府県のCard一覧を取得する関数
- * @param menuId - string
- * @returns - Card[]
- */
-const getCardListPrefecture = async (menuId: string): Promise<Card[]> => {
-  const cardList = await getCardListAll(menuId)
-  return cardList.cardsPrefecture.map((d) => {
-    return {
-      cardTitle: d.fields.cardTitle,
-      cardTitleId: d.fields.cardTitleId,
+  const cards = () => {
+    if (govType === 'prefecture') {
+      return entries.items[0].fields.cardsPrefecture
+    } else {
+      return entries.items[0].fields.cardsCity
     }
-  })
-}
-
-/**
- * 市区町村のCard一覧を取得する関数
- * @param menuId - string
- * @returns - Card[]
- */
-const getCardListCity = async (menuId: string): Promise<Card[]> => {
-  const cardList = await getCardListAll(menuId)
-  return cardList.cardsCity.map((d) => {
-    return {
-      cardTitle: d.fields.cardTitle,
-      cardTitleId: d.fields.cardTitleId,
-    }
-  })
-}
-
-/**
- * 統計分野、地方公共団体区分に合致するCardListを取得する関数
- * @param menuId - string
- * @param govType - string
- * @returns - Card[]
- */
-export const getCardList = async (menuId: string, govType: string) => {
-  if (govType === 'prefecture') {
-    return await getCardListPrefecture(menuId)
-  } else {
-    return await getCardListCity(menuId)
   }
+
+  return cards().map((d) => {
+    return {
+      cardId: d.fields.cardId,
+      cardTitle: d.fields.cardTitle,
+      chartComponent: d.fields.chartComponent,
+    }
+  })
 }
 
 /**
  * estatの統計情報を取得する関数
+ * @param cardId - string
  * @returns - Field[]
  */
-export const getEstatCard = async (cardTitleId: string) => {
-  // console.log(cardTitleId)
+export const getContentfulCard = async (cardId: string) => {
   const entries = await client.getEntries({
     content_type: 'estatCardConfig',
-    'fields.cardTitleId': cardTitleId,
+    'fields.cardId': cardId,
   })
   return entries.items.map((d) => d.fields)
 }

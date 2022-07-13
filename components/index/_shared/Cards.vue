@@ -1,10 +1,11 @@
 <template>
   <p v-if="$fetchState.pending" />
-  <div v-else />
+  <div v-else>
+    <cards-lazy-row :rows="rows" />
+  </div>
 </template>
 
 <script lang="ts">
-// <cards-lazy-row :rows="rows" :cards="cards" />
 import CardsLazyRow from '@/components/index/_shared/CardsLazyRow.vue'
 import {
   defineComponent,
@@ -13,17 +14,22 @@ import {
   useFetch,
   useRoute,
 } from '@nuxtjs/composition-api'
-import { getCardList } from '@/composition/utils/contentful'
+import { Card, getContentfulCardList } from '@/composition/utils/contentful'
 
 // 総人口（男女別）
-const TotalPopulation = () => {
+const CardsTimeChart = () => {
   return import('~/components/index/_shared/estat/EstatCard.vue')
 }
 // 総人口ランキング
-const TotalPopulationRank = () => {
-  return import(
-    '~/components/index/population/cards/population/totalPopulationRankPrefecture.vue'
-  )
+// const CardsTimeChartRank = () => {
+//   return import(
+//     '~/components/index/population/cards/population/totalPopulationRankPrefecture.vue'
+//   )
+// }
+
+type Cards = {
+  Component: Vue.Component
+  Card: Card
 }
 
 export default defineComponent({
@@ -32,27 +38,46 @@ export default defineComponent({
   },
   setup() {
     // Card
-    const rows = ref([[TotalPopulation, TotalPopulationRank]])
+    const rows = ref<Cards[][]>()
+    // const cards = ref<Card[][]>()
 
     // パスパラメータの取得
     const route = useRoute()
     const params = route.value.params
     const { govType, menuId } = params
 
-    const cards = ref<Promise<Card[]>>()
     const { fetch } = useFetch(async () => {
-      cards.value = await getCardList(menuId, govType)
-      // console.log({ govType, menuId })
-      // console.log({ test })
+      const cardList = await getContentfulCardList(govType, menuId)
+      rows.value = getCards(cardList)
     })
     fetch()
 
-    // const cards = useAsync(() => getCardList(menuId, govType))
-    // console.log({ test, cards })
+    // Cards配列の作成
+    const getCards = (cardList: Card[]) => {
+      const result: Cards[][] = []
+      let line: Cards[] = []
 
+      cardList.reduce((_, cur, i, arr) => {
+        if (i % 2 === 0) {
+          line = []
+
+          line[0] = { component: CardsTimeChart, card: cur }
+          // componentRows[0] = CardsTimeChart
+          if (i === arr.length - 1) {
+            result.push(line)
+            // components.push(componentRows)
+          }
+        } else {
+          line[1] = { component: CardsTimeChart, card: cur }
+          result.push(line)
+        }
+      }, [])
+      return result
+    }
+
+    // console.log(rows)
     return {
       rows,
-      cards,
     }
   },
 })
