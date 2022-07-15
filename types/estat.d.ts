@@ -7,13 +7,19 @@ export type EstatParams = {
   cdTime?: string | string[]
 }
 
-export type EstatState = {
-  title: string
-  titleId: string
-  params: EstatParams
-  series: EstatSeries[]
-  annotation: string[]
-  latestYear?: EstatTimes
+export type EstatCardConfig = {
+  cardTitle: string
+  cardId: string
+  statsDataId: string
+  cdCat01?: string | string[]
+  cdCat02?: string | string[]
+  series?: string | string[]
+  chartType?: string | string[]
+  yAxis: string | string[]
+  govType: 'prefecture' | 'city'
+  chartComponent: 'TimeChart' | 'PyramidChart'
+  isBreak: boolean
+  annotation?: Document | undefined
 }
 
 export type EstatSeries = {
@@ -35,14 +41,14 @@ export type EstatTimes = {
   yearName?: string
 }
 
-export type EstatTimeChart = {
+export type EstatTimeChartData = {
   name: string
   data: {
     x: number
     y: number
     unit: string
   }
-  color: string
+  // color: string
   yAxis?: number
   type?: string
 }

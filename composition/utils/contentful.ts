@@ -1,5 +1,6 @@
 import { Entry, EntryCollection } from 'contentful'
 import {
+  IEstatCardConfigFields,
   IStatisticsFieldFields,
   IStatisticsMenuFields,
 } from '@/types/contentful'
@@ -157,10 +158,14 @@ export const getContentfulCardList = async (
  * @param cardId - string
  * @returns - Field[]
  */
-export const getContentfulCard = async (cardId: string) => {
+export const getContentfulCard = async (
+  cardId: string
+): Promise<IEstatCardConfigFields> => {
   const entries = await client.getEntries({
     content_type: 'estatCardConfig',
     'fields.cardId': cardId,
   })
-  return entries.items.map((d) => d.fields)
+  // console.log(entries.items)
+  // return entries.items.map((d) => d.fields)
+  return entries.items[0].fields
 }

@@ -3,9 +3,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useFetch } from '@nuxtjs/composition-api'
-import { EstatState } from '@/types/estat'
+import { defineComponent, useFetch } from '@nuxtjs/composition-api'
+// import { EstatState } from '@/types/estat'
 import { getContentfulCard } from '@/composition/utils/contentful'
+import { useEstatChart } from '~/composition/useEstatChart'
+// import { useEstatChart } from '@/composition/useEstatChart'
 
 export default defineComponent({
   props: {
@@ -18,16 +20,33 @@ export default defineComponent({
     // cardコンポーネントの設定
     const cardComponent = 'estat-column-card-all-break'
 
-    const test = ref<any>()
+    const {
+      // test,
+      estatCardConfig,
+      // estatResponse,
+      // chartData,
+      // tableHeader,
+      // tableData,
+      // additionalDescription,
+      // source,
+      // lastUpdate,
+    } = useEstatChart()
     const { fetch } = useFetch(async () => {
-      test.value = await getContentfulCard(props.card.cardId)
+      estatCardConfig.value = await getContentfulCard(props.card.cardId)
     })
     fetch()
-    // console.log(test)
 
-    // console.log(props.card)
-    // State
-    const estatState: EstatState = {
+    // console.log({
+    //   estatCardConfig,
+    //   chartData,
+    //   tableHeader,
+    //   tableData,
+    //   additionalDescription,
+    //   source,
+    //   lastUpdate,
+    // })
+
+    const estatState = {
       title: '総人口',
       titleId: 'total-population',
       params: {
