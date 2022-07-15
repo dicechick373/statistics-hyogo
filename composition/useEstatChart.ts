@@ -10,10 +10,11 @@ import { GlobalState, StateKey } from './useGlobalState'
 import { useEstatApi } from './useEstatApi'
 import {
   formatEstatSource,
+  formatEstatTimeChartData,
   // formatEstatTimeChartData,
   formatEstatTimeList,
 } from './utils/formatEstat'
-import { EstatCardConfig, VALUE } from '~/types/estat'
+import { EstatCardConfig } from '~/types/estat'
 
 export const useEstatChart = () => {
   // カード設定
@@ -62,25 +63,7 @@ export const useEstatChart = () => {
 
   // chartData
   const chartData = computed(() => {
-    const value: VALUE[] =
-      estatResponse.value.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
-    return estatCardConfig.value.series.map((d, i) => {
-      const key: keyof VALUE = `@cat01`
-      return {
-        name: d,
-        data: value
-          .filter((f) => f[key] === estatCardConfig.value.cdCat01[i])
-          .map((d) => {
-            return {
-              x: parseInt(d['@time'].substr(0, 4)),
-              y: parseFloat(d.$),
-              unit: d['@unit'],
-            }
-          }),
-        yAxis: estatCardConfig.value.yAxis[i],
-        type: estatCardConfig.value.chartType[i],
-      }
-    })
+    return formatEstatTimeChartData(estatResponse.value)
   })
 
   const tableHeader = computed(() => {

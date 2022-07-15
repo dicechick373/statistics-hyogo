@@ -54,7 +54,7 @@ export const formatEstatTimeChartData = (response: EstatResponse) => {
 
   const chartData = () => {
     if (Array.isArray(cat01)) {
-      cat01.map((d) => {
+      return cat01.map((d) => {
         return formatChartData(d)
       })
     } else {

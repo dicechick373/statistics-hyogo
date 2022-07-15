@@ -18,7 +18,7 @@ import { Card, getContentfulCardList } from '@/composition/utils/contentful'
 
 // 総人口（男女別）
 const CardsTimeChart = () => {
-  return import('~/components/index/_shared/estat/EstatCard.vue')
+  return import('~/components/index/_shared/estat/EstatTimeChartCard.vue')
 }
 // 総人口ランキング
 // const CardsTimeChartRank = () => {
