@@ -80,7 +80,7 @@ export default defineComponent({
         },
         tooltip: {
           pointFormat:
-            '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}{point.unit}</b> ({point.percentage:.0f}%)<br/>',
+            '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}{point.unit}</b> <br/>',
           shared: true,
         },
         credits: {

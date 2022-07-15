@@ -144,7 +144,14 @@ export default defineComponent({
     })
 
     const chartData = computed(() => {
-      return formatEstatTimeChartData(estatResponse.value)
+      return formatEstatTimeChartData(estatResponse.value).map((d, i) => {
+        return {
+          name: d.name,
+          data: d.data,
+          yAxis: parseInt(estatCardConfig.value.yAxis[i]),
+          type: estatCardConfig.value.chartType[i],
+        }
+      })
     })
 
     const tableHeader = computed(() => {
@@ -204,13 +211,15 @@ export default defineComponent({
     })
 
     // chartの種類を設定
-    const chartComponent = 'column-line-chart'
+    const chartComponent = 'time-chart'
 
     // console.log({ chartData })
     // 総数／内訳の切替
     const allbreak = ref<string>('all')
     const displayData = computed(() => {
-      if (allbreak.value === 'all') {
+      if (!estatCardConfig.value.isBreak) {
+        return chartData.value
+      } else if (allbreak.value === 'all') {
         return chartData.value.slice(0, 1)
       } else {
         return chartData.value.slice(1)
