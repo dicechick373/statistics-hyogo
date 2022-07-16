@@ -242,10 +242,10 @@ export interface IStatisticsMenuFields {
     | 'international'
 
   /** cardsPrefecture */
-  cardsPrefecture?: Entry<{ [fieldId: string]: unknown }>[] | undefined
+  cardsPrefecture?: IEstatCardConfigFields[] | undefined
 
   /** cardsCity */
-  cardsCity?: Entry<{ [fieldId: string]: unknown }>[] | undefined
+  cardsCity?: IEstatCardConfigFields[] | undefined
 }
 
 /** 統計項目 */

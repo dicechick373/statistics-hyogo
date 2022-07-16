@@ -136,15 +136,13 @@ export const getContentfulCardList = async (
       'fields.menuId': menuId,
     })
 
-  const cards = () => {
+  const cards = (): IEstatCardConfigFields[] => {
     if (govType === 'prefecture') {
       return entries.items[0].fields.cardsPrefecture
     } else {
       return entries.items[0].fields.cardsCity
     }
   }
-
-  console.log({ entries, cards })
 
   return cards().map((d) => {
     return {
