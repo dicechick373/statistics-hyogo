@@ -23,7 +23,7 @@ const CardsTimeChart = () => {
 
 // PyramidChartCard
 const CardsPyramidChart = () => {
-  return import('~/components/index/_shared/estat/EstatCard.vue')
+  return import('~/components/index/_shared/estat/EstatPyramidChartCard.vue')
 }
 
 type Cards = {
