@@ -4,7 +4,7 @@ export type HighchartsTimeChartSeries = {
     x: number
     y: number
     unit: string
-  }
+  }[]
   color?: string
   type?: string
   yAxis?: number

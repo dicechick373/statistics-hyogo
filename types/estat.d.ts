@@ -14,26 +14,26 @@ export type EstatCardConfig = {
   cdCat01?: string | string[]
   cdCat02?: string | string[]
   series?: string | string[]
-  chartType?: string | string[]
-  yAxis: string | string[]
+  chartType?: string[] | string[]
+  yAxis?: string | string[]
   govType: 'prefecture' | 'city'
   chartComponent: 'TimeChart' | 'PyramidChart'
   isBreak: boolean
   annotation?: Document | undefined
 }
 
-export type EstatSeries = {
-  id: string
-  code: string
-  name: string
-  type?: string
-  yAxis?: number
-  color?: string
-  data?: []
-  year?: number
-  man?: string
-  woman?: string
-}
+// export type EstatSeries = {
+//   id: string
+//   code: string
+//   name: string
+//   type?: string
+//   yAxis?: number
+//   color?: string
+//   data?: []
+//   year?: number
+//   man?: string
+//   woman?: string
+// }
 
 export type EstatTimes = {
   yearInt?: number
@@ -41,17 +41,17 @@ export type EstatTimes = {
   yearName?: string
 }
 
-export type EstatTimeChartData = {
-  name: string
-  data: {
-    x: number
-    y: number
-    unit: string
-  }
-  // color: string
-  yAxis?: number
-  type?: string
-}
+// export type EstatTimeChartData = {
+//   name: string
+//   data: {
+//     x: number
+//     y: number
+//     unit: string
+//   }
+//   // color: string
+//   yAxis?: number
+//   type?: string
+// }
 
 export type EstatSource = {
   estatName: string

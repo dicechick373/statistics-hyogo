@@ -94,15 +94,13 @@ export default defineComponent({
     const { code } = useRoute().value.params
 
     // reactive値
-    const estatResponse = ref<EstatResponse>()
-    // カード設定
     const estatCardConfig = ref<EstatCardConfig>()
+    const estatResponse = ref<EstatResponse>()
 
     // eStat-APIからデータを取得
     const { $axios } = useContext()
     const { fetch } = useFetch(async () => {
       estatCardConfig.value = await getContentfulCard(props.card.cardId)
-      // const params = Object.assign({}, props.estatState.params)
       const estatParams = computed((): EstatParams => {
         return {
           statsDataId: estatCardConfig.value.statsDataId,
@@ -213,10 +211,9 @@ export default defineComponent({
     // chartの種類を設定
     const chartComponent = 'time-chart'
 
-    // console.log({ chartData })
     // 総数／内訳の切替
     const allbreak = ref<string>('all')
-    const displayData = computed((): HighchartsTimeChartSeries => {
+    const displayData = computed((): HighchartsTimeChartSeries[] => {
       if (!estatCardConfig.value.isBreak) {
         return chartData.value
       } else if (allbreak.value === 'all') {
@@ -227,7 +224,7 @@ export default defineComponent({
     })
 
     const displayInfo = computed(() => {
-      const d: EstatSeries = chartData.value[0]
+      const d: HighchartsTimeChartSeries = chartData.value[0]
       const l: number = d.data.length
       return {
         lText: d.data[l - 1].y.toLocaleString(),
