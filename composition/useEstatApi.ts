@@ -1,14 +1,22 @@
+import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { reactive, toRefs } from '@nuxtjs/composition-api'
 import qs from 'qs'
+import { EstatParams, EstatResponse } from '~/types/estat'
 
-export const useEstatApi = (axios, params) => {
-  const state = reactive<baseState>({
-    response: {},
+type State = {
+  response: EstatResponse
+  otherError: string
+  isLoading: boolean
+}
+
+export const useEstatApi = (axios: NuxtAxiosInstance, params: EstatParams) => {
+  const state = reactive<State>({
+    response: null,
     otherError: null,
     isLoading: false,
   })
-  // const { $axios } = useContext()
-  const getData = async () => {
+
+  const getData = async (): Promise<EstatResponse> => {
     const url = 'getStatsData'
 
     const api = axios.create({
@@ -21,27 +29,23 @@ export const useEstatApi = (axios, params) => {
       params: {
         appId: process.env.ESTAT_APPID,
       },
-      paramsSerializer: (params) => {
+      paramsSerializer: (params: EstatParams) => {
         return qs.stringify(params, { arrayFormat: 'comma' })
       },
-      // mode: 'cors',
       withCredentials: true,
       data: {},
     })
     api.setBaseURL(`${process.env.SITE_URL}/json/`)
-    // api.setBaseURL(`https://statistics-hyogo.com/json/`)
 
-    // console.log(process.env.ESTAT_APPID)
+    api.interceptors.request.use((request) => {
+      // console.log('Starting Request: ', request)
+      return request
+    })
 
-    // api.interceptors.request.use((request) => {
-    //   console.log('Starting Request: ', request)
-    //   return request
-    // })
-
-    // api.interceptors.response.use((response) => {
-    //   console.log('Response: ', response)
-    //   return response
-    // })
+    api.interceptors.response.use((response) => {
+      // console.log('Response: ', response)
+      return response
+    })
 
     state.isLoading = true
 

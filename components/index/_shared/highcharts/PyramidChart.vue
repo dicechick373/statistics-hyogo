@@ -4,50 +4,41 @@
   </div>
 </template>
 
-<script>
-// import { cloneDeep } from 'lodash'
+<script lang="ts">
+import { defineComponent, computed } from '@nuxtjs/composition-api'
+import { HighchartsPyramidChartSeries } from '~/types/highcharts'
 
-export default {
+export default defineComponent({
   props: {
     displayData: {
       type: Array,
       required: true,
     },
-    // categories: {
-    //   type: Array,
-    //   required: true,
-    // },
   },
-  data() {
-    return {
-      //   charWidth: 300,
-      //   windowWidth: 0,
-    }
-  },
-  computed: {
-    categories() {
-      return this.displayData[0].data.map((d) => d.category)
-    },
-    unit() {
-      return this.displayData[0].unit
-    },
-    series() {
+  setup(props) {
+    const series = computed((): HighchartsPyramidChartSeries => {
       return [
         {
           name: '男性',
-          data: this.displayData[0].data.map((d) => -1 * d.man),
+          data: props.displayData[0].data.map((d) => -1 * d.man),
           color: '#4169e1',
-          // unit: this.displayData[0].unit,
         },
         {
           name: '女性',
-          data: this.displayData[0].data.map((d) => d.woman),
+          data: props.displayData[0].data.map((d) => d.woman),
           color: '#ff69b4',
-          // unit: this.displayData[0].unit,
         },
       ]
-    },
-    chartOptions() {
+    })
+    const categories = computed(() => {
+      // console.log(series.value)
+      return props.displayData[0].data.map((d) => d.category)
+    })
+
+    // const unit = computed(() => {
+    //   return props.displayData[0].unit
+    // })
+    const chartOptions = computed(() => {
       return {
         chart: {
           height: 350,
@@ -65,7 +56,7 @@ export default {
         xAxis: [
           {
             // 左軸
-            categories: this.categories,
+            categories: categories.value,
             reversed: false,
             labels: {
               step: 1,
@@ -78,7 +69,7 @@ export default {
             // 右軸
             opposite: true,
             reversed: false,
-            categories: this.categories,
+            categories: categories.value,
             linkedTo: 0,
             labels: {
               step: 1,
@@ -143,11 +134,14 @@ export default {
         credits: {
           enabled: false,
         },
-        series: this.series,
+        series: series.value,
       }
-    },
+    })
+    return {
+      chartOptions,
+    }
   },
-}
+})
 </script>
 
 <style lang="sass" scoped>

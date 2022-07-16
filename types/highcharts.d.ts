@@ -9,3 +9,9 @@ export type HighchartsTimeChartSeries = {
   type?: string
   yAxis?: number
 }
+
+export type HighchartsPyramidChartSeries = {
+  name: string
+  data: number[]
+  color?: string
+}[]

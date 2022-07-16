@@ -68,8 +68,7 @@ import {
   useFetch,
   inject,
 } from '@nuxtjs/composition-api'
-// import { useEstatTimeChart } from '@/composition/useEstatTimeChart'
-import { EstatResponse } from '~/types/estat'
+import { EstatCardConfig, EstatParams, EstatResponse } from '~/types/estat'
 import { useEstatApi } from '~/composition/useEstatApi'
 import { getContentfulCard } from '~/composition/utils/contentful'
 import {
@@ -78,6 +77,7 @@ import {
   formatEstatTimeList,
 } from '~/composition/utils/formatEstat'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { HighchartsTimeChartSeries } from '~/types/highcharts'
 
 export default defineComponent({
   props: {
@@ -103,19 +103,18 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       estatCardConfig.value = await getContentfulCard(props.card.cardId)
       // const params = Object.assign({}, props.estatState.params)
-      const estatParams = computed(() => {
+      const estatParams = computed((): EstatParams => {
         return {
           statsDataId: estatCardConfig.value.statsDataId,
           cdCat01: estatCardConfig.value.cdCat01,
           cdArea: code,
         }
       })
-      // console.log(estatParams)
+
       estatResponse.value = await useEstatApi(
         $axios,
         estatParams.value
       ).getData()
-      // console.log(estatResponse.value)
     })
     fetch()
 
@@ -144,7 +143,7 @@ export default defineComponent({
       return formatEstatTimeList(estatResponse.value)
     })
 
-    const chartData = computed(() => {
+    const chartData = computed((): HighchartsTimeChartSeries[] => {
       return formatEstatTimeChartData(estatResponse.value).map((d, i) => {
         return {
           name: d.name,
@@ -217,7 +216,7 @@ export default defineComponent({
     // console.log({ chartData })
     // 総数／内訳の切替
     const allbreak = ref<string>('all')
-    const displayData = computed(() => {
+    const displayData = computed((): HighchartsTimeChartSeries => {
       if (!estatCardConfig.value.isBreak) {
         return chartData.value
       } else if (allbreak.value === 'all') {

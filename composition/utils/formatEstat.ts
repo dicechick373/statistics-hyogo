@@ -1,4 +1,12 @@
-import { CLASS, EstatResponse, EstatSource, EstatTimes } from '~/types/estat'
+import {
+  CLASS,
+  CLASSOBJ,
+  EstatResponse,
+  EstatSource,
+  EstatTimes,
+  VALUE,
+} from '~/types/estat'
+import { HighchartsTimeChartSeries } from '~/types/highcharts'
 
 export const convertPrefCodeToString = (prefCode: number): string => {
   return ('0000000000' + prefCode).slice(-2) + '000'
@@ -30,25 +38,28 @@ export const formatEstatSource = (response: EstatResponse): EstatSource => {
 }
 
 export const formatEstatTimeChartData = (response: EstatResponse) => {
-  const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
-  const VALUE = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
+  const CLASS_OBJ: CLASSOBJ[] =
+    response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
+  const value: VALUE[] = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
 
   const cat01: CLASS | CLASS[] = CLASS_OBJ.find(
     (f) => f['@id'] === 'cat01'
   ).CLASS
 
   // chartDataを生成する関数
-  const formatChartData = (data: CLASS) => {
+  const formatChartData = (data: CLASS): HighchartsTimeChartSeries => {
     return {
       code: data['@code'],
       name: data['@name'].replace(`${data['@code']}_`, ''),
-      data: VALUE.filter((f) => f['@cat01'] === data['@code']).map((d) => {
-        return {
-          x: parseInt(d['@time'].substring(0, 4)),
-          y: parseFloat(d.$),
-          unit: d['@unit'],
-        }
-      }),
+      data: value
+        .filter((f) => f['@cat01'] === data['@code'])
+        .map((d) => {
+          return {
+            x: parseInt(d['@time'].substring(0, 4)),
+            y: parseFloat(d.$),
+            unit: d['@unit'],
+          }
+        }),
     }
   }
 

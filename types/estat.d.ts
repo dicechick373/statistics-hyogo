@@ -112,7 +112,7 @@ type CLASSINF = {
   CLASS_OBJ: CLASSOBJ[]
 }
 
-type CLASSOBJ = {
+export type CLASSOBJ = {
   '@id': string
   '@name': string
   CLASS: CLASS[] | CLASS | CLASS3
