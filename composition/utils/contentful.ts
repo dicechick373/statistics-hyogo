@@ -144,6 +144,8 @@ export const getContentfulCardList = async (
     }
   }
 
+  console.log({ entries, cards })
+
   return cards().map((d) => {
     return {
       cardId: d.fields.cardId,

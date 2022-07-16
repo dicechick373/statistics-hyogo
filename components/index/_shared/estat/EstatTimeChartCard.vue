@@ -140,6 +140,7 @@ export default defineComponent({
 
     // times
     const times = computed(() => {
+      // console.log(estatResponse.value)
       return formatEstatTimeList(estatResponse.value)
     })
 

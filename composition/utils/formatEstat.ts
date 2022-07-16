@@ -64,3 +64,96 @@ export const formatEstatTimeChartData = (response: EstatResponse) => {
 
   return chartData()
 }
+
+export const formatChartDataPyramidChart = (response: EstatResponse) => {
+  const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
+  const VALUE = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
+
+  const times = () => {
+    return formatEstatTimeList(response)
+  }
+  // console.log({ CLASS_OBJ, VALUE })
+
+  const cat01: CLASS | CLASS[] = CLASS_OBJ.find(
+    (f) => f['@id'] === 'cat01'
+  ).CLASS
+
+  const result = (data) => {
+    const res = []
+    // let line = {}
+    const key: keyof VALUE = `@cat01`
+    cat01.reduce((_, cur) => {
+      // カテゴリ名を整形
+      const categoryName = cur['@name']
+        .replace(`${cur['@code']}_`, '')
+        .replace('（男）', '')
+        .replace('（女）', '')
+
+      // codeに一致する値（$）を返す関数
+      const getValueMatchCode = (code: string) => {
+        return parseInt(data.find((f) => f[key] === code).$)
+      }
+
+      const obj = cur['@name'].match('（男）')
+        ? {
+            man: getValueMatchCode(cur['@code']),
+            unit: data[0]['@unit'],
+          }
+        : {
+            woman: getValueMatchCode(cur['@code']),
+            unit: data[0]['@unit'],
+          }
+
+      if (res.some((s) => s.name === categoryName)) {
+        // line.name = categoryName
+        const j = res.findIndex(({ name }) => name === categoryName)
+        res[j].woman = getValueMatchCode(cur['@code'])
+      } else {
+        res.push(Object.assign({ name: categoryName }, obj))
+      }
+    }, [])
+    // console.log(res)
+    return res
+  }
+  // console.log({ result })
+
+  const chartData = () => {
+    return times().map((d) => {
+      const dataByTime = VALUE.filter((f) => f['@time'] === d.yearStr)
+      return {
+        year: d.yearInt,
+        data: result(dataByTime),
+      }
+    })
+  }
+
+  // console.log({ CLASS_OBJ, VALUE, cat01 })
+  // console.log(chartData())
+
+  // // chartDataを生成する関数
+  // const formatChartData = (data: CLASS) => {
+  //   return {
+  //     code: data['@code'],
+  //     name: data['@name'].replace(`${data['@code']}_`, ''),
+  //     data: VALUE.filter((f) => f['@cat01'] === data['@code']).map((d) => {
+  //       return {
+  //         x: parseInt(d['@time'].substring(0, 4)),
+  //         y: parseFloat(d.$),
+  //         unit: d['@unit'],
+  //       }
+  //     }),
+  //   }
+  // }
+
+  // const chartData = () => {
+  //   if (Array.isArray(cat01)) {
+  //     return cat01.map((d) => {
+  //       return formatChartData(d)
+  //     })
+  //   } else {
+  //     return [formatChartData(cat01)]
+  //   }
+  // }
+
+  return chartData()
+}

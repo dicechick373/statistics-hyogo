@@ -16,16 +16,15 @@ import {
 } from '@nuxtjs/composition-api'
 import { Card, getContentfulCardList } from '@/composition/utils/contentful'
 
-// 総人口（男女別）
+// TimeChartCard
 const CardsTimeChart = () => {
   return import('~/components/index/_shared/estat/EstatTimeChartCard.vue')
 }
-// 総人口ランキング
-// const CardsTimeChartRank = () => {
-//   return import(
-//     '~/components/index/population/cards/population/totalPopulationRankPrefecture.vue'
-//   )
-// }
+
+// PyramidChartCard
+const CardsPyramidChart = () => {
+  return import('~/components/index/_shared/estat/EstatCard.vue')
+}
 
 type Cards = {
   Component: Vue.Component
@@ -54,24 +53,31 @@ export default defineComponent({
 
     // Cards配列の作成
     const getCards = (cardList: Card[]) => {
+      // console.log(cardList)
       const result: Cards[][] = []
       let line: Cards[] = []
 
+      // const component = CardsTimeChart
+
       cardList.reduce((_, cur, i, arr) => {
+        const obj =
+          cur.chartComponent === 'TimeChart'
+            ? { component: CardsTimeChart, card: cur }
+            : { component: CardsPyramidChart, card: cur }
         if (i % 2 === 0) {
           line = []
 
-          line[0] = { component: CardsTimeChart, card: cur }
-          // componentRows[0] = CardsTimeChart
+          line[0] = obj
           if (i === arr.length - 1) {
             result.push(line)
             // components.push(componentRows)
           }
         } else {
-          line[1] = { component: CardsTimeChart, card: cur }
+          line[1] = obj
           result.push(line)
         }
       }, [])
+      // console.log(result)
       return result
     }
 
