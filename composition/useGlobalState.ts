@@ -34,6 +34,7 @@ interface State {
   currentCity: City
   prefList: Pref[]
   cityList: City[]
+  isRank: boolean
 }
 
 export const useGlobalState = () => {
@@ -53,6 +54,7 @@ export const useGlobalState = () => {
     },
     prefList: getResasPrefList(),
     cityList: getResasCityList(28),
+    isRank: false,
   })
 
   // 地方公共団体区分（都道府県／市区町村）のセット
@@ -114,6 +116,16 @@ export const useGlobalState = () => {
     return state.currentMenu
   }
 
+  // isRankの取得
+  const getIsRank = (): Menu => {
+    return state.isRank
+  }
+
+  // isRankの設定
+  const setIsRank = (newVal: boolean): Menu => {
+    state.isRank = newVal
+  }
+
   const getTitle = (title: string): string => {
     return state.currentGovType === 'prefecture'
       ? `${state.currentPref.prefName}の${title}`
@@ -126,6 +138,8 @@ export const useGlobalState = () => {
     // setCurrentMenu,
     getTitle,
     setState,
+    getIsRank,
+    setIsRank,
     getCurrentGovType,
     getCurrentMenuList,
     getCurrentCityList,

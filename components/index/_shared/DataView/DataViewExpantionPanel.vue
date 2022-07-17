@@ -47,7 +47,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-expansion-panel-header__icon {
   margin-left: -5px !important;
 

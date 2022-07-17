@@ -154,7 +154,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .cardTable {
   &.v-data-table {
     th {

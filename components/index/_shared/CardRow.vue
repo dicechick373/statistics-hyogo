@@ -115,7 +115,7 @@ const options: ThisTypedComponentOptionsWithRecordProps<
 export default Vue.extend(options)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .DataCard {
   transition: max-height 0.3s;
 }

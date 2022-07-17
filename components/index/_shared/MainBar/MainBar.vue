@@ -16,6 +16,11 @@
         <v-col v-if="isCity" cols="12" md="3">
           <city-selector />
         </v-col>
+
+        <v-col cols="12" md="3">
+          <rank-selector />
+          <!-- <v-icon right dark>{{ mdiCloudUpload }}</v-icon> -->
+        </v-col>
       </v-row>
     </div>
   </v-card>
@@ -29,6 +34,7 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
+// import { mdiCloudUpload  } from '@mdi/js'
 
 /** 役割
  * フォームの取得
@@ -49,6 +55,7 @@ export default defineComponent({
 
     return {
       isCity,
+      // mdiCloudUpload,
     }
   },
 })

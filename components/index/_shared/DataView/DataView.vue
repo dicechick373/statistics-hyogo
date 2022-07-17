@@ -130,7 +130,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .DataView {
   height: 100%;
   @include card-container();

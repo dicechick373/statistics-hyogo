@@ -77,7 +77,7 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .app-print {
   margin: 0 auto;
   background-color: inherit !important;

@@ -44,7 +44,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .Slider {
   margin-bottom: 20px;
   background-color: $white;
