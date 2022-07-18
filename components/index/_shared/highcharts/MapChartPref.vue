@@ -22,6 +22,7 @@ export default defineComponent({
   },
   setup(props) {
     const series = computed(() => {
+      // console.log(props.displayData)
       const series: SeriesRankPref[] = cloneDeep(props.displayData)
       series[0].joinBy = ['N03_001', 'prefName']
       series[0].states = { hover: { color: '#a4edba' } }

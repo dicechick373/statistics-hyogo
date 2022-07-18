@@ -13,21 +13,21 @@
             <!-- <toggle-map-bar v-model="mapbar" /> -->
 
             <v-row>
-              <!-- <v-col>
+              <v-col>
                 <v-select
-                  v-model="selectedSeries"
-                  :items="series"
-                  item-text="name"
-                  item-value="name"
+                  v-model="selectedCategory"
+                  :items="categoryList"
+                  item-text="@name"
+                  item-value="@code"
                   return-object
                 />
-              </v-col> -->
+              </v-col>
               <v-col>
                 <v-select
                   v-model="selectedTime"
-                  :items="times"
-                  item-text="yearName"
-                  item-value="yearInt"
+                  :items="timeList"
+                  item-text="@name"
+                  item-value="@code"
                   return-object
                   @change="$emit('input', $event)"
                 />
@@ -36,14 +36,14 @@
 
             <!-- <template v-slot:infoPanel>
               <data-view-data-set-panel :display-info="displayInfo" />
-            </template>
+            </template> -->
 
             <lazy-component
               :is="chartComponent"
               v-show="true"
               :display-data="displayData"
               :geo-json="geoJson"
-            /> -->
+            />
 
             <template v-slot:description>
               <p>最終更新日:{{ lastUpdate }}</p>
@@ -91,18 +91,37 @@ import {
 } from '@nuxtjs/composition-api'
 import { useEstatApi } from '@/composition/useEstatApi'
 import { useGeojson } from '@/composition/useGeojson'
-import { EstatParams, EstatResponse, EstatTimes } from '~/types/estat'
+import { convertCodeToString, usePrefecture } from '~/composition/usePrefecture'
+import {
+  CLASS,
+  EstatParams,
+  EstatRankChartData,
+  EstatResponse,
+  EstatSeries,
+  // EstatTimes,
+  VALUE,
+} from '~/types/estat'
 import { useTotalPopulation } from '~/composition/useTotalPopulation'
 import { useTotalArea } from '~/composition/useTotalArea'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { convertPrefCodeToCode } from '~/composition/utils/formatResas'
 import { getContentfulCard } from '~/composition/utils/contentful'
 import {
+  // formatCategoryName,
+  formatChartDataRankChart,
+  formatEstatCategory,
+  // formatEstatCategoryName,
   // convertPrefCodeToString,
   // formatChartDataRankChart,
   formatEstatSource,
-  formatEstatTimeList,
+  // formatEstatTimeList,
+  getEstatCategoryList,
+  getEstatTimeList,
 } from '~/composition/utils/formatEstat'
+import {
+  HighchartsRankChartData,
+  HighchartsRankChartSeries,
+} from '~/types/highcharts'
 
 // MapChart
 const MapChart = () => {
@@ -183,15 +202,21 @@ export default defineComponent({
     })
 
     // 系列セレクト
-    // const series = ''
-    // const selectedSeries = ref<any>()
+    const selectedCategory = ref<CLASS>()
+    const categoryList = computed(() => {
+      selectedCategory.value = getEstatCategoryList(estatResponse.value)[0]
+      return getEstatCategoryList(estatResponse.value).map((d) =>
+        formatEstatCategory(d, propSeries.value)
+      )
+    })
 
     // 年次セレクト
-    const times = computed(() => {
-      return formatEstatTimeList(estatResponse.value)
+    const selectedTime = ref<CLASS>()
+    const timeList = computed(() => {
+      selectedTime.value = getEstatTimeList(estatResponse.value)[0]
+      return getEstatTimeList(estatResponse.value)
     })
-    // console.log(times)
-    const selectedTime = ref<EstatTimes>()
+    // console.log(timeList)
 
     // 順位を付与
     // const withRankingData = computed(() => {
@@ -230,10 +255,73 @@ export default defineComponent({
     //   ]
     // })
 
-    // const chartData = computed(() => {
-    //   return formatChartDataRankChart(estatResponse.value)
-    // })
-    // console.log(chartData)
+    // const formatRankChartSeries = (item: EstatRankChartData) => {
+    //   return {
+    //     name: item.category,
+    //     time: item.time,
+    //     data: item.value.map((d: VALUE) => {
+    //       return {
+    //         prefCode: getPref(d['@code']),
+    //       }
+    //     }),
+    //   }
+    // }
+
+    const chartData = computed(() => {
+      return formatChartDataRankChart(estatResponse.value).map((d) => {
+        d.category = formatEstatCategory(d.category, propSeries.value)
+        return d
+      })
+    })
+
+    const { getPrefecture } = usePrefecture()
+
+    const displayData = computed(() => {
+      // category,timeに合致するデータ
+      const data = chartData.value
+        .filter((f) => Object.is(f.category, selectedCategory.value))
+        .filter((f) => Object.is(f.time, selectedTime.value))
+
+      // highchartsのseriesに整形
+      return data.map((d) => formatHighchartsRankChartSeries(d))
+    })
+
+    const formatHighchartsRankChartSeries = (
+      data: EstatRankChartData
+    ): HighchartsRankChartSeries => {
+      return {
+        name: data.category['@name'],
+        year: parseInt(data.time['@code'].substring(0, 4)),
+        data: data.value.map((d) => formatHighchartsRankChartData(d)),
+      }
+    }
+
+    const formatHighchartsRankChartData = (
+      value: VALUE
+    ): HighchartsRankChartData => {
+      return {
+        prefCode: convertCodeToString(getPrefecture(value['@area']).prefCode),
+        prefName: getPrefecture(value['@area']).prefName,
+        value: parseInt(value.$),
+        unit: value['@unit'],
+      }
+    }
+
+    // series生成
+    const propSeries = computed((): EstatSeries[] => {
+      return estatCardConfig.value.series.map((d, i: number) => {
+        return {
+          name: d,
+          cdCat01: estatCardConfig.value.cdCat01[i],
+          type: estatCardConfig.value.chartType[i],
+          yAxis: estatCardConfig.value.yAxis[i],
+        }
+      })
+    })
+
+    // console.log({ chartData, displayData, propSeries })
+
+    // console.log(getPref('28000'))
 
     // tableHeader
     // const tableHeader = computed(() => [
@@ -282,16 +370,13 @@ export default defineComponent({
       }
     })
 
-    // // 年次セレクト
-    // const selectedTime = ref<EstatTimes>(props.estatState.latestYear)
-
     // // 総数or単位人口or単位面積
     // const selectedValueType = ref<string>('all')
 
     // GeoJsonの設定
-    // const geoJson = computed(() => {
-    //   return prefMap.value
-    // })
+    const geoJson = computed(() => {
+      return prefMap.value
+    })
 
     // MapChartとBarChartの切替
     const mapbar = ref<string>('map')
@@ -307,9 +392,12 @@ export default defineComponent({
       source,
       chartComponent,
       lastUpdate,
-      // selectedSeries,
+      timeList,
       selectedTime,
-      times,
+      categoryList,
+      selectedCategory,
+      displayData,
+      geoJson,
     }
   },
 })

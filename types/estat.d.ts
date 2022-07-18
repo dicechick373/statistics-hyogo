@@ -205,10 +205,10 @@ type RESULT = {
   DATE: string
 }
 
-export type Series = {
-  id?: string
-  code?: string
+export type EstatSeries = {
   name: string
+  cdCat01?: string
+  cdCat02?: string
   type?: string
   yAxis?: number
 }
@@ -219,9 +219,15 @@ export type Times = {
   yearName?: string
 }
 
-export type StateType = {
-  estatParams: EstatParams
-  series: Series[]
-  latestYear: Times
-  annotation: never[]
+export type EstatRankChartData = {
+  category: CLASS
+  time: CLASS
+  value: VALUE[]
 }
+
+// export type StateType = {
+//   estatParams: EstatParams
+//   series: Series[]
+//   latestYear: Times
+//   annotation: never[]
+// }
