@@ -76,9 +76,14 @@ export const formatEstatTimeChartData = (response: EstatResponse) => {
   return chartData()
 }
 
+/**
+ * 統計分野、地方公共団体区分に合致するCardListを取得する関数
+ * @param response -EstatResponse
+ * @returns - HighchartsPyramidChartSeries[]
+ */
 export const formatChartDataPyramidChart = (response: EstatResponse) => {
   const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
-  const VALUE = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
+  const value = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
 
   const times = () => {
     return formatEstatTimeList(response)
@@ -130,7 +135,7 @@ export const formatChartDataPyramidChart = (response: EstatResponse) => {
 
   const chartData = () => {
     return times().map((d) => {
-      const dataByTime = VALUE.filter((f) => f['@time'] === d.yearStr)
+      const dataByTime = value.filter((f) => f['@time'] === d.yearStr)
       return {
         year: d.yearInt,
         data: result(dataByTime),
@@ -138,33 +143,88 @@ export const formatChartDataPyramidChart = (response: EstatResponse) => {
     })
   }
 
-  // console.log({ CLASS_OBJ, VALUE, cat01 })
-  // console.log(chartData())
-
-  // // chartDataを生成する関数
-  // const formatChartData = (data: CLASS) => {
-  //   return {
-  //     code: data['@code'],
-  //     name: data['@name'].replace(`${data['@code']}_`, ''),
-  //     data: VALUE.filter((f) => f['@cat01'] === data['@code']).map((d) => {
-  //       return {
-  //         x: parseInt(d['@time'].substring(0, 4)),
-  //         y: parseFloat(d.$),
-  //         unit: d['@unit'],
-  //       }
-  //     }),
-  //   }
-  // }
-
-  // const chartData = () => {
-  //   if (Array.isArray(cat01)) {
-  //     return cat01.map((d) => {
-  //       return formatChartData(d)
-  //     })
-  //   } else {
-  //     return [formatChartData(cat01)]
-  //   }
-  // }
-
   return chartData()
+}
+
+/**
+ * estatAPIのレスポンスからcdArea一覧を取得する関数
+ * @param response -EstatResponse
+ * @returns -  CLASS | CLASS[]
+ */
+export const getEstatAreaList = (response: EstatResponse): CLASS | CLASS[] => {
+  const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
+  return CLASS_OBJ.find((f) => f['@id'] === 'area').CLASS
+}
+
+/**
+ * estatAPIのレスポンスからcdCat01一覧を取得する関数
+ * @param response -EstatResponse
+ * @returns -  CLASS | CLASS[]
+ */
+export const getEstatCategoryList = (
+  response: EstatResponse
+): CLASS | CLASS[] => {
+  const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
+  return CLASS_OBJ.find((f) => f['@id'] === 'cat01').CLASS
+}
+
+/**
+ * estatAPIのレスポンスからcdCat01一覧を取得する関数
+ * @param response -EstatResponse
+ * @returns -  CLASS | CLASS[]
+ */
+export const getEstatTimeList = (response: EstatResponse): CLASS | CLASS[] => {
+  const CLASS_OBJ = response.GET_STATS_DATA.STATISTICAL_DATA.CLASS_INF.CLASS_OBJ
+  return CLASS_OBJ.find((f) => f['@id'] === 'time').CLASS
+}
+
+export const getValueListGroupByCategory = (
+  value: VALUE[],
+  categoryList: CLASS | CLASS[]
+) => {
+  const key: keyof VALUE = `@cat01`
+  return Array.isArray(categoryList)
+    ? categoryList.map((d) => {
+        return {
+          category: d,
+          value: value.filter((f) => f[key] === d['@code']),
+        }
+      })
+    : [{ category: categoryList, value }]
+}
+
+export const getValueListGroupByTime = (
+  value: VALUE[],
+  timeList: CLASS | CLASS[]
+) => {
+  return Array.isArray(timeList)
+    ? timeList.map((d) => {
+        return {
+          time: d,
+          value: value.filter((f) => f['@time'] === d['@code']),
+        }
+      })
+    : [{ time: timeList, value }]
+}
+
+/**
+ * estatAPIのレスポンスをRankChartに変換する関数
+ * @param response -EstatResponse
+ * @returns - HighchartsPyramidChartSeries[]
+ */
+export const formatChartDataRankChart = (response: EstatResponse) => {
+  const value = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
+  const categoryList = getEstatCategoryList(response)
+  const TimeList = getEstatTimeList(response)
+
+  return getValueListGroupByCategory(value, categoryList)
+    .map((c) => {
+      return getValueListGroupByTime(c.value, TimeList).map((t) => {
+        return {
+          category: c.category,
+          ...t,
+        }
+      })
+    })
+    .flat()
 }

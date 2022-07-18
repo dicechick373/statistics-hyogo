@@ -9,12 +9,15 @@
 import CardsLazyRow from '@/components/index/_shared/CardsLazyRow.vue'
 import {
   defineComponent,
+  inject,
   ref,
-  // useAsync,
   useFetch,
   useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
-import { Card, getContentfulCardList } from '@/composition/utils/contentful'
+import { getContentfulCardList } from '@/composition/utils/contentful'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { CardInformation } from '~/types/main'
 
 // TimeChartCard
 const CardsTimeChart = () => {
@@ -26,9 +29,14 @@ const CardsPyramidChart = () => {
   return import('~/components/index/_shared/estat/EstatPyramidChartCard.vue')
 }
 
-type Cards = {
+// RankChartCard
+const CardsRankChart = () => {
+  return import('~/components/index/_shared/estat/EstatRankChartCard.vue')
+}
+
+type CardProps = {
   Component: Vue.Component
-  Card: Card
+  Card: CardInformation
 }
 
 export default defineComponent({
@@ -37,8 +45,7 @@ export default defineComponent({
   },
   setup() {
     // Card
-    const rows = ref<Cards[][]>()
-    // const cards = ref<Card[][]>()
+    const rows = ref<CardInformation[][]>()
 
     // パスパラメータの取得
     const route = useRoute()
@@ -46,24 +53,39 @@ export default defineComponent({
     const { govType, menuId } = params
 
     const { fetch } = useFetch(async () => {
-      const cardList = await getContentfulCardList(govType, menuId)
+      const cardList: CardInformation[] = await getContentfulCardList(
+        govType,
+        menuId
+      )
       rows.value = getCards(cardList)
     })
     fetch()
 
-    // Cards配列の作成
-    const getCards = (cardList: Card[]) => {
-      // console.log(cardList)
-      const result: Cards[][] = []
-      let line: Cards[] = []
+    // GlobalState
+    const { isRank } = inject(StateKey) as GlobalState
 
-      // const component = CardsTimeChart
+    watch(isRank, () => change())
+    const change = () => {
+      fetch()
+    }
+
+    const setCardProps = (newCard: CardInformation): CardProps => {
+      if (isRank.value) {
+        return { component: CardsRankChart, card: newCard }
+      } else {
+        return newCard.chartComponent === 'TimeChart'
+          ? { component: CardsTimeChart, card: newCard }
+          : { component: CardsPyramidChart, card: newCard }
+      }
+    }
+
+    const getCards = (cardList: CardInformation) => {
+      const result: CardInformation[][] = []
+      let line: CardInformation[] = []
 
       cardList.reduce((_, cur, i, arr) => {
-        const obj =
-          cur.chartComponent === 'TimeChart'
-            ? { component: CardsTimeChart, card: cur }
-            : { component: CardsPyramidChart, card: cur }
+        const obj = setCardProps(cur)
+
         if (i % 2 === 0) {
           line = []
 

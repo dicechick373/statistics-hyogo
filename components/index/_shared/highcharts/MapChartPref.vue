@@ -9,19 +9,6 @@ import { defineComponent, computed, PropType } from '@nuxtjs/composition-api'
 import { FeatureCollection } from 'geojson'
 import { cloneDeep } from 'lodash'
 
-type SeriesRankPref = {
-  name: string
-  year: number
-  data: {
-    prefCode: string
-    prefName: string
-    value: number
-    unit: string
-  }
-  joinBy: string[]
-  states: object
-}
-
 export default defineComponent({
   props: {
     displayData: {
