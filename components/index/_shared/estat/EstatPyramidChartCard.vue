@@ -71,7 +71,7 @@ import {
 // import { useEstatTimeChart } from '@/composition/useEstatTimeChart'
 import { EstatResponse } from '~/types/estat'
 import { useEstatApi } from '~/composition/useEstatApi'
-import { getContentfulCard } from '~/composition/utils/contentful'
+// import { getContentfulCard } from '~/composition/utils/contentful'
 import {
   formatChartDataPyramidChart,
   formatEstatSource,
@@ -81,7 +81,7 @@ import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
 export default defineComponent({
   props: {
-    card: {
+    cardConfig: {
       type: Object,
       required: true,
     },
@@ -96,12 +96,12 @@ export default defineComponent({
     // reactive値
     const estatResponse = ref<EstatResponse>()
     // カード設定
-    const estatCardConfig = ref<EstatCardConfig>()
+    const estatCardConfig = ref<EstatCardConfig>(props.cardConfig)
 
     // eStat-APIからデータを取得
     const { $axios } = useContext()
     const { fetch } = useFetch(async () => {
-      estatCardConfig.value = await getContentfulCard(props.card.cardId)
+      // estatCardConfig.value = await getContentfulCard(props.card.cardId)
       // const params = Object.assign({}, props.estatState.params)
       const estatParams = computed(() => {
         return {

@@ -5,7 +5,7 @@ import {
   IStatisticsMenuFields,
 } from '@/types/contentful'
 import client from '~/plugins/contentful'
-import { CardInformation, Field, Menu } from '~/types/main'
+import { CardConfig, Field, Menu } from '~/types/main'
 
 /**
  * contentfulから統計分野一覧を取得する関数
@@ -129,14 +129,14 @@ export const getContentfulMenu = async (menuId: string): Promise<Menu> => {
 export const getContentfulCardList = async (
   govType: string,
   menuId: string
-): Promise<CardInformation[]> => {
+): Promise<CardConfig[]> => {
   const entries: EntryCollection<IStatisticsMenuFields> =
     await client.getEntries({
       content_type: 'statisticsMenu',
       'fields.menuId': menuId,
     })
 
-  const cards = (): IEstatCardConfigFields[] => {
+  const cards = (): IEstatCardConfigFields[] | undefined => {
     if (govType === 'prefecture') {
       return entries.items[0].fields.cardsPrefecture
     } else {
@@ -144,13 +144,7 @@ export const getContentfulCardList = async (
     }
   }
 
-  return cards().map((d) => {
-    return {
-      cardId: d.fields.cardId,
-      cardTitle: d.fields.cardTitle,
-      chartComponent: d.fields.chartComponent,
-    }
-  })
+  return cards().map((d) => d.fields)
 }
 
 /**

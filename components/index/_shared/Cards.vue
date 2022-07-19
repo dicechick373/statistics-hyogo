@@ -1,7 +1,7 @@
 <template>
   <p v-if="$fetchState.pending" />
   <div v-else>
-    <cards-lazy-row :rows="rows" />
+    <cards-lazy-row :card-rows="cardRows" />
   </div>
 </template>
 
@@ -34,9 +34,9 @@ const CardsRankChart = () => {
   return import('~/components/index/_shared/estat/EstatRankChartCard.vue')
 }
 
-type CardProps = {
-  Component: Vue.Component
-  Card: CardConfig
+type CardRow = {
+  cardComponent: Vue.AsyncComponent
+  cardConfig: CardConfig
 }
 
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
   },
   setup() {
     // Card
-    const rows = ref<CardConfig[][]>()
+    const cardRows = ref<CardRow[][]>()
 
     // パスパラメータの取得
     const route = useRoute()
@@ -58,7 +58,7 @@ export default defineComponent({
         menuId
       )
       // console.log(cardList)
-      rows.value = getCards(cardList)
+      cardRows.value = setCardRows(cardList)
     })
     fetch()
 
@@ -70,43 +70,41 @@ export default defineComponent({
       fetch()
     }
 
-    const setCardProps = (newCard: CardConfig): CardProps => {
-      if (isRank.value) {
-        return { component: CardsRankChart, card: newCard }
-      } else {
-        return newCard.chartComponent === 'TimeChart'
-          ? { component: CardsTimeChart, card: newCard }
-          : { component: CardsPyramidChart, card: newCard }
+    // cardRow{cardComponent,cardConfig}
+    const setCardRow = (cardConfig: CardConfig): CardRow => {
+      const component = isRank.value
+        ? CardsRankChart
+        : cardConfig.chartComponent === 'TimeChart'
+        ? CardsTimeChart
+        : CardsPyramidChart
+
+      return {
+        cardComponent: component,
+        cardConfig,
       }
     }
 
-    const getCards = (cardList: CardConfig) => {
-      const result: CardConfig[][] = []
-      let line: CardConfig[] = []
+    const setCardRows = (cardList: CardConfig[]) => {
+      const result: CardRow[][] = []
+      let line: CardRow[] = []
 
       cardList.reduce((_, cur, i, arr) => {
-        const obj = setCardProps(cur)
-
         if (i % 2 === 0) {
           line = []
-
-          line[0] = obj
+          line[0] = setCardRow(cur)
           if (i === arr.length - 1) {
             result.push(line)
-            // components.push(componentRows)
           }
         } else {
-          line[1] = obj
+          line[1] = setCardRow(cur)
           result.push(line)
         }
       }, [])
-      // console.log(result)
       return result
     }
 
-    // console.log(rows)
     return {
-      rows,
+      cardRows,
     }
   },
 })

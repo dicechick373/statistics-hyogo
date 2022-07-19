@@ -1,7 +1,7 @@
 <template>
   <div class="DataBlock">
     <v-lazy
-      v-for="(row, i) in rows"
+      v-for="(row, i) in cardRows"
       :key="i"
       v-intersect="handler"
       v-scroll="onScroll"
@@ -12,10 +12,10 @@
     >
       <card-row v-if="actives[i]">
         <component
-          :is="r.component"
+          :is="r.cardComponent"
           v-for="(r, j) in row"
           :key="j"
-          :card="r.card"
+          :card-config="r.cardConfig"
         />
       </card-row>
     </v-lazy>
@@ -27,6 +27,7 @@ import { mdiChevronRight } from '@mdi/js'
 import Vue from 'vue'
 
 import CardRow from '@/components/index/_shared/CardRow.vue'
+import { CardConfig } from '~/types/main'
 // import { defineComponent, reactive } from '@nuxtjs/composition-api'
 
 type Data = {
@@ -44,8 +45,10 @@ type Methods = {
 }
 type Computed = {}
 type Props = {
-  rows: Vue[][]
-  cards: {}
+  cardRows: {
+    cardComponent: Vue[][]
+    cardConfig: CardConfig
+  }
 }
 
 export default Vue.extend<Data, Methods, Computed, Props>({
@@ -53,18 +56,18 @@ export default Vue.extend<Data, Methods, Computed, Props>({
     CardRow,
   },
   props: {
-    rows: {
+    cardRows: {
       type: Array,
       required: true,
     },
-    cards: {
-      type: Object,
-      required: true,
-    },
+    // cards: {
+    //   type: Object,
+    //   required: true,
+    // },
   },
   data() {
     return {
-      actives: Array.from({ length: this.rows.length }, () => false),
+      actives: Array.from({ length: this.cardRows.length }, () => false),
       scroll: false,
       mdiChevronRight,
     }
