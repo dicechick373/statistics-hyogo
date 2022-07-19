@@ -12,13 +12,13 @@ export type Menu = {
   menuId: string
 }
 
-export type CardInformation = {
-  cardTitle: string
-  cardId: string
-  chartComponent: 'TimeChart' | 'PyramidChart'
-}
+// export type CardInformation = {
+//   cardTitle: string
+//   cardId: string
+//   chartComponent: 'TimeChart' | 'PyramidChart'
+// }
 
-export type CardConfigEstat = {
+export type CardConfig = {
   cardTitle: string
   cardId: string
   statsDataId: string

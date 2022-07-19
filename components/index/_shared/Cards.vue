@@ -17,7 +17,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { getContentfulCardList } from '@/composition/utils/contentful'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-import { CardInformation } from '~/types/main'
+import { CardConfig } from '~/types/main'
 
 // TimeChartCard
 const CardsTimeChart = () => {
@@ -36,7 +36,7 @@ const CardsRankChart = () => {
 
 type CardProps = {
   Component: Vue.Component
-  Card: CardInformation
+  Card: CardConfig
 }
 
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
   },
   setup() {
     // Card
-    const rows = ref<CardInformation[][]>()
+    const rows = ref<CardConfig[][]>()
 
     // パスパラメータの取得
     const route = useRoute()
@@ -53,10 +53,11 @@ export default defineComponent({
     const { govType, menuId } = params
 
     const { fetch } = useFetch(async () => {
-      const cardList: CardInformation[] = await getContentfulCardList(
+      const cardList: CardConfig[] = await getContentfulCardList(
         govType,
         menuId
       )
+      // console.log(cardList)
       rows.value = getCards(cardList)
     })
     fetch()
@@ -69,7 +70,7 @@ export default defineComponent({
       fetch()
     }
 
-    const setCardProps = (newCard: CardInformation): CardProps => {
+    const setCardProps = (newCard: CardConfig): CardProps => {
       if (isRank.value) {
         return { component: CardsRankChart, card: newCard }
       } else {
@@ -79,9 +80,9 @@ export default defineComponent({
       }
     }
 
-    const getCards = (cardList: CardInformation) => {
-      const result: CardInformation[][] = []
-      let line: CardInformation[] = []
+    const getCards = (cardList: CardConfig) => {
+      const result: CardConfig[][] = []
+      let line: CardConfig[] = []
 
       cardList.reduce((_, cur, i, arr) => {
         const obj = setCardProps(cur)

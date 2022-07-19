@@ -48,44 +48,6 @@ type Props = {
   cards: {}
 }
 
-// export default defineComponent({
-//   props: {
-//     rows: {},
-//   },
-//   components: {
-//     CardRow,
-//   },
-//   setup(props) {
-//     const data = reactive<Data>({
-//       actives: Array.from({ length: props.rows.length }, () => false),
-//       scroll: false,
-//       mdiChevronRight,
-//     })
-
-//     const onScroll = () => {
-//       if (data.scroll) return
-//       data.scroll = true
-//       data.actives[0] = true
-//       data.actives[1] = true
-//     }
-
-//     const handler = (
-//       _entries: IntersectionObserverEntry[],
-//       _observer: IntersectionObserver,
-//       isIntersecting: boolean
-//     ) => {
-//       if (!isIntersecting) return
-//       data.actives.indexOf(false) = true
-//     }
-
-//     return {
-//       onScroll,
-//       handler,
-//       data,
-//     }
-//   },
-// })
-
 export default Vue.extend<Data, Methods, Computed, Props>({
   components: {
     CardRow,
@@ -95,10 +57,10 @@ export default Vue.extend<Data, Methods, Computed, Props>({
       type: Array,
       required: true,
     },
-    // cards: {
-    //   type: Object,
-    //   required: true,
-    // },
+    cards: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
