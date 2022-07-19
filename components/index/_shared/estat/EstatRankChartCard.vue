@@ -105,7 +105,7 @@ import { useTotalPopulation } from '~/composition/useTotalPopulation'
 import { useTotalArea } from '~/composition/useTotalArea'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { convertPrefCodeToCode } from '~/composition/utils/formatResas'
-import { getContentfulCard } from '~/composition/utils/contentful'
+// import { getContentfulCard } from '~/composition/utils/contentful'
 import {
   // formatCategoryName,
   formatChartDataRankChart,
@@ -134,7 +134,7 @@ const BarChart = () => {
 
 export default defineComponent({
   props: {
-    card: {
+    cardConfig: {
       type: Object,
       required: true,
     },
@@ -148,7 +148,7 @@ export default defineComponent({
     const prefList = getPrefList()
 
     // reactive値
-    const estatCardConfig = ref<EstatCardConfig>()
+    const estatCardConfig = ref<EstatCardConfig>(props.cardConfig)
     const estatResponse = ref<EstatResponse>()
     const prefMap = ref<any>()
     const totalPopulationData = ref<any>()
@@ -157,7 +157,7 @@ export default defineComponent({
     // APIからデータを取得してreactiveに格納
     const { $axios } = useContext()
     const { fetch } = useFetch(async () => {
-      estatCardConfig.value = await getContentfulCard(props.card.cardId)
+      // estatCardConfig.value = await getContentfulCard(props.card.cardId)
       const estatParams = computed((): EstatParams => {
         return {
           statsDataId: estatCardConfig.value.statsDataId,
@@ -172,7 +172,7 @@ export default defineComponent({
       ).getData()
 
       // geojsonの取得
-      const { getPrefMap } = useGeojson($axios)
+      const { getPrefMap } = useGeojson()
       prefMap.value = await getPrefMap()
 
       totalPopulationData.value = await useTotalPopulation(
@@ -193,7 +193,6 @@ export default defineComponent({
     const cardId = computed(() => {
       return estatCardConfig.value.cardId
     })
-    // console.log(cardId)
 
     // path
     const route = useRoute()
