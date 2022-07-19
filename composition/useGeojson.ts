@@ -1,6 +1,7 @@
 import * as topojson from 'topojson-client'
+import axios from 'axios'
 
-export const useGeojson = (axios) => {
+export const useGeojson = () => {
   const geoshape = 'https://geoshape.ex.nii.ac.jp/city/topojson/20210101'
 
   const convertTopoToGeoCity = async (url: string) => {

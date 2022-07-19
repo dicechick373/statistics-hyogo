@@ -5,14 +5,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  computed,
+  PropType,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import { FeatureCollection } from 'geojson'
 import { cloneDeep } from 'lodash'
+import { HighchartsRankChartSeries } from '~/types/highcharts'
 
 export default defineComponent({
   props: {
     displayData: {
-      type: Array as () => SeriesRankPref[],
+      type: Array as () => HighchartsRankChartSeries[],
       required: true,
     },
     geoJson: {
@@ -21,11 +27,19 @@ export default defineComponent({
     },
   },
   setup(props) {
+    // 都道府県／市区町村の判定
+    const route = useRoute()
+    const { govType } = route.value.params
+
+    // HighMaps用にseriesを整形
     const series = computed(() => {
-      // console.log(props.displayData)
-      const series: SeriesRankPref[] = cloneDeep(props.displayData)
-      series[0].joinBy = ['N03_001', 'prefName']
-      series[0].states = { hover: { color: '#a4edba' } }
+      const series: HighchartsRankChartSeries[] = cloneDeep(props.displayData)
+      if (govType === 'prefecture') {
+        series[0].joinBy = ['N03_001', 'prefName']
+        series[0].states = { hover: { color: '#a4edba' } }
+      } else {
+      }
+
       return series
     })
 
