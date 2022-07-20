@@ -35,7 +35,8 @@ export const useEstatResponse = (cardConfig: CardConfig) => {
   const { prefList } = usePrefecture()
   const { cityList } = useCity()
   const cdArea = computed(() => {
-    return !isRank
+    // console.log()
+    return isRank.value === false
       ? code
       : govType === 'prefecture'
       ? prefList.value.map((d) => convertPrefCodeNumberToString(d.prefCode))

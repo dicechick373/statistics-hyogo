@@ -10,6 +10,7 @@ export const useGeojson = () => {
   // route情報の取得
   const route = useRoute()
 
+  // TODO:stateにする
   const geoJson = ref<any>()
 
   // geoJsonを取得
@@ -52,8 +53,9 @@ export const generateGeoShapeURL = (
 /**
  * topoJsonをgeoJsonに変換する関数
  * @param topo -
- * @returns - FeatureCollection
+ * @returns - FeatureCollectionÏ
  */
+// TODO:型定義の整理
 const convertTopoToGeo = (topo): GeometryCollection => {
   // console.log(topo)
   return 'pref' in topo.objects
