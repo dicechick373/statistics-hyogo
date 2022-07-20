@@ -9,19 +9,18 @@ import {
   defineComponent,
   computed,
   useRoute,
-  useMeta,
+  // useMeta,
   inject,
-  reactive,
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from '@/composition/useGlobalState'
-import { useContents } from '~/composition/useContents'
+// import { useContents } from '~/composition/useContents'
 
 export default defineComponent({
   head: {},
   setup() {
     // パスパラメータの取得
     const route = useRoute()
-    const { govType, code, fieldId, menuId, cardId } = route.value.params
+    const { govType, cardId } = route.value.params
     const params = route.value.params
 
     // globalState
@@ -37,57 +36,57 @@ export default defineComponent({
       }
     })
 
-    // メタ
-    const url = 'https://statistics-hyogo.com'
-    const puppeteerFunction =
-      'https://asia-northeast2-primal-buttress-342908.cloudfunctions.net/puppeteerSample'
+    // // メタ
+    // const url = 'https://statistics-hyogo.com'
+    // const puppeteerFunction =
+    //   'https://asia-northeast2-primal-buttress-342908.cloudfunctions.net/puppeteerSample'
 
-    const ogpImage = computed(() => {
-      return `${puppeteerFunction}?url=${url}${route.value.path}?ogp=true`
-    })
-    // console.log(ogpImage)
-    // console.log(ogpImage)
-    const { getCardTitle } = useContents()
-    const ogpTitle = computed(() => {
-      return `${getCardTitle.value(cardId)} | 統計で見る兵庫県のすがた`
-    })
+    // const ogpImage = computed(() => {
+    //   return `${puppeteerFunction}?url=${url}${route.value.path}?ogp=true`
+    // })
+    // // console.log(ogpImage)
+    // // console.log(ogpImage)
+    // const { getCardTitle } = useContents()
+    // const ogpTitle = computed(() => {
+    //   return `${getCardTitle.value(cardId)} | 統計で見る兵庫県のすがた`
+    // })
 
-    const mInfo = reactive<any>([
-      {
-        hid: 'og:url',
-        property: 'og:url',
-        content: `${url}/${govType}/${code}/${fieldId}/${menuId}/${cardId}`,
-      },
-      {
-        hid: 'og:title',
-        property: 'og:title',
-        content: ogpTitle.value,
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: `当サイトは、兵庫県に関する統計をわかりやすく伝えることを目的として、いち兵庫県民が開設したサイトです。`,
-      },
-      {
-        hid: 'og:description',
-        property: 'og:description',
-        content: `当サイトは、兵庫県に関する統計をわかりやすく伝えることを目的として、いち兵庫県民が開設したサイトです。`,
-      },
-      {
-        hid: 'og:image',
-        property: 'og:image',
-        content: ogpImage.value,
-      },
-      {
-        hid: 'twitter:image',
-        name: 'twitter:image',
-        content: ogpImage.value,
-      },
-    ])
+    // const mInfo = reactive<any>([
+    //   {
+    //     hid: 'og:url',
+    //     property: 'og:url',
+    //     content: `${url}/${govType}/${code}/${fieldId}/${menuId}/${cardId}`,
+    //   },
+    //   {
+    //     hid: 'og:title',
+    //     property: 'og:title',
+    //     content: ogpTitle.value,
+    //   },
+    //   {
+    //     hid: 'description',
+    //     name: 'description',
+    //     content: `当サイトは、兵庫県に関する統計をわかりやすく伝えることを目的として、いち兵庫県民が開設したサイトです。`,
+    //   },
+    //   {
+    //     hid: 'og:description',
+    //     property: 'og:description',
+    //     content: `当サイトは、兵庫県に関する統計をわかりやすく伝えることを目的として、いち兵庫県民が開設したサイトです。`,
+    //   },
+    //   {
+    //     hid: 'og:image',
+    //     property: 'og:image',
+    //     content: ogpImage.value,
+    //   },
+    //   {
+    //     hid: 'twitter:image',
+    //     name: 'twitter:image',
+    //     content: ogpImage.value,
+    //   },
+    // ])
 
-    const { title, meta } = useMeta()
-    title.value = ogpTitle.value
-    meta.value = mInfo
+    // const { title, meta } = useMeta()
+    // title.value = ogpTitle.value
+    // meta.value = mInfo
 
     return {
       cardComponent,

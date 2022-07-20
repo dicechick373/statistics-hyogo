@@ -7,27 +7,33 @@ export type EstatParams = {
   cdTime?: string | string[]
 }
 
-export type EstatState = {
-  title: string
-  titleId: string
-  params: EstatParams
-  series: EstatSeries[]
-  annotation: string[]
-  latestYear?: EstatTimes
+export type EstatCardConfig = {
+  cardTitle: string
+  cardId: string
+  statsDataId: string
+  cdCat01?: string | string[]
+  cdCat02?: string | string[]
+  series?: string | string[]
+  chartType?: string[] | string[]
+  yAxis?: string | string[]
+  govType: 'prefecture' | 'city'
+  chartComponent: 'TimeChart' | 'PyramidChart'
+  isBreak: boolean
+  annotation?: Document | undefined
 }
 
-export type EstatSeries = {
-  id: string
-  code: string
-  name: string
-  type?: string
-  yAxis?: number
-  color?: string
-  data?: []
-  year?: number
-  man?: string
-  woman?: string
-}
+// export type EstatSeries = {
+//   id: string
+//   code: string
+//   name: string
+//   type?: string
+//   yAxis?: number
+//   color?: string
+//   data?: []
+//   year?: number
+//   man?: string
+//   woman?: string
+// }
 
 export type EstatTimes = {
   yearInt?: number
@@ -35,17 +41,17 @@ export type EstatTimes = {
   yearName?: string
 }
 
-export type EstatTimeChart = {
-  name: string
-  data: {
-    x: number
-    y: number
-    unit: string
-  }
-  color: string
-  yAxis?: number
-  type?: string
-}
+// export type EstatTimeChartData = {
+//   name: string
+//   data: {
+//     x: number
+//     y: number
+//     unit: string
+//   }
+//   // color: string
+//   yAxis?: number
+//   type?: string
+// }
 
 export type EstatSource = {
   estatName: string
@@ -106,7 +112,7 @@ type CLASSINF = {
   CLASS_OBJ: CLASSOBJ[]
 }
 
-type CLASSOBJ = {
+export type CLASSOBJ = {
   '@id': string
   '@name': string
   CLASS: CLASS[] | CLASS | CLASS3
@@ -199,10 +205,10 @@ type RESULT = {
   DATE: string
 }
 
-export type Series = {
-  id?: string
-  code?: string
+export type EstatSeries = {
   name: string
+  cdCat01?: string
+  cdCat02?: string
   type?: string
   yAxis?: number
 }
@@ -213,9 +219,15 @@ export type Times = {
   yearName?: string
 }
 
-export type StateType = {
-  estatParams: EstatParams
-  series: Series[]
-  latestYear: Times
-  annotation: never[]
+export type EstatRankChartData = {
+  category: CLASS
+  time: CLASS
+  value: VALUE[]
 }
+
+// export type StateType = {
+//   estatParams: EstatParams
+//   series: Series[]
+//   latestYear: Times
+//   annotation: never[]
+// }

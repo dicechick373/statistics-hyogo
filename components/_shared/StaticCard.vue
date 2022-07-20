@@ -10,7 +10,7 @@ import Vue from 'vue'
 export default Vue.extend()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .StaticCard {
   @include card-container();
   @include font-size(16);
