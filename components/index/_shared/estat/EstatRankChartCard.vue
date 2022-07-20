@@ -10,7 +10,7 @@
             </h4>
 
             <!-- <toggle-rank-value v-model="selectedValueType" /> -->
-            <!-- <toggle-map-bar v-model="mapbar" /> -->
+            <toggle-map-bar v-model="mapbar" />
 
             <v-row>
               <v-col>
@@ -118,7 +118,7 @@ import { useCity } from '~/composition/useCity'
 
 // MapChart
 const MapChart = () => {
-  return import('@/components/index/_shared/highcharts/MapChartPref.vue')
+  return import('~/components/index/_shared/highcharts/MapChart.vue')
 }
 // BarChart
 const BarChart = () => {
@@ -135,6 +135,8 @@ export default defineComponent({
   setup(props) {
     // canvas
     // const canvas = true
+    const drawer = ref<boolean>(false)
+    const group = ref<any>()
 
     // reactive値
     const estatCardConfig = ref<CardConfig>(props.cardConfig)
@@ -366,6 +368,8 @@ export default defineComponent({
       selectedCategory,
       displayData,
       geoJson,
+      drawer,
+      group,
     }
   },
 })
