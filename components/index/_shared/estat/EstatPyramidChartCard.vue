@@ -101,8 +101,6 @@ export default defineComponent({
     // eStat-APIからデータを取得
     const { $axios } = useContext()
     const { fetch } = useFetch(async () => {
-      // estatCardConfig.value = await getContentfulCard(props.card.cardId)
-      // const params = Object.assign({}, props.estatState.params)
       const estatParams = computed(() => {
         return {
           statsDataId: estatCardConfig.value.statsDataId,

@@ -100,7 +100,7 @@ import {
 import { useTotalPopulation } from '~/composition/useTotalPopulation'
 import { useTotalArea } from '~/composition/useTotalArea'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-import { convertPrefCodeToCode } from '~/composition/utils/formatResas'
+import { convertPrefCodeNumberToString } from '~/composition/utils/formatResas'
 
 // MapChart
 const MapChart = () => {
@@ -134,7 +134,9 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       // estat-APIの取得
       const params = Object.assign({}, props.estatState.params)
-      params.cdArea = prefList.map((d) => convertPrefCodeToCode(d.prefCode))
+      params.cdArea = prefList.map((d) =>
+        convertPrefCodeNumberToString(d.prefCode)
+      )
       estatResponse.value = await useEstatApi($axios, params).getData()
 
       // geojsonの取得

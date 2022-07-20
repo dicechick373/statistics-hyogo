@@ -1,38 +1,39 @@
 import { reactive, toRefs } from '@nuxtjs/composition-api'
-import prefListMaster from '~/assets/json/preflist.json'
-import { Pref } from '~/types/resas'
+import { getResasCityList } from './utils/formatResas'
+import { City } from '~/types/resas'
 
 interface State {
-  isPref: boolean
-  currentPref: Pref
-  prefList: Pref[]
+  isCity: boolean
+  currentCity: City
+  cityList: City[]
 }
 
-export const usePrefecture = () => {
+export const useCity = () => {
   // state
   const state = reactive<State>({
-    isPref: true,
-    currentPref: { prefCode: 28, prefName: '兵庫県' },
-    prefList: prefListMaster.result,
+    isCity: true,
+    currentCity: {
+      prefCode: 28,
+      cityCode: '28100',
+      cityName: '神戸市',
+      bigCityFlag: '2',
+    },
+    cityList: getResasCityList(28),
   })
 
   // codeに合致する都道府県を返す
-  const getPrefecture = (code: string): Pref => {
-    return (
-      prefListMaster.result.find(
-        (f) => f.prefCode === convertCodeToNumber(code)
-      ) ?? prefListMaster.result[0]
-    )
+  const getCity = (code: string): City => {
+    return state.cityList.find((f) => f.cityCode === code) ?? state.cityList[0]
   }
 
-  const changeIsPref = (newBoolean: boolean) => {
-    state.isPref = newBoolean
-  }
+  // const changeIsPref = (newBoolean: boolean) => {
+  //   state.isCity = newBoolean
+  // }
 
   return {
     ...toRefs(state),
-    getPrefecture,
-    changeIsPref,
+    getCity,
+    // changeIsPref,
   }
 }
 

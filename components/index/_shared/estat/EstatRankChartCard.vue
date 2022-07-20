@@ -14,24 +14,14 @@
 
             <v-row>
               <v-col>
-                <v-select
+                <class-selector
                   v-model="selectedCategory"
                   :items="categoryList"
-                  item-text="@name"
-                  item-value="@code"
-                  return-object
                 />
               </v-col>
               <v-col>
-                <v-select
-                  v-model="selectedTime"
-                  :items="timeList"
-                  item-text="@name"
-                  item-value="@code"
-                  return-object
-                  @change="$emit('input', $event)"
-                />
-              </v-col>
+                <class-selector v-model="selectedTime" :items="timeList"
+              /></v-col>
             </v-row>
 
             <!-- <template v-slot:infoPanel>
@@ -84,27 +74,28 @@ import {
   ref,
   computed,
   // PropType,
-  useContext,
+  // useContext,
   useFetch,
   inject,
   useRoute,
 } from '@nuxtjs/composition-api'
-import { useEstatApi } from '@/composition/useEstatApi'
+// import { useEstatApi } from '@/composition/useEstatApi'
 import { useGeojson } from '@/composition/useGeojson'
+import { useEstatResponse } from '@/composition/useEstatResponse'
 import { convertCodeToString, usePrefecture } from '~/composition/usePrefecture'
 import {
   CLASS,
-  EstatParams,
+  // EstatParams,
   EstatRankChartData,
-  EstatResponse,
+  // EstatResponse,
   EstatSeries,
   // EstatTimes,
   VALUE,
 } from '~/types/estat'
-import { useTotalPopulation } from '~/composition/useTotalPopulation'
-import { useTotalArea } from '~/composition/useTotalArea'
+// import { useTotalPopulation } from '~/composition/useTotalPopulation'
+// import { useTotalArea } from '~/composition/useTotalArea'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-import { convertPrefCodeToCode } from '~/composition/utils/formatResas'
+// import { convertPrefCodeNumberToString } from '~/composition/utils/formatResas'
 // import { getContentfulCard } from '~/composition/utils/contentful'
 import {
   // formatCategoryName,
@@ -122,6 +113,8 @@ import {
   HighchartsRankChartData,
   HighchartsRankChartSeries,
 } from '~/types/highcharts'
+import { CardConfig } from '~/types/main'
+import { useCity } from '~/composition/useCity'
 
 // MapChart
 const MapChart = () => {
@@ -143,42 +136,21 @@ export default defineComponent({
     // canvas
     // const canvas = true
 
-    // 都道府県リストの取得
-    const { getPrefList } = inject(StateKey) as GlobalState
-    const prefList = getPrefList()
-
     // reactive値
-    const estatCardConfig = ref<EstatCardConfig>(props.cardConfig)
-    const estatResponse = ref<EstatResponse>()
-    const prefMap = ref<any>()
-    const totalPopulationData = ref<any>()
-    const totalAreaData = ref<any>()
+    const estatCardConfig = ref<CardConfig>(props.cardConfig)
+
+    // GeoJsonの設定
+    const { geoJson, setGeoJsonAsync } = useGeojson()
+
+    const { estatResponse, setEstatResponseAsync } = useEstatResponse(
+      props.cardConfig
+    )
+    // console.log(estatResponse)
 
     // APIからデータを取得してreactiveに格納
-    const { $axios } = useContext()
     const { fetch } = useFetch(async () => {
-      // estatCardConfig.value = await getContentfulCard(props.card.cardId)
-      const estatParams = computed((): EstatParams => {
-        return {
-          statsDataId: estatCardConfig.value.statsDataId,
-          cdCat01: estatCardConfig.value.cdCat01,
-          cdArea: prefList.map((d) => convertPrefCodeToCode(d.prefCode)),
-        }
-      })
-
-      estatResponse.value = await useEstatApi(
-        $axios,
-        estatParams.value
-      ).getData()
-
-      // geojsonの取得
-      const { getPrefMap } = useGeojson()
-      prefMap.value = await getPrefMap()
-
-      totalPopulationData.value = await useTotalPopulation(
-        $axios
-      ).getPrefecture(prefList)
-      totalAreaData.value = await useTotalArea($axios).getPrefecture(prefList)
+      await setGeoJsonAsync()
+      await setEstatResponseAsync()
     })
     fetch()
 
@@ -273,8 +245,6 @@ export default defineComponent({
       })
     })
 
-    const { getPrefecture } = usePrefecture()
-
     const displayData = computed(() => {
       // category,timeに合致するデータ
       const data = chartData.value
@@ -286,21 +256,25 @@ export default defineComponent({
     })
 
     const formatHighchartsRankChartSeries = (
-      data: EstatRankChartData
+      chartData: EstatRankChartData
     ): HighchartsRankChartSeries => {
       return {
-        name: data.category['@name'],
-        year: parseInt(data.time['@code'].substring(0, 4)),
-        data: data.value.map((d) => formatHighchartsRankChartData(d)),
+        name: chartData.category['@name'],
+        year: parseInt(chartData.time['@code'].substring(0, 4)),
+        data: chartData.value.map((d) => formatHighchartsRankChartData(d)),
       }
     }
 
+    const { getPrefecture } = usePrefecture()
+    const { getCity } = useCity()
     const formatHighchartsRankChartData = (
       value: VALUE
     ): HighchartsRankChartData => {
       return {
         prefCode: convertCodeToString(getPrefecture(value['@area']).prefCode),
         prefName: getPrefecture(value['@area']).prefName,
+        cityCode: getCity(value['@area']).cityCode,
+        cityName: getCity(value['@area']).cityName,
         value: parseInt(value.$),
         unit: value['@unit'],
       }
@@ -372,11 +346,6 @@ export default defineComponent({
     // // 総数or単位人口or単位面積
     // const selectedValueType = ref<string>('all')
 
-    // GeoJsonの設定
-    const geoJson = computed(() => {
-      return prefMap.value
-    })
-
     // MapChartとBarChartの切替
     const mapbar = ref<string>('map')
     const chartComponent = computed(() => {
@@ -401,3 +370,6 @@ export default defineComponent({
   },
 })
 </script>
+
+function useEstatResponse() { throw new Error('Function not implemented.') }
+function getCity(arg0: string) { throw new Error('Function not implemented.') }

@@ -38,6 +38,8 @@ export default defineComponent({
         series[0].joinBy = ['N03_001', 'prefName']
         series[0].states = { hover: { color: '#a4edba' } }
       } else {
+        series[0].joinBy = ['N03_007', 'cityCode']
+        series[0].states = { hover: { color: '#a4edba' } }
       }
 
       return series

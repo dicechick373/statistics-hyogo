@@ -25,7 +25,7 @@ export const convertCodeToPrefCode = (code: string): number => {
  * @param code -string
  * @returns - string
  */
-export const convertPrefCodeToCode = (code: number): string => {
+export const convertPrefCodeNumberToString = (code: number): string => {
   return ('0000000000' + code).slice(-2) + '000'
 }
 

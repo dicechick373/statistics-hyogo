@@ -25,7 +25,7 @@
 import { defineComponent, inject, ref, watch } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
-import { convertPrefCodeToCode } from '@/composition/utils/formatResas'
+import { convertPrefCodeNumberToString } from '@/composition/utils/formatResas'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { Pref } from '~/types/resas'
 import { useChangeRouter } from '~/composition/useChangeRouter'
@@ -50,7 +50,7 @@ export default defineComponent({
     watch(selectedPref, () => changePref())
     const { changeRoute } = useChangeRouter()
     const changePref = () => {
-      const code = convertPrefCodeToCode(selectedPref.value.prefCode)
+      const code = convertPrefCodeNumberToString(selectedPref.value.prefCode)
 
       changeRoute(code)
     }

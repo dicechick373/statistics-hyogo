@@ -9,7 +9,7 @@ import {
 import { getInitMenuList, Menu } from '@/composition/utils/contentful'
 import {
   convertCodeToGovType,
-  convertPrefCodeToCode,
+  convertPrefCodeNumberToString,
 } from '@/composition/utils/formatResas'
 import { GlobalState, StateKey } from './useGlobalState'
 import { City } from '~/types/resas'
@@ -32,7 +32,7 @@ export const useChangeRouter = () => {
   } = inject(StateKey) as GlobalState
 
   // 都道府県コード、市区町村コード
-  const prefCode = convertPrefCodeToCode(currentPref.value.prefCode)
+  const prefCode = convertPrefCodeNumberToString(currentPref.value.prefCode)
   const cityCode = currentCity.value.cityCode
 
   const router = useRouter()
