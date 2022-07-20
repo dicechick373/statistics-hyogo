@@ -135,8 +135,6 @@ export default defineComponent({
   setup(props) {
     // canvas
     // const canvas = true
-    const drawer = ref<boolean>(false)
-    const group = ref<any>()
 
     // reactive値
     const estatCardConfig = ref<CardConfig>(props.cardConfig)
@@ -368,8 +366,6 @@ export default defineComponent({
       selectedCategory,
       displayData,
       geoJson,
-      drawer,
-      group,
     }
   },
 })
