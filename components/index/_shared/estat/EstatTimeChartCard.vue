@@ -63,13 +63,11 @@ import {
   defineComponent,
   ref,
   computed,
-  useContext,
   useRoute,
   useFetch,
   inject,
 } from '@nuxtjs/composition-api'
-import { EstatCardConfig, EstatParams, EstatResponse } from '~/types/estat'
-import { useEstatApi } from '~/composition/useEstatApi'
+import { EstatCardConfig } from '~/types/estat'
 import {
   formatEstatSource,
   formatEstatTimeChartData,
@@ -77,6 +75,7 @@ import {
 } from '~/composition/utils/formatEstat'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { HighchartsTimeChartSeries } from '~/types/highcharts'
+import { useEstatResponse } from '~/composition/useEstatResponse'
 
 export default defineComponent({
   props: {
@@ -89,28 +88,18 @@ export default defineComponent({
     // canvas
     const canvas = true
 
-    // routeパラメータの取得
-    const { code } = useRoute().value.params
-
     // reactive値
     const estatCardConfig = ref<EstatCardConfig>(props.cardConfig)
-    const estatResponse = ref<EstatResponse>()
+    // const estatResponse = ref<EstatResponse>()
+
+    const { estatResponse, setEstatResponseAsync } = useEstatResponse(
+      props.cardConfig
+    )
 
     // eStat-APIからデータを取得
-    const { $axios } = useContext()
-    const { fetch } = useFetch(async () => {
-      const estatParams = computed((): EstatParams => {
-        return {
-          statsDataId: estatCardConfig.value.statsDataId,
-          cdCat01: estatCardConfig.value.cdCat01,
-          cdArea: code,
-        }
-      })
 
-      estatResponse.value = await useEstatApi(
-        $axios,
-        estatParams.value
-      ).getData()
+    const { fetch } = useFetch(async () => {
+      await setEstatResponseAsync()
     })
     fetch()
 

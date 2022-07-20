@@ -10,7 +10,7 @@
             </h4>
 
             <!-- <toggle-rank-value v-model="selectedValueType" /> -->
-            <toggle-map-bar v-model="mapbar" />
+            <!-- <toggle-map-bar v-model="mapbar" /> -->
 
             <v-row>
               <v-col>
@@ -73,39 +73,19 @@ import {
   defineComponent,
   ref,
   computed,
-  // PropType,
-  // useContext,
   useFetch,
   inject,
   useRoute,
 } from '@nuxtjs/composition-api'
-// import { useEstatApi } from '@/composition/useEstatApi'
 import { useGeojson } from '@/composition/useGeojson'
 import { useEstatResponse } from '@/composition/useEstatResponse'
 import { convertCodeToString, usePrefecture } from '~/composition/usePrefecture'
-import {
-  CLASS,
-  // EstatParams,
-  EstatRankChartData,
-  // EstatResponse,
-  EstatSeries,
-  // EstatTimes,
-  VALUE,
-} from '~/types/estat'
-// import { useTotalPopulation } from '~/composition/useTotalPopulation'
-// import { useTotalArea } from '~/composition/useTotalArea'
+import { CLASS, EstatRankChartData, EstatSeries, VALUE } from '~/types/estat'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-// import { convertPrefCodeNumberToString } from '~/composition/utils/formatResas'
-// import { getContentfulCard } from '~/composition/utils/contentful'
 import {
-  // formatCategoryName,
   formatChartDataRankChart,
   formatEstatCategory,
-  // formatEstatCategoryName,
-  // convertPrefCodeToString,
-  // formatChartDataRankChart,
   formatEstatSource,
-  // formatEstatTimeList,
   getEstatCategoryList,
   getEstatTimeList,
 } from '~/composition/utils/formatEstat'
@@ -145,7 +125,6 @@ export default defineComponent({
     const { estatResponse, setEstatResponseAsync } = useEstatResponse(
       props.cardConfig
     )
-    // console.log(estatResponse)
 
     // APIからデータを取得してreactiveに格納
     const { fetch } = useFetch(async () => {
@@ -343,9 +322,6 @@ export default defineComponent({
       }
     })
 
-    // // 総数or単位人口or単位面積
-    // const selectedValueType = ref<string>('all')
-
     // MapChartとBarChartの切替
     const mapbar = ref<string>('map')
     const chartComponent = computed(() => {
@@ -366,6 +342,7 @@ export default defineComponent({
       selectedCategory,
       displayData,
       geoJson,
+      // mapbar,
     }
   },
 })
