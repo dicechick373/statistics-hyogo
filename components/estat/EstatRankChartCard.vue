@@ -98,11 +98,11 @@ import { useCity } from '~/composition/useCity'
 
 // MapChart
 const MapChart = () => {
-  return import('~/components/index/_shared/highcharts/MapChart.vue')
+  return import('@/components/highcharts/MapChart.vue')
 }
 // BarChart
 const BarChart = () => {
-  return import('@/components/index/_shared/highcharts/BarChart.vue')
+  return import('@/components/highcharts/BarChart.vue')
 }
 
 export default defineComponent({

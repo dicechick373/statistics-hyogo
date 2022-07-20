@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import CardsLazyRow from '@/components/index/_shared/CardsLazyRow.vue'
 import {
   defineComponent,
   inject,
@@ -16,22 +15,23 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 import { getContentfulCardList } from '@/composition/utils/contentful'
+import CardsLazyRow from '~/components/card/CardsLazyRow.vue'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { CardConfig } from '~/types/main'
 
 // TimeChartCard
 const CardsTimeChart = () => {
-  return import('~/components/index/_shared/estat/EstatTimeChartCard.vue')
+  return import('~/components/estat/EstatTimeChartCard.vue')
 }
 
 // PyramidChartCard
 const CardsPyramidChart = () => {
-  return import('~/components/index/_shared/estat/EstatPyramidChartCard.vue')
+  return import('~/components/estat/EstatPyramidChartCard.vue')
 }
 
 // RankChartCard
 const CardsRankChart = () => {
-  return import('~/components/index/_shared/estat/EstatRankChartCard.vue')
+  return import('~/components/estat/EstatRankChartCard.vue')
 }
 
 type CardRow = {

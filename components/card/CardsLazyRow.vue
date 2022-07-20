@@ -26,7 +26,7 @@
 import { mdiChevronRight } from '@mdi/js'
 import Vue from 'vue'
 
-import CardRow from '@/components/index/_shared/CardRow.vue'
+import CardRow from '~/components/card/CardRow.vue'
 import { CardConfig } from '~/types/main'
 // import { defineComponent, reactive } from '@nuxtjs/composition-api'
 
