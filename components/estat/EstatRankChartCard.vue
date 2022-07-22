@@ -3,14 +3,12 @@
     <client-only>
       <template>
         <v-card :loading="$fetchState.pending">
+          <card-app-bar />
           <p v-if="$fetchState.pending" />
           <data-view v-else :title="cardTitle" :route="path">
             <h4 :id="cardId" class="visually-hidden">
               {{ cardTitle }}
             </h4>
-
-            <!-- <toggle-rank-value v-model="selectedValueType" /> -->
-            <!-- <toggle-map-bar v-model="mapbar" /> -->
 
             <v-row>
               <v-col>
@@ -88,7 +86,7 @@ import {
   formatEstatSource,
   getEstatCategoryList,
   getEstatTimeList,
-} from '~/composition/utils/formatEstat'
+} from '~/composition/utils/formatEstatResponse'
 import {
   HighchartsRankChartData,
   HighchartsRankChartSeries,
@@ -185,24 +183,6 @@ export default defineComponent({
     //       pre.push(Object.assign(cur, { rank }))
     //       return pre
     //     }, [])
-    // })
-
-    // const displayData = computed(() => {
-    //   return [
-    //     {
-    //       name: currentSeries.value.name,
-    //       data: prefList.map((d) => {
-    //         const data = withRankingData.value.find(
-    //           (f) => f.code === convertPrefCodeToString(d.prefCode)
-    //         )
-
-    //         return Object.assign(
-    //           { prefCode: d.prefCode, prefName: d.prefName },
-    //           data
-    //         )
-    //       }),
-    //     },
-    //   ]
     // })
 
     // const formatRankChartSeries = (item: EstatRankChartData) => {

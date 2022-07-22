@@ -1,3 +1,5 @@
+import { SeriesColumnOptions } from 'highcharts'
+
 export type HighchartsTimeChartSeries = {
   name: string
   data?: {
@@ -32,3 +34,5 @@ export type HighchartsRankChartData = {
   value: number
   unit: string
 }
+
+type Data = Pick<SeriesColumnOptions, 'data'>

@@ -1,6 +1,6 @@
 import { useEstatApi } from '@/composition//useEstatApi'
-import { convertPrefCodeToString } from '@/composition/utils/formatEstat'
-import { EstatParams, EstatResponse, VALUE } from '~/types/estat'
+import { convertPrefCodeToString } from '~/composition/utils/formatEstatResponse'
+import { EstatParams, EstatResponse, VALUE } from '~/types/estat-api'
 import { City, Pref } from '~/types/resas'
 
 export type TotalPopulationData = {

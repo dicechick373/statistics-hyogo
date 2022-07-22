@@ -72,7 +72,7 @@ import {
   formatChartDataPyramidChart,
   formatEstatSource,
   formatEstatTimeList,
-} from '~/composition/utils/formatEstat'
+} from '~/composition/utils/formatEstatResponse'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { useEstatResponse } from '~/composition/useEstatResponse'
 

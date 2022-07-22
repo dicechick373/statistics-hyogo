@@ -1,12 +1,12 @@
 import { computed, inject, Ref, useRoute } from '@nuxtjs/composition-api'
+import { GlobalState, StateKey } from './useGlobalState'
 import {
   EstatState,
   VALUE,
   EstatTimes,
   EstatSeries,
   EstatResponse,
-} from '@/types/estat'
-import { GlobalState, StateKey } from './useGlobalState'
+} from '~/types/estat-api'
 
 export const useEstatCityRankChart = (
   estatState: EstatState,

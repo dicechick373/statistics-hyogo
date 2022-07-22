@@ -13,17 +13,25 @@ import { convertPrefCodeNumberToString } from './utils/formatResas'
 import { useEstatApi } from './useEstatApi'
 import { useCity } from './useCity'
 import { EstatParams, EstatResponse } from '~/types/estat-api'
-import { CardConfig } from '~/types/main'
+import { EstatCardConfig } from '~/types/main'
 
 interface State {
-  estatResponse: EstatResponse
+  config: EstatCardConfig
+  params: EstatParams
+  response: EstatResponse
 }
 
-export const useEstatResponse = (cardConfig: CardConfig) => {
+export const useEstatTimeChart = () => {
   // state
   const state = reactive<State>({
-    estatResponse: null,
+    config: null,
+    params: null,
+    response: null,
   })
+
+  const setConfig = (newConfig: EstatCardConfig) => {
+    state.config = newConfig
+  }
 
   // routeパラメータの取得
   const { govType, code } = useRoute().value.params
@@ -46,8 +54,8 @@ export const useEstatResponse = (cardConfig: CardConfig) => {
   // estatパラメータのセット
   const estatParams = computed((): EstatParams => {
     return {
-      statsDataId: cardConfig.statsDataId,
-      cdCat01: cardConfig.cdCat01,
+      statsDataId: state.config.statsDataId,
+      cdCat01: state.config.cdCat01,
       cdArea: cdArea.value,
     }
   })
@@ -61,5 +69,6 @@ export const useEstatResponse = (cardConfig: CardConfig) => {
   return {
     ...toRefs(state),
     setEstatResponseAsync,
+    setConfig,
   }
 }
