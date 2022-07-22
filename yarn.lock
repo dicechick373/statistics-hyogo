@@ -986,6 +986,11 @@
     "local-or-home-npmrc" "^1.1.0"
     "registry-url" "^4.0.0"
 
+"@mdi/font@^7.0.96":
+  "integrity" "sha512-rzlxTfR64hqY8yiBzDjmANfcd8rv+T5C0Yedv/TWk2QyAQYdc66e0kaN1ipmnYU3RukHRTRcBARHzzm+tIhL7w=="
+  "resolved" "https://registry.npmjs.org/@mdi/font/-/font-7.0.96.tgz"
+  "version" "7.0.96"
+
 "@mdi/js@5.8.55":
   "integrity" "sha512-2bvln56SW6V/nSDC/0/NTu1bMF/CgSyZox8mcWbAPWElBN3UYIrukKDUckEER8ifr8X2YJl1RLKQqi7T7qLzmg=="
   "resolved" "https://registry.npmjs.org/@mdi/js/-/js-5.8.55.tgz"

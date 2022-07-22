@@ -9,9 +9,6 @@
               {{ cardTitle }}
             </h4>
 
-            <!-- <toggle-rank-value v-model="selectedValueType" /> -->
-            <!-- <toggle-map-bar v-model="mapbar" /> -->
-
             <v-row>
               <v-col>
                 <class-selector
@@ -185,24 +182,6 @@ export default defineComponent({
     //       pre.push(Object.assign(cur, { rank }))
     //       return pre
     //     }, [])
-    // })
-
-    // const displayData = computed(() => {
-    //   return [
-    //     {
-    //       name: currentSeries.value.name,
-    //       data: prefList.map((d) => {
-    //         const data = withRankingData.value.find(
-    //           (f) => f.code === convertPrefCodeToString(d.prefCode)
-    //         )
-
-    //         return Object.assign(
-    //           { prefCode: d.prefCode, prefName: d.prefName },
-    //           data
-    //         )
-    //       }),
-    //     },
-    //   ]
     // })
 
     // const formatRankChartSeries = (item: EstatRankChartData) => {

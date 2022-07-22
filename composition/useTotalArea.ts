@@ -1,6 +1,6 @@
 import { useEstatApi } from '@/composition//useEstatApi'
 import { convertPrefCodeToString } from '@/composition/utils/formatEstat'
-import { EstatParams, EstatResponse, VALUE } from '~/types/estat'
+import { EstatParams, EstatResponse, VALUE } from '~/types/estat-response'
 import { City, Pref } from '~/types/resas'
 
 export const useTotalArea = (axios: any) => {

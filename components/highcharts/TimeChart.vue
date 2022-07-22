@@ -7,20 +7,20 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from '@nuxtjs/composition-api'
 import { cloneDeep } from 'lodash'
-import { HighchartsTimeChartSeries } from '~/types/highcharts'
+import * as Highcharts from 'highcharts'
 
 export default defineComponent({
   props: {
     displayData: {
-      type: Array as PropType<HighchartsTimeChartSeries[]>,
+      type: Array as PropType<Highcharts.SeriesColumnOptions[]>,
       required: true,
     },
   },
   setup(props) {
-    const series = computed((): HighchartsTimeChartSeries[] => {
+    const series = computed((): Highcharts.SeriesColumnOptions[] => {
       return cloneDeep(props.displayData)
     })
-    const chartOptions = computed(() => {
+    const chartOptions = computed((): Highcharts.Options => {
       return {
         chart: {
           height: 280,

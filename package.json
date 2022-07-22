@@ -35,6 +35,7 @@
     }
   },
   "dependencies": {
+    "@mdi/font": "^7.0.96",
     "@nuxt/builder-edge": "^2.16.0-27164173.b0147772",
     "@nuxt/cli-edge": "2.16.0-27148332.1455784",
     "@nuxt/core-edge": "^2.16.0-27164173.b0147772",

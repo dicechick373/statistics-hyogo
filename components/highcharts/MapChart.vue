@@ -12,13 +12,13 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 import { FeatureCollection } from 'geojson'
+import { Options, SeriesMapOptions } from 'highcharts'
 import { cloneDeep } from 'lodash'
-import { HighchartsRankChartSeries } from '~/types/highcharts'
 
 export default defineComponent({
   props: {
     displayData: {
-      type: Array as () => HighchartsRankChartSeries[],
+      type: Array as () => SeriesMapOptions[],
       required: true,
     },
     geoJson: {
@@ -31,9 +31,10 @@ export default defineComponent({
     const route = useRoute()
     const { govType } = route.value.params
 
+    // TODO joinByは上位コンポーネントで設定すること
     // HighMaps用にseriesを整形
-    const series = computed(() => {
-      const series: HighchartsRankChartSeries[] = cloneDeep(props.displayData)
+    const series = computed((): SeriesMapOptions[] => {
+      const series = cloneDeep(props.displayData)
       if (govType === 'prefecture') {
         series[0].joinBy = ['N03_001', 'prefName']
         series[0].states = { hover: { color: '#a4edba' } }
@@ -45,7 +46,7 @@ export default defineComponent({
       return series
     })
 
-    const chartOptions = computed(() => {
+    const chartOptions = computed((): Options => {
       return {
         chart: {
           map: props.geoJson,

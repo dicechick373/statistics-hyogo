@@ -1,7 +1,7 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { reactive, toRefs } from '@nuxtjs/composition-api'
 import qs from 'qs'
-import { EstatParams, EstatResponse } from '~/types/estat'
+import { EstatParams, EstatResponse } from '~/types/estat-response'
 
 type State = {
   response: EstatResponse

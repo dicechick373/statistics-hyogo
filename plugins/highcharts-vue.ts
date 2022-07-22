@@ -1,12 +1,13 @@
 import Vue from 'vue'
-import HighchartsVue from 'highcharts-vue'
-import Highcharts from 'highcharts'
+import HighchartsVue, { Chart } from 'highcharts-vue'
+import * as Highcharts from 'highcharts'
 import stockInit from 'highcharts/modules/stock'
 import exportingInit from 'highcharts/modules/exporting'
 import exportingCSV from 'highcharts/modules/export-data'
 import HighchartsMapModule from 'highcharts/modules/map'
 
 Vue.use(HighchartsVue)
+Vue.component('highcharts', Chart)
 
 if (typeof Highcharts === 'object') {
   exportingInit(Highcharts)

@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@nuxtjs/composition-api'
+import { Options } from 'highcharts'
 import { HighchartsPyramidChartSeries } from '~/types/highcharts'
 
 export default defineComponent({
@@ -35,10 +36,7 @@ export default defineComponent({
       return props.displayData[0].data.map((d) => d.category)
     })
 
-    // const unit = computed(() => {
-    //   return props.displayData[0].unit
-    // })
-    const chartOptions = computed(() => {
+    const chartOptions = computed((): Options => {
       return {
         chart: {
           height: 350,
