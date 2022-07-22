@@ -67,15 +67,16 @@ import {
   useFetch,
   inject,
 } from '@nuxtjs/composition-api'
-import { EstatCardConfig } from '~/types/estat'
+// import { EstatCardConfig } from '~/types/estat'
 import {
   formatEstatSource,
   formatEstatTimeChartData,
   formatEstatTimeList,
-} from '~/composition/utils/formatEstat'
+} from '~/composition/utils/formatEstatResponse'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { HighchartsTimeChartSeries } from '~/types/highcharts'
 import { useEstatResponse } from '~/composition/useEstatResponse'
+import { EstatCardConfig } from '~/types/main'
 
 export default defineComponent({
   props: {

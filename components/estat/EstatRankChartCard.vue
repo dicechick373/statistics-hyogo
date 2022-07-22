@@ -3,6 +3,7 @@
     <client-only>
       <template>
         <v-card :loading="$fetchState.pending">
+          <card-app-bar />
           <p v-if="$fetchState.pending" />
           <data-view v-else :title="cardTitle" :route="path">
             <h4 :id="cardId" class="visually-hidden">
@@ -85,7 +86,7 @@ import {
   formatEstatSource,
   getEstatCategoryList,
   getEstatTimeList,
-} from '~/composition/utils/formatEstat'
+} from '~/composition/utils/formatEstatResponse'
 import {
   HighchartsRankChartData,
   HighchartsRankChartSeries,

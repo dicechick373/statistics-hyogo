@@ -1,13 +1,13 @@
 import { computed, inject, Ref, useRoute } from '@nuxtjs/composition-api'
-import { convertPrefCodeToString } from '@/composition/utils/formatEstat'
 import { GlobalState, StateKey } from './useGlobalState'
+import { convertPrefCodeToString } from '~/composition/utils/formatEstatResponse'
 import {
   EstatState,
   VALUE,
   EstatTimes,
   EstatSeries,
   EstatResponse,
-} from '~/types/estat-response'
+} from '~/types/estat-api'
 
 export const useEstatPrefRankChart = (
   estatState: EstatState,

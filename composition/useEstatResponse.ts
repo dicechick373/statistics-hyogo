@@ -12,7 +12,7 @@ import { usePrefecture } from './usePrefecture'
 import { convertPrefCodeNumberToString } from './utils/formatResas'
 import { useEstatApi } from './useEstatApi'
 import { useCity } from './useCity'
-import { EstatParams, EstatResponse } from '~/types/estat-response'
+import { EstatParams, EstatResponse } from '~/types/estat-api'
 import { CardConfig } from '~/types/main'
 
 interface State {

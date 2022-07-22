@@ -16,6 +16,7 @@
         />
       </div>
       <main class="mainContainer" :class="{ open: isOpenNavigation }">
+        <test-bar />
         <v-container class="px-4 py-8">
           <nuxt />
         </v-container>

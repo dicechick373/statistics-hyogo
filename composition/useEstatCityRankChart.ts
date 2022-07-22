@@ -6,7 +6,7 @@ import {
   EstatTimes,
   EstatSeries,
   EstatResponse,
-} from '~/types/estat-response'
+} from '~/types/estat-api'
 
 export const useEstatCityRankChart = (
   estatState: EstatState,

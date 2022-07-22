@@ -1,14 +1,10 @@
-// import * as  from '~/types/estat-response'
-// import { HighchartsTimeChartSeries } from '~/types/highcharts'
-// import { convertCodeToString } from '../usePrefecture'
-
-// interface Response extends EstatResponse.RootObject {}
+import { EstatResponse } from '~/types/estat-api'
 
 export const convertPrefCodeToString = (prefCode: number): string => {
   return ('0000000000' + prefCode).slice(-2) + '000'
 }
 
-export const formatEstatTimeList = (response: RootObject) => {
+export const formatEstatTimeList = (response: EstatResponse) => {
   const value = response.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE
   return Array.from(new Set(value.map((d) => d['@time'])))
     .map((d) => {
