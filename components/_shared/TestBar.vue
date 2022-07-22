@@ -5,6 +5,17 @@
       <v-tab>Tab 2</v-tab>
       <v-tab>Tab 3</v-tab>
     </v-tabs>
+
+    <!-- 統計項目セレクト -->
+    <v-col cols="12" md="3">
+      <menu-selector />
+    </v-col>
+
+    <!-- 市区町村セレクト -->
+    <v-col v-if="isCity" cols="12" md="3">
+      <city-selector />
+    </v-col>
+
     <v-spacer />
 
     <v-btn icon>
