@@ -96,6 +96,7 @@ export default defineComponent({
     const { estatResponse, setEstatResponseAsync } = useEstatResponse(
       props.cardConfig
     )
+    console.log(props.cardConfig)
 
     // eStat-APIからデータを取得
 
