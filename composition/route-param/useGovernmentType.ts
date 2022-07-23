@@ -13,18 +13,20 @@ export const useGovernmentType = () => {
   })
 
   // setter
-  const setGovernmentType = (newGovernmentType: GovernmentType) => {
-    state.currentGovernmentType = newGovernmentType
+  const setCurrentGovernmentType = (newGovernmentType: GovernmentType) => {
+    if (state.currentGovernmentType !== newGovernmentType) {
+      state.currentGovernmentType = newGovernmentType
+    }
   }
 
   // getter
-  const getGovernmentType = () => {
+  const getCurrentGovernmentType = () => {
     return state.currentGovernmentType
   }
 
   return {
     ...toRefs(state),
-    setGovernmentType,
-    getGovernmentType,
+    setCurrentGovernmentType,
+    getCurrentGovernmentType,
   }
 }

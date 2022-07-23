@@ -1,5 +1,13 @@
-import { reactive, toRefs } from '@nuxtjs/composition-api'
-import { getResasCityList } from './formatResas'
+import {
+  inject,
+  reactive,
+  ref,
+  toRefs,
+  // useRoute,
+  // watch,
+} from '@nuxtjs/composition-api'
+import { GlobalState, StateKey } from '../useGlobalState'
+import * as Resas from './formatResas'
 import { City } from '~/types/resas'
 
 interface State {
@@ -8,16 +16,22 @@ interface State {
 }
 
 export const useCity = () => {
+  // GlobalStateの設定
+  const { currentCode } = inject(StateKey) as GlobalState
+  const prefCode = ref<number>(Resas.convertCodeToPrefCode(currentCode.value))
+
   // state
   const state = reactive<State>({
-    currentCity: {
-      prefCode: 28,
-      cityCode: '28100',
-      cityName: '神戸市',
-      bigCityFlag: '2',
-    },
-    cityList: getResasCityList(28),
+    currentCity: Resas.getCity(currentCode.value),
+    cityList: Resas.getResasCityList(prefCode.value),
   })
+
+  // watch(currentCode, () => change())
+  // const setCityState = () => {
+  //   const prefCode = Resas.convertCodeToPrefCode(currentCode.value)
+  //   state.cityList = Resas.getResasCityList(prefCode)
+  //   state.currentCity = Resas.getCity(currentCode.value)
+  // }
 
   const setCurrentCity = (newCity: City): void => {
     state.currentCity = newCity
@@ -54,6 +68,7 @@ export const useCity = () => {
     getCityList,
     getCity,
     getCurrentCity,
+    // setCityState,
     getCurrentCityCode,
   }
 }

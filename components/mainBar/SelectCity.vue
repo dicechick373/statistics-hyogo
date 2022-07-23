@@ -42,16 +42,15 @@ export default defineComponent({
   },
   setup() {
     // 市区町村リストの設定
-    const { getCityList, getCurrentCity, setCurrentCity } = useCity()
+    const { getCityList, getCurrentCity } = useCity()
     const cityList = ref<City[]>(getCityList())
     const selectedCity = ref<City>(getCurrentCity())
 
     // 選択時の処理
     watch(selectedCity, () => change())
-    const { changeRouterCity } = useChangeRouter()
+    const { changeRoute } = useChangeRouter()
     const change = () => {
-      setCurrentCity(selectedCity.value)
-      changeRouterCity.value(selectedCity)
+      changeRoute(selectedCity.value.cityCode)
     }
 
     return {

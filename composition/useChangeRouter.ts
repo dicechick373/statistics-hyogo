@@ -86,9 +86,9 @@ export const useChangeRouter = () => {
     }
   })
 
-  // const { currentCode } = useCode()
   const { getCurrentPrefCodeString } = usePrefecture()
   const { getCurrentCityCode } = useCity()
+
   // 都道府県・市区町村タブのリンク設定
   const generateTabGovernmentTypeLink = computed(() => {
     return function (governmentType: GovernmentType) {

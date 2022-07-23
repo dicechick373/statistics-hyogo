@@ -12,7 +12,7 @@ export const convertCodeToGovType = (code: string): GovType => {
 }
 
 /**
- * codeから都道府県情報を返す関数
+ * codeをprefCodeに変換する関数
  * @param code -string
  * @returns - Pref
  */
@@ -29,38 +29,43 @@ export const convertPrefCodeNumberToString = (code: number): string => {
   return ('0000000000' + code).slice(-2) + '000'
 }
 
-export const getPref = (prefCode: number): Pref => {
-  return (
-    prefListMaster.result.find((f) => f.prefCode === prefCode) ??
-    prefListMaster.result[0]
-  )
-}
-
-// 都道府県リストの取得
+/**
+ * 都道府県リストを返す関数
+ * @returns - Pref[]
+ */
 export const getResasPrefList = (): Pref[] => {
   return prefListMaster.result
 }
 
+/**
+ * 市区町村リストを返す関数
+ * @param prefCode - number
+ * @returns - City[]
+ */
+export const getResasCityList = (prefCode: number): City[] => {
+  return cityListMaster.result.filter((f) => f.prefCode === prefCode)
+}
+
+/**
+ * 市区町村を返す関数
+ * @param cityCode - string
+ * @returns - City
+ * Note:入力値が'28000'の場合は'28100'を返す
+ */
 export const getCity = (cityCode: string): City => {
   const prefCode = convertCodeToPrefCode(cityCode)
   const cityList = cityListMaster.result.filter((f) => f.prefCode === prefCode)
   return cityList.find((f) => f.cityCode === cityCode) ?? cityList[0]
 }
 
-// 市区町村リストの取得
-export const getResasCityList = (
-  prefCode: number,
-  bigCityKind: string = 'all'
-): City[] => {
-  const cityListAll = cityListMaster.result.filter(
-    (f) => f.prefCode === prefCode
+/**
+ * 都道府県を返す関数
+ * @param prefCode - number
+ * @returns - Pref
+ */
+export const getPref = (prefCode: number): Pref => {
+  return (
+    prefListMaster.result.find((f) => f.prefCode === prefCode) ??
+    prefListMaster.result[0]
   )
-
-  if (bigCityKind === 'all') {
-    return cityListAll
-  } else if (bigCityKind === 'join') {
-    return cityListAll.filter((f) => f.bigCityFlag !== '1')
-  } else {
-    return cityListAll.filter((f) => f.bigCityFlag !== '2')
-  }
 }

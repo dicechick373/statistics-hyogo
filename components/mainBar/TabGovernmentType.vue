@@ -6,7 +6,6 @@
       :to="{ path: item.link }"
       nuxt
       exact
-      @change="clickGovernmentTypeTab(item)"
     >
       {{ item.label }}
     </v-tab>
@@ -17,7 +16,7 @@
 import { computed, defineComponent } from '@nuxtjs/composition-api'
 import { EventBus, TOGGLE_EVENT } from '@/utils/tab-event-bus'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-import { useGovernmentType } from '~/composition/route-param/useGovernmentType'
+// import { useGovernmentType } from '~/composition/route-param/useGovernmentType'
 
 type Item = {
   label: string
@@ -27,14 +26,6 @@ type Item = {
 
 export default defineComponent({
   setup() {
-    // タブをクリックした時の処理
-    const { setCurrentGovernmentType } = useGovernmentType()
-    const clickGovernmentTypeTab = computed(() => {
-      return function (item: Item) {
-        setCurrentGovernmentType(item.governmentType)
-      }
-    })
-
     // タブ設定
     const { generateTabGovernmentTypeLink } = useChangeRouter()
     const items = computed((): Item[] => {
@@ -59,7 +50,7 @@ export default defineComponent({
     return {
       items,
       change,
-      clickGovernmentTypeTab,
+      // clickGovernmentTypeTab,
     }
   },
 })
