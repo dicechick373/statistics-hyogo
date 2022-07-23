@@ -73,11 +73,11 @@ export const getInitMenuList = async () => {
 /**
  * 統計分野、地方公共団体区分に合致する統計項目リストを取得する関数
  * @param fieldId - string
- * @param govType - string
+ * @param governmentType - string
  * @returns - Menu[]
  */
 export const getContentfulMenuList = async (
-  govType: string,
+  governmentType: string,
   fieldId: string
 ): Promise<Menu[]> => {
   const entries: EntryCollection<IStatisticsFieldFields> =
@@ -86,7 +86,7 @@ export const getContentfulMenuList = async (
       'fields.fieldId': fieldId,
     })
 
-  if (govType === 'prefecture') {
+  if (governmentType === 'prefecture') {
     return entries.items
       .map((d) => d.fields)[0]
       .menuPrefecture.map((d: Entry<IStatisticsMenuFields>) => {
@@ -122,12 +122,12 @@ export const getContentfulMenu = async (menuId: string): Promise<Menu> => {
 
 /**
  * 統計分野、地方公共団体区分に合致するCardListを取得する関数
- * @param govType -string
+ * @param governmentType -string
  * @param menuId - string
  * @returns - Card[]
  */
 export const getContentfulCardList = async (
-  govType: string,
+  governmentType: string,
   menuId: string
 ): Promise<CardConfig[]> => {
   const entries: EntryCollection<IStatisticsMenuFields> =
@@ -137,7 +137,7 @@ export const getContentfulCardList = async (
     })
 
   const cards = (): IEstatCardConfigFields[] | undefined => {
-    if (govType === 'prefecture') {
+    if (governmentType === 'prefecture') {
       return entries.items[0].fields.cardsPrefecture
     } else {
       return entries.items[0].fields.cardsCity

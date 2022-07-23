@@ -29,13 +29,13 @@ export default defineComponent({
   setup(props) {
     // 都道府県／市区町村の判定
     const route = useRoute()
-    const { govType } = route.value.params
+    const { governmentType } = route.value.params
 
     // TODO joinByは上位コンポーネントで設定すること
     // HighMaps用にseriesを整形
     const series = computed((): SeriesMapOptions[] => {
       const series = cloneDeep(props.displayData)
-      if (govType === 'prefecture') {
+      if (governmentType === 'prefecture') {
         series[0].joinBy = ['N03_001', 'prefName']
         series[0].states = { hover: { color: '#a4edba' } }
       } else {

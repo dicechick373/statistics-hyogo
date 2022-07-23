@@ -15,9 +15,9 @@ export const useGeojson = () => {
 
   // geoJsonを取得
   const getGeoJsonAsync = async () => {
-    const govType = route.value.params.govType
+    const governmentType = route.value.params.governmentType
     const prefCode = convertCodeToNumber(route.value.params.code)
-    const url = generateGeoShapeURL(govType, prefCode)
+    const url = generateGeoShapeURL(governmentType, prefCode)
     const { data: topo } = await axios.get(url)
     return convertTopoToGeo(topo)
   }
@@ -31,19 +31,19 @@ export const useGeojson = () => {
 
 /**
  * geoshapeリポジトリのURLを生成する関数
- * @param govType - 'prefecture' | 'city
+ * @param governmentType - 'prefecture' | 'city
  * @param prefCode - number
  * @param designatedCity - 'join' | 'split'
  * @returns - string
  */
 export const generateGeoShapeURL = (
-  govType: GovType = 'prefecture',
+  governmentType: GovType = 'prefecture',
   prefCode: number = 28,
   designatedCity: 'join' | 'split' = 'join'
 ) => {
   const baseURL = 'https://geoshape.ex.nii.ac.jp/city/topojson/20210101'
 
-  return govType === 'prefecture'
+  return governmentType === 'prefecture'
     ? `${baseURL}/jp_pref.c.topojson`
     : designatedCity === 'join'
     ? `${baseURL}/${prefCode}/${prefCode}_city_dc.l.topojson`

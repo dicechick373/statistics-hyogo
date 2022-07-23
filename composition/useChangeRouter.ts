@@ -18,7 +18,7 @@ export const useChangeRouter = () => {
   // パスパラメータの取得
   const route = useRoute()
   const params = route.value.params
-  const { govType, code, fieldId, menuId } = params
+  const { governmentType, code, fieldId, menuId } = params
 
   // GlobalState
   const {
@@ -43,7 +43,9 @@ export const useChangeRouter = () => {
    */
   const changeRouterCity = computed(() => {
     return function (newCity: Ref<City>) {
-      router.push(`/${govType}/${newCity.value.cityCode}/${fieldId}/${menuId}`)
+      router.push(
+        `/${governmentType}/${newCity.value.cityCode}/${fieldId}/${menuId}`
+      )
     }
   })
 
@@ -54,14 +56,16 @@ export const useChangeRouter = () => {
   const changeRouterMenu = computed(() => {
     return function (newMenu: Ref<Menu>) {
       // setCurrentMenu(newMenu)
-      router.push(`/${govType}/${code}/${fieldId}/${newMenu.value.menuId}`)
+      router.push(
+        `/${governmentType}/${code}/${fieldId}/${newMenu.value.menuId}`
+      )
     }
   })
 
   const changeRoute = (code: string): void => {
-    const govType = convertCodeToGovType(code)
+    const governmentType = convertCodeToGovType(code)
     router.push(
-      `/${govType}/${code}/${currentFieldId.value}/${currentMenuId.value}`
+      `/${governmentType}/${code}/${currentFieldId.value}/${currentMenuId.value}`
     )
   }
 
@@ -88,10 +92,10 @@ export const useChangeRouter = () => {
 
   // 都道府県・市区町村タブのリンク設定
   const getGovTabLink = computed(() => {
-    return function (govType: string) {
-      const code = govType === 'city' ? cityCode : prefCode
-      const menuId = initMenu(fieldId, govType).menuId
-      return `/${govType}/${code}/${fieldId}/${menuId}`
+    return function (governmentType: string) {
+      const code = governmentType === 'city' ? cityCode : prefCode
+      const menuId = initMenu(fieldId, governmentType).menuId
+      return `/${governmentType}/${code}/${fieldId}/${menuId}`
     }
   })
 

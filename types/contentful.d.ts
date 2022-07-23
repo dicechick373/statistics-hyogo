@@ -76,8 +76,8 @@ export interface IEstatCardConfigFields {
   /** statisticsField */
   statisticsField: IStatisticsField[]
 
-  /** govType */
-  govType: 'prefecture' | 'city'
+  /** governmentType */
+  governmentType: 'prefecture' | 'city'
 
   /** statsDataId */
   statsDataId: string

@@ -8,7 +8,7 @@ export type StateType = {
   cityList: City[]
   selectedPref?: Pref
   selectedCity?: City
-  govType: string
+  governmentType: string
 }
 
 export type RouteParams = {

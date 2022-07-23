@@ -26,7 +26,7 @@ export const useEstatResponse = (cardConfig: CardConfig) => {
   })
 
   // routeパラメータの取得
-  const { govType, code } = useRoute().value.params
+  const { governmentType, code } = useRoute().value.params
 
   // GlobalState
   const { isRank } = inject(StateKey) as GlobalState
@@ -38,7 +38,7 @@ export const useEstatResponse = (cardConfig: CardConfig) => {
     // console.log()
     return isRank.value === false
       ? code
-      : govType === 'prefecture'
+      : governmentType === 'prefecture'
       ? prefList.value.map((d) => convertPrefCodeNumberToString(d.prefCode))
       : cityList.value.map((d) => d.cityCode)
   })

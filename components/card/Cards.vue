@@ -50,11 +50,11 @@ export default defineComponent({
     // パスパラメータの取得
     const route = useRoute()
     const params = route.value.params
-    const { govType, menuId } = params
+    const { governmentType, menuId } = params
 
     const { fetch } = useFetch(async () => {
       const cardList: CardConfig[] = await getContentfulCardList(
-        govType,
+        governmentType,
         menuId
       )
       // console.log(cardList)

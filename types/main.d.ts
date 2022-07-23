@@ -26,7 +26,7 @@ export type EstatCardConfig = {
   series?: string | string[]
   chartType?: string[] | string[]
   yAxis?: string | string[]
-  govType: 'prefecture' | 'city'
+  governmentType: 'prefecture' | 'city'
   chartComponent: 'TimeChart' | 'PyramidChart'
   isBreak: boolean
   annotation?: Document | undefined
@@ -37,7 +37,7 @@ export type EstatCardConfig = {
 //   cardId: string
 //   chartType?: string[] | string[]
 //   yAxis?: string | string[]
-//   govType: 'prefecture' | 'city'
+//   governmentType: 'prefecture' | 'city'
 //   chartComponent: 'TimeChart' | 'PyramidChart'
 //   isBreak: boolean
 //   annotation?: Document | undefined
@@ -127,7 +127,7 @@ export type CardConfig = {
   series?: string[]
   chartType?: string[]
   yAxis?: string[]
-  govType: 'prefecture' | 'city'
+  governmentType: 'prefecture' | 'city'
   chartComponent: 'TimeChart' | 'PyramidChart'
   isBreak: boolean
   annotation?: Document | undefined

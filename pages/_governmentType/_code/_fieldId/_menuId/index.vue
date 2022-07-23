@@ -1,61 +1,57 @@
 <template>
-  <div>
-    <component :is="cardComponent" />
+  <p v-if="$fetchState.pending" />
+  <div v-else>
+    <main-bar />
+    <cards />
   </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  computed,
+  // computed,
   useRoute,
-  // useMeta,
   inject,
+  useFetch,
 } from '@nuxtjs/composition-api'
-import { GlobalState, StateKey } from '@/composition/useGlobalState'
-// import { useContents } from '~/composition/useContents'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
 
+/** 役割
+ * ①Routerのparamsを取得
+ * ②GlobalStateの設定
+ * ③Metaの設定
+ */
 export default defineComponent({
   head: {},
   setup() {
-    // パスパラメータの取得
+    // paramsの取得
     const route = useRoute()
-    const { govType, cardId } = route.value.params
     const params = route.value.params
 
-    // globalState
+    // GlobalStateの設定
     const { setState } = inject(StateKey) as GlobalState
-    setState(params)
+    const { fetch } = useFetch(async () => {
+      await setState(params)
+    })
+    fetch()
 
     // カードコンポーネントの設定
-    const cardComponent = computed((): string => {
-      if (govType === 'prefecture') {
-        return `lazy-${cardId}-prefecture`
-      } else {
-        return `lazy-${cardId}-city`
-      }
-    })
+    // const cardComponent = computed((): string => {
+    //   return `lazy-cards`
+    // })
 
     // // メタ
     // const url = 'https://statistics-hyogo.com'
-    // const puppeteerFunction =
-    //   'https://asia-northeast2-primal-buttress-342908.cloudfunctions.net/puppeteerSample'
-
-    // const ogpImage = computed(() => {
-    //   return `${puppeteerFunction}?url=${url}${route.value.path}?ogp=true`
-    // })
-    // // console.log(ogpImage)
-    // // console.log(ogpImage)
-    // const { getCardTitle } = useContents()
+    // const { getMenuTitle } = useContents()
     // const ogpTitle = computed(() => {
-    //   return `${getCardTitle.value(cardId)} | 統計で見る兵庫県のすがた`
+    //   return `${getMenuTitle.value(menuId)} | 統計で見る兵庫県のすがた`
     // })
 
     // const mInfo = reactive<any>([
     //   {
     //     hid: 'og:url',
     //     property: 'og:url',
-    //     content: `${url}/${govType}/${code}/${fieldId}/${menuId}/${cardId}`,
+    //     content: `${url}/${governmentType}/${code}/${fieldId}/${menuId}`,
     //   },
     //   {
     //     hid: 'og:title',
@@ -75,12 +71,12 @@ export default defineComponent({
     //   {
     //     hid: 'og:image',
     //     property: 'og:image',
-    //     content: ogpImage.value,
+    //     content: `https://statistice-hyogo.com/ogp.png`,
     //   },
     //   {
     //     hid: 'twitter:image',
     //     name: 'twitter:image',
-    //     content: ogpImage.value,
+    //     content: `https://statistice-hyogo.com/ogp.png`,
     //   },
     // ])
 
@@ -89,7 +85,8 @@ export default defineComponent({
     // meta.value = mInfo
 
     return {
-      cardComponent,
+      // isCity,
+      // cardComponent,
     }
   },
 })

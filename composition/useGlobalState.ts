@@ -74,10 +74,10 @@ export const useGlobalState = () => {
 
   // stateの一括設定
   const setState = async (params: Dictionary<string>): Promise<void> => {
-    const { govType, fieldId, menuId } = params
-    state.currentGovType = govType
+    const { governmentType, fieldId, menuId } = params
+    state.currentGovType = governmentType
     state.currentField = await getContentfulField(fieldId)
-    state.currentMenuList = await getContentfulMenuList(govType, fieldId)
+    state.currentMenuList = await getContentfulMenuList(governmentType, fieldId)
     state.currentMenu = await getContentfulMenu(menuId)
   }
 

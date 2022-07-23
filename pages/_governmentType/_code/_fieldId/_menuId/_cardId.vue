@@ -1,57 +1,61 @@
 <template>
-  <p v-if="$fetchState.pending" />
-  <div v-else>
-    <main-bar />
-    <cards />
+  <div>
+    <component :is="cardComponent" />
   </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  // computed,
+  computed,
   useRoute,
+  // useMeta,
   inject,
-  useFetch,
 } from '@nuxtjs/composition-api'
-import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { GlobalState, StateKey } from '@/composition/useGlobalState'
+// import { useContents } from '~/composition/useContents'
 
-/** 役割
- * ①Routerのparamsを取得
- * ②GlobalStateの設定
- * ③Metaの設定
- */
 export default defineComponent({
   head: {},
   setup() {
-    // paramsの取得
+    // パスパラメータの取得
     const route = useRoute()
+    const { governmentType, cardId } = route.value.params
     const params = route.value.params
 
-    // GlobalStateの設定
+    // globalState
     const { setState } = inject(StateKey) as GlobalState
-    const { fetch } = useFetch(async () => {
-      await setState(params)
-    })
-    fetch()
+    setState(params)
 
     // カードコンポーネントの設定
-    // const cardComponent = computed((): string => {
-    //   return `lazy-cards`
-    // })
+    const cardComponent = computed((): string => {
+      if (governmentType === 'prefecture') {
+        return `lazy-${cardId}-prefecture`
+      } else {
+        return `lazy-${cardId}-city`
+      }
+    })
 
     // // メタ
     // const url = 'https://statistics-hyogo.com'
-    // const { getMenuTitle } = useContents()
+    // const puppeteerFunction =
+    //   'https://asia-northeast2-primal-buttress-342908.cloudfunctions.net/puppeteerSample'
+
+    // const ogpImage = computed(() => {
+    //   return `${puppeteerFunction}?url=${url}${route.value.path}?ogp=true`
+    // })
+    // // console.log(ogpImage)
+    // // console.log(ogpImage)
+    // const { getCardTitle } = useContents()
     // const ogpTitle = computed(() => {
-    //   return `${getMenuTitle.value(menuId)} | 統計で見る兵庫県のすがた`
+    //   return `${getCardTitle.value(cardId)} | 統計で見る兵庫県のすがた`
     // })
 
     // const mInfo = reactive<any>([
     //   {
     //     hid: 'og:url',
     //     property: 'og:url',
-    //     content: `${url}/${govType}/${code}/${fieldId}/${menuId}`,
+    //     content: `${url}/${governmentType}/${code}/${fieldId}/${menuId}/${cardId}`,
     //   },
     //   {
     //     hid: 'og:title',
@@ -71,12 +75,12 @@ export default defineComponent({
     //   {
     //     hid: 'og:image',
     //     property: 'og:image',
-    //     content: `https://statistice-hyogo.com/ogp.png`,
+    //     content: ogpImage.value,
     //   },
     //   {
     //     hid: 'twitter:image',
     //     name: 'twitter:image',
-    //     content: `https://statistice-hyogo.com/ogp.png`,
+    //     content: ogpImage.value,
     //   },
     // ])
 
@@ -85,8 +89,7 @@ export default defineComponent({
     // meta.value = mInfo
 
     return {
-      // isCity,
-      // cardComponent,
+      cardComponent,
     }
   },
 })
