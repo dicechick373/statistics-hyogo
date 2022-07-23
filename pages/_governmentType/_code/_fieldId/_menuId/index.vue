@@ -15,6 +15,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { useGovernmentType } from '~/composition/route-param/useGovernmentType'
+// import { useCity } from '~/composition/resas-api/useCity'
 
 /** 役割
  * ①Routerのparamsを取得
@@ -31,6 +32,7 @@ export default defineComponent({
     const { setCurrentGovernmentType } = useGovernmentType()
     setCurrentGovernmentType(params.governmentType)
 
+    // console.log(params)
     // GlobalStateの設定
     const { setState } = inject(StateKey) as GlobalState
     const { fetch } = useFetch(async () => {
