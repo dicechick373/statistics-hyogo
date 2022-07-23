@@ -1,12 +1,13 @@
 import {
   computed,
   inject,
+  // reactive,
   Ref,
   useAsync,
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
-import { getInitMenuList, Menu } from '@/composition/utils/contentful'
+import { generateFieldListAsync, Menu } from '@/composition/utils/contentful'
 import {
   convertCodeToGovType,
   convertPrefCodeNumberToString,
@@ -19,6 +20,13 @@ export const useChangeRouter = () => {
   const route = useRoute()
   const params = route.value.params
   const { governmentType, code, fieldId, menuId } = params
+
+  // const state = reactive<any>({
+  //   governmentType,
+  //   code,
+  //   fieldId,
+  //   menuId,
+  // })
 
   // GlobalState
   const {
@@ -70,7 +78,8 @@ export const useChangeRouter = () => {
   }
 
   // 統計項目（Menu）の初期値設定
-  const initMenuList = useAsync(() => getInitMenuList())
+  const initMenuList = useAsync(() => generateFieldListAsync())
+  // console.log(generateFieldListAsync())
   const initMenu = (fieldId: string) => {
     const menu = initMenuList.value.find((f) => f.fieldId === fieldId)
     if (currentGovType.value === 'prefecture') {
@@ -85,7 +94,6 @@ export const useChangeRouter = () => {
     return function (fieldId: string) {
       const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
       const menuId = initMenu(fieldId).menuId
-      // console.log(menuId)
       return `${path}/${menuId}`
     }
   })
