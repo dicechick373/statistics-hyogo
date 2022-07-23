@@ -66,6 +66,7 @@ import {
   useRoute,
   useFetch,
   inject,
+  PropType,
 } from '@nuxtjs/composition-api'
 // import { EstatCardConfig } from '~/types/estat'
 import {
@@ -76,12 +77,14 @@ import {
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { HighchartsTimeChartSeries } from '~/types/highcharts'
 import { useEstatResponse } from '~/composition/estat-api/useEstatResponse'
-import { EstatCardConfig } from '~/types/main'
+// import { EstatCardConfig } from '~/types/main'
+import { useEstatTimeChart } from '~/composition/estat-api/useEstatTimeChart'
+import { IEstatCardConfigFields } from '~/types/contentful'
 
 export default defineComponent({
   props: {
     cardConfig: {
-      type: Object,
+      type: Object as PropType<IEstatCardConfigFields>,
       required: true,
     },
   },
@@ -90,8 +93,9 @@ export default defineComponent({
     const canvas = true
 
     // reactive値
-    const estatCardConfig = ref<EstatCardConfig>(props.cardConfig)
-    // const estatResponse = ref<EstatResponse>()
+    const estatCardConfig = ref<IEstatCardConfigFields>(props.cardConfig)
+
+    // const { setConfig } = useEstatTimeChart()
 
     const { estatResponse, setEstatResponseAsync } = useEstatResponse(
       props.cardConfig
@@ -99,11 +103,15 @@ export default defineComponent({
     // console.log(props.cardConfig)
 
     // eStat-APIからデータを取得
+    const { test } = useEstatTimeChart(props.cardConfig)
 
     const { fetch } = useFetch(async () => {
       await setEstatResponseAsync()
+      await test()
     })
     fetch()
+
+    // console.log(params)
 
     // cardTitle
     const { getTitle } = inject(StateKey) as GlobalState

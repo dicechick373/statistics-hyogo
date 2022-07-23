@@ -4,71 +4,77 @@ import {
   reactive,
   toRefs,
   useContext,
-  useRoute,
+  // useRoute,
 } from '@nuxtjs/composition-api'
 
-import { GlobalState, StateKey } from './useGlobalState'
-import { usePrefecture } from './resas-api/usePrefecture'
-import { convertPrefCodeNumberToString } from './resas-api/formatResas'
-import { useEstatApi } from './useEstatApi'
-import { useCity } from './resas-api/useCity'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { usePrefecture } from '~/composition/resas-api/usePrefecture'
+// import { convertPrefCodeNumberToString } from '~/composition/resas-api/formatResas'
+import { useEstatApi } from '~/composition/estat-api/useEstatApi'
+import { useCity } from '~/composition/resas-api/useCity'
 import { EstatParams, EstatResponse } from '~/types/estat-api'
-import { EstatCardConfig } from '~/types/main'
+// import { EstatCardConfig } from '~/types/main'
+import { IEstatCardConfigFields } from '~/types/contentful'
 
 interface State {
-  config: EstatCardConfig
   params: EstatParams
   response: EstatResponse
 }
 
-export const useEstatTimeChart = () => {
+export const useEstatTimeChart = (config: IEstatCardConfigFields) => {
   // state
   const state = reactive<State>({
-    config: null,
     params: null,
     response: null,
   })
 
-  const setConfig = (newConfig: EstatCardConfig) => {
-    state.config = newConfig
-  }
-
-  // routeパラメータの取得
-  const { governmentType, code } = useRoute().value.params
+  // console.log(config)
 
   // GlobalState
-  const { isRank } = inject(StateKey) as GlobalState
+  const { currentGovType, currentCode, isRank } = inject(
+    StateKey
+  ) as GlobalState
 
   // cdAreaを取得
-  const { prefList } = usePrefecture()
-  const { cityList } = useCity()
+  const { getPrefCodeList } = usePrefecture()
+  const { getCityCodeList } = useCity()
   const cdArea = computed(() => {
-    // console.log()
     return isRank.value === false
-      ? code
-      : governmentType === 'prefecture'
-      ? prefList.value.map((d) => convertPrefCodeNumberToString(d.prefCode))
-      : cityList.value.map((d) => d.cityCode)
+      ? currentCode.value
+      : currentGovType.value === 'prefecture'
+      ? getPrefCodeList()
+      : getCityCodeList()
   })
 
   // estatパラメータのセット
   const estatParams = computed((): EstatParams => {
     return {
-      statsDataId: state.config.statsDataId,
-      cdCat01: state.config.cdCat01,
+      statsDataId: config.estatParams.statsDataId,
+      cdCat01: config.estatParams.cdCat01,
       cdArea: cdArea.value,
     }
   })
 
+  // console.log(estatParams)
+
   // estat-APIからデータ取得
   const { $axios } = useContext()
-  const setEstatResponseAsync = async () => {
-    state.estatResponse = await useEstatApi($axios, estatParams.value).getData()
+  const test = async () => {
+    return await useEstatApi($axios, estatParams.value).getData()
   }
+  // const kk =
+  // console.log(test())
+
+  // const { get } = usePrefecture()
+  // const { getCityCodeList } = useCity()
+
+  // const cardTitle = computed(() => {
+  //   return config.cardTitle.replace('都道府県の', '')
+  // })
+  // console.log(cardTitle.value)
 
   return {
     ...toRefs(state),
-    setEstatResponseAsync,
-    setConfig,
+    test,
   }
 }

@@ -1,4 +1,5 @@
 import { reactive, toRefs } from '@nuxtjs/composition-api'
+import { convertPrefCodeNumberToString } from './formatResas'
 import prefListMaster from '~/assets/json/preflist.json'
 import { Pref } from '~/types/resas'
 
@@ -28,6 +29,9 @@ export const usePrefecture = () => {
   const getCurrentPrefCodeString = (): string => {
     return convertCodeToString(state.currentPref.prefCode)
   }
+  const getPrefCodeList = (): string[] => {
+    return state.prefList.map((d) => convertPrefCodeNumberToString(d.prefCode))
+  }
 
   // codeに合致する都道府県を返す
   const getPrefecture = (code: string): Pref => {
@@ -45,6 +49,7 @@ export const usePrefecture = () => {
     getCurrentPref,
     getPrefecture,
     getCurrentPrefCodeString,
+    getPrefCodeList,
   }
 }
 
