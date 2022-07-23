@@ -96,7 +96,7 @@ export default defineComponent({
     const { estatResponse, setEstatResponseAsync } = useEstatResponse(
       props.cardConfig
     )
-    console.log(props.cardConfig)
+    // console.log(props.cardConfig)
 
     // eStat-APIからデータを取得
 
@@ -240,3 +240,6 @@ export default defineComponent({
   },
 })
 </script>
+
+function useField(): { fieldList: any } { throw new Error('Function not
+implemented.') }

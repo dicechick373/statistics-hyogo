@@ -35,7 +35,13 @@
           </label>
           <language-selector />
         </div>
-        <menu-list :items="items" @click="$emit('close-navigation', $event)" />
+        <menu-list
+          :items="items"
+          @click="
+            test()
+            $emit('close-navigation', $event)
+          "
+        />
       </nav>
 
       <v-icon
@@ -151,6 +157,9 @@ export default defineComponent({
     // Routing設定
     const { getSideNaviLink } = useChangeRouter()
 
+    const test = () => {
+      // console.log('ここ')
+    }
     // サイドメニュー項目
     const items = computed((): Item[] => {
       return [
@@ -241,6 +250,7 @@ export default defineComponent({
       items,
       mdiClose,
       mdiMenu,
+      test,
     }
   },
 })

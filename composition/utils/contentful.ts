@@ -11,7 +11,9 @@ import { CardConfig, Field, Menu } from '~/types/main'
  * contentfulから統計分野一覧を取得する関数
  * @returns - Field[]
  */
-export const getFieldList = async (): Promise<Field[]> => {
+export const getContentfulFieldListAsync = async (): Promise<
+  IStatisticsFieldFields[]
+> => {
   const entries: EntryCollection<IStatisticsFieldFields> =
     await client.getEntries({
       content_type: 'statisticsField',
@@ -20,34 +22,19 @@ export const getFieldList = async (): Promise<Field[]> => {
 }
 
 /**
- * 統計分野を取得する関数
- * @param fieldId - string
- * @returns - Field
- */
-export const getContentfulField = async (fieldId: string): Promise<Field> => {
-  // contentfulからデータ取得
-  const entries: EntryCollection<IStatisticsFieldFields> =
-    await client.getEntries({
-      content_type: 'statisticsField',
-      'fields.fieldId': fieldId,
-    })
-
-  return {
-    fieldId: entries.items[0].fields.fieldId,
-    fieldTitle: entries.items[0].fields.fieldTitle,
-  }
-}
-
-/**
  * 統計分野の初期値リスト
  * @returns - IStatisticsFieldFields[]
  */
-export const getInitMenuList = async () => {
+export const generateFieldListAsync = async () => {
   // contentfulからデータ取得
   const entries: EntryCollection<IStatisticsFieldFields> =
     await client.getEntries({
       content_type: 'statisticsField',
     })
+
+  // const contentfulFieldList = await getContentfulFieldListAsync()
+
+  // contentfulFieldList.menuCity = contentfulFieldList.menuCity
 
   return entries.items.map((d) => {
     // 統計項目の初期値を取得
@@ -68,6 +55,27 @@ export const getInitMenuList = async () => {
       city: getInitMenu('menuPrefecture')[0],
     }
   })
+}
+
+/**
+ * 統計分野を取得する関数
+ * @param fieldId - string
+ * @returns - Field
+ */
+export const getContentfulField = async (fieldId: string): Promise<Field> => {
+  // contentfulからデータ取得
+  const entries: EntryCollection<IStatisticsFieldFields> =
+    await client.getEntries({
+      content_type: 'statisticsField',
+      'fields.fieldId': fieldId,
+    })
+
+  // getContentfulField
+
+  return {
+    fieldId: entries.items[0].fields.fieldId,
+    fieldTitle: entries.items[0].fields.fieldTitle,
+  }
 }
 
 /**

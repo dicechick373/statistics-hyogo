@@ -16,10 +16,6 @@
 import { computed, defineComponent } from '@nuxtjs/composition-api'
 import { EventBus, TOGGLE_EVENT } from '@/utils/tab-event-bus'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-type Menu = {
-  menuId: string
-  menuTitle: string
-}
 
 export default defineComponent({
   setup() {
