@@ -3,23 +3,23 @@ import { reactive, toRefs } from '@nuxtjs/composition-api'
 export type GovernmentType = 'prefecture' | 'city'
 
 interface State {
-  governmentType: GovernmentType
+  currentGovernmentType: GovernmentType
 }
 
 export const useGovernmentType = () => {
   // state
   const state = reactive<State>({
-    governmentType: 'prefecture',
+    currentGovernmentType: 'prefecture',
   })
 
   // setter
   const setGovernmentType = (newGovernmentType: GovernmentType) => {
-    state.governmentType = newGovernmentType
+    state.currentGovernmentType = newGovernmentType
   }
 
   // getter
   const getGovernmentType = () => {
-    return state.governmentType
+    return state.currentGovernmentType
   }
 
   return {

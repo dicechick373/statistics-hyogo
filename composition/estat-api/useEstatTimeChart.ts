@@ -8,10 +8,10 @@ import {
 } from '@nuxtjs/composition-api'
 
 import { GlobalState, StateKey } from './useGlobalState'
-import { usePrefecture } from './usePrefecture'
-import { convertPrefCodeNumberToString } from './utils/formatResas'
+import { usePrefecture } from './resas-api/usePrefecture'
+import { convertPrefCodeNumberToString } from './resas-api/formatResas'
 import { useEstatApi } from './useEstatApi'
-import { useCity } from './useCity'
+import { useCity } from './resas-api/useCity'
 import { EstatParams, EstatResponse } from '~/types/estat-api'
 import { EstatCardConfig } from '~/types/main'
 

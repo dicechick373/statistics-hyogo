@@ -3,7 +3,7 @@ import axios from 'axios'
 import { GeometryCollection } from 'geojson'
 import { ref, useRoute } from '@nuxtjs/composition-api'
 // import { Topology } from 'topojson-specification'
-import { convertCodeToNumber } from './usePrefecture'
+import { convertCodeToNumber } from './resas-api/usePrefecture'
 import { GovType } from '~/types/main'
 
 export const useGeojson = () => {

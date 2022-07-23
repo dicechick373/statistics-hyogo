@@ -76,8 +76,11 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 import { useGeojson } from '@/composition/useGeojson'
-import { useEstatResponse } from '@/composition/useEstatResponse'
-import { convertCodeToString, usePrefecture } from '~/composition/usePrefecture'
+import { useEstatResponse } from '~/composition/estat-api/useEstatResponse'
+import {
+  convertCodeToString,
+  usePrefecture,
+} from '~/composition/resas-api/usePrefecture'
 import { CLASS, EstatRankChartData, EstatSeries, VALUE } from '~/types/estat'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import {
@@ -92,7 +95,7 @@ import {
   HighchartsRankChartSeries,
 } from '~/types/highcharts'
 import { CardConfig } from '~/types/main'
-import { useCity } from '~/composition/useCity'
+import { useCity } from '~/composition/resas-api/useCity'
 
 // MapChart
 const MapChart = () => {

@@ -1,5 +1,5 @@
 import { reactive, toRefs } from '@nuxtjs/composition-api'
-import { getResasCityList } from './utils/formatResas'
+import { getResasCityList } from './formatResas'
 import { City } from '~/types/resas'
 
 interface State {

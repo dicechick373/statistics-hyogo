@@ -4,11 +4,6 @@ import {
   InjectionKey,
   // useRoute,
 } from '@nuxtjs/composition-api'
-import {
-  // convertCodeToGovType,
-  getResasCityList,
-  getResasPrefList,
-} from '@/composition/utils/formatResas'
 // import { Field } from 'contentful'
 import { Dictionary } from 'router'
 import {
@@ -17,6 +12,11 @@ import {
   getContentfulMenuList,
   Menu,
 } from './utils/contentful'
+import {
+  // convertCodeToGovType,
+  getResasCityList,
+  getResasPrefList,
+} from '~/composition/resas-api/formatResas'
 import { Pref, City } from '~/types/resas'
 
 interface Field {
@@ -63,7 +63,7 @@ export const useGlobalState = () => {
   // }
 
   // 選択中の統計分野（Field）のセット
-  // const setCurrentField = (newField: Menu): void => {
+  // const setCurrentFieldAsync = (newField: Menu): void => {
   //   state.currentField = newField
   // }
 

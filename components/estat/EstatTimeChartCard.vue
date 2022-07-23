@@ -75,7 +75,7 @@ import {
 } from '~/composition/utils/formatEstatResponse'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { HighchartsTimeChartSeries } from '~/types/highcharts'
-import { useEstatResponse } from '~/composition/useEstatResponse'
+import { useEstatResponse } from '~/composition/estat-api/useEstatResponse'
 import { EstatCardConfig } from '~/types/main'
 
 export default defineComponent({

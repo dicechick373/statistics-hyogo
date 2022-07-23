@@ -25,7 +25,7 @@
 import { defineComponent, inject, ref, watch } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
-import { convertPrefCodeNumberToString } from '@/composition/utils/formatResas'
+import { convertPrefCodeNumberToString } from '~/composition/resas-api/formatResas'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 import { Pref } from '~/types/resas'
 import { useChangeRouter } from '~/composition/useChangeRouter'

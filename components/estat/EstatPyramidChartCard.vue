@@ -74,7 +74,7 @@ import {
   formatEstatTimeList,
 } from '~/composition/utils/formatEstatResponse'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-import { useEstatResponse } from '~/composition/useEstatResponse'
+import { useEstatResponse } from '~/composition/estat-api/useEstatResponse'
 
 export default defineComponent({
   props: {

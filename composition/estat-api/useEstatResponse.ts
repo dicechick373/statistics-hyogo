@@ -7,11 +7,11 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 
-import { GlobalState, StateKey } from './useGlobalState'
-import { usePrefecture } from './usePrefecture'
-import { convertPrefCodeNumberToString } from './utils/formatResas'
-import { useEstatApi } from './useEstatApi'
-import { useCity } from './useCity'
+import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { usePrefecture } from '~/composition/resas-api/usePrefecture'
+import { convertPrefCodeNumberToString } from '~/composition/resas-api/formatResas'
+import { useEstatApi } from '~/composition/estat-api/useEstatApi'
+import { useCity } from '~/composition/resas-api/useCity'
 import { EstatParams, EstatResponse } from '~/types/estat-api'
 import { CardConfig } from '~/types/main'
 

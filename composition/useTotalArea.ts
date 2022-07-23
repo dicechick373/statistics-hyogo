@@ -1,4 +1,4 @@
-import { useEstatApi } from '@/composition//useEstatApi'
+import { useEstatApi } from '~/composition/estat-api/useEstatApi'
 import { convertPrefCodeToString } from '~/composition/utils/formatEstatResponse'
 import { EstatParams, EstatResponse, VALUE } from '~/types/estat-api'
 import { City, Pref } from '~/types/resas'

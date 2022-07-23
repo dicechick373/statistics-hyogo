@@ -26,33 +26,14 @@ export const getContentfulFieldListAsync = async (): Promise<
  * @returns - IStatisticsFieldFields[]
  */
 export const generateFieldListAsync = async () => {
-  // contentfulからデータ取得
-  const entries: EntryCollection<IStatisticsFieldFields> =
-    await client.getEntries({
-      content_type: 'statisticsField',
-    })
-
-  // const contentfulFieldList = await getContentfulFieldListAsync()
-
-  // contentfulFieldList.menuCity = contentfulFieldList.menuCity
-
-  return entries.items.map((d) => {
-    // 統計項目の初期値を取得
-    const getInitMenu = (g: keyof IStatisticsFieldFields): Menu[] => {
-      return d.fields[g].map((d: Entry<IStatisticsMenuFields>) => {
-        return {
-          menuId: d.fields.menuId,
-          menuTitle: d.fields.menuTitle,
-        }
-      })
-    }
-
-    // 都道府県、市区町村それぞれの初期値を返す
+  const fieldList = await getContentfulFieldListAsync()
+  return fieldList.map((d) => {
     return {
-      fieldId: d.fields.fieldId,
-      fieldTitle: d.fields.fieldTitle,
-      prefecture: getInitMenu('menuPrefecture')[0],
-      city: getInitMenu('menuPrefecture')[0],
+      fieldId: d.fieldId,
+      fieldTitle: d.fieldTitle,
+      iconPath: d.iconPath,
+      initialMenuIdPref: d.menuPrefecture[0].fields.menuId,
+      initialMenuIdCity: d.menuCity[0].fields.menuId,
     }
   })
 }
@@ -85,7 +66,7 @@ export const getContentfulField = async (fieldId: string): Promise<Field> => {
  * @returns - Menu[]
  */
 export const getContentfulMenuList = async (
-  governmentType: string,
+  governmentType: string = 'prefecture',
   fieldId: string
 ): Promise<Menu[]> => {
   const entries: EntryCollection<IStatisticsFieldFields> =
