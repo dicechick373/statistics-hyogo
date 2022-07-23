@@ -9,17 +9,12 @@
 <script lang="ts">
 import {
   defineComponent,
-  // computed,
   useRoute,
   inject,
   useFetch,
-  // watch,
-  // reactive,
-  // computed,
-  // ref,
 } from '@nuxtjs/composition-api'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
-// import { useField } from '~/composition/useField'
+import { useGovernmentType } from '~/composition/route-param/useGovernmentType'
 
 /** 役割
  * ①Routerのparamsを取得
@@ -32,27 +27,14 @@ export default defineComponent({
     // paramsの取得
     const route = useRoute()
     const params = route.value.params
-    // console.log(params)
-    // const { setFieldList } = useField()
 
-    // const { fieldId } = route.value.params
-    // const cbFunction = async () => {
-    //   // console.log(test)
-    //   // test.governmentType = 'prefecture'
-    //   console.log('ここ')
-    //   await setField(params.fieldId)
-    // }
-    // watch(() => cbFunction())
-    // watch(() => fieldId, cbFunction)
+    const { setCurrentGovernmentType } = useGovernmentType()
+    setCurrentGovernmentType(params.governmentType)
 
     // GlobalStateの設定
     const { setState } = inject(StateKey) as GlobalState
     const { fetch } = useFetch(async () => {
       await setState(params)
-
-      // 統計分野リスト
-      // await setFieldList()
-      // setField(params.fieldId)
     })
     fetch()
 

@@ -33,7 +33,7 @@
           >
             {{ '都道府県を選択' }}
           </label>
-          <language-selector />
+          <select-prefecture />
         </div>
 
         <!-- 統計分野のリスト -->

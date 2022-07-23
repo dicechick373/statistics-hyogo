@@ -3,7 +3,6 @@ import prefListMaster from '~/assets/json/preflist.json'
 import { Pref } from '~/types/resas'
 
 interface State {
-  isPref: boolean
   currentPref: Pref
   prefList: Pref[]
 }
@@ -11,10 +10,24 @@ interface State {
 export const usePrefecture = () => {
   // state
   const state = reactive<State>({
-    isPref: true,
     currentPref: { prefCode: 28, prefName: '兵庫県' },
     prefList: prefListMaster.result,
   })
+
+  const setCurrentPref = (newPref: Pref): void => {
+    state.currentPref = newPref
+  }
+
+  // getter
+  const getPrefList = (): Pref[] => {
+    return state.prefList
+  }
+  const getCurrentPref = (): Pref => {
+    return state.currentPref
+  }
+  const getCurrentPrefCodeString = (): string => {
+    return convertCodeToString(state.currentPref.prefCode)
+  }
 
   // codeに合致する都道府県を返す
   const getPrefecture = (code: string): Pref => {
@@ -25,14 +38,13 @@ export const usePrefecture = () => {
     )
   }
 
-  const changeIsPref = (newBoolean: boolean) => {
-    state.isPref = newBoolean
-  }
-
   return {
     ...toRefs(state),
+    setCurrentPref,
+    getPrefList,
+    getCurrentPref,
     getPrefecture,
-    changeIsPref,
+    getCurrentPrefCodeString,
   }
 }
 

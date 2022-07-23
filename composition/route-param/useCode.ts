@@ -1,4 +1,5 @@
 import { reactive, toRefs } from '@nuxtjs/composition-api'
+// import { useGovernmentType } from './useGovernmentType'
 
 interface State {
   currentCode: string
@@ -9,6 +10,9 @@ export const useCode = () => {
   const state = reactive<State>({
     currentCode: '28000',
   })
+
+  // const { getCurrentGovernmentType } = useGovernmentType()
+  // console.log(getCurrentGovernmentType)
 
   // setter
   const setCode = (newCode: string) => {

@@ -4,7 +4,7 @@
       <v-row>
         <!-- 都道府県／市区町村 -->
         <v-col cols="12" md="3">
-          <gov-type-tab />
+          <tab-government-type />
         </v-col>
 
         <!-- 統計項目セレクト -->
@@ -14,7 +14,7 @@
 
         <!-- 市区町村セレクト -->
         <v-col v-if="isCity" cols="12" md="3">
-          <city-selector />
+          <select-city />
         </v-col>
 
         <v-col cols="12" md="3">
@@ -33,6 +33,7 @@ import {
   onBeforeMount,
   ref,
 } from '@nuxtjs/composition-api'
+// import TabGovernmentType from './TabGovernmentType.vue'
 import { GlobalState, StateKey } from '~/composition/useGlobalState'
 // import { mdiCloudUpload  } from '@mdi/js'
 
@@ -40,6 +41,7 @@ import { GlobalState, StateKey } from '~/composition/useGlobalState'
  * フォームの取得
  */
 export default defineComponent({
+  // components: { TabGovernmentType },
   head: {},
   setup() {
     // 市区町村の判定（true:市区町村、false：都道府県）

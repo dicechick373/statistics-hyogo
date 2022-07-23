@@ -1,13 +1,13 @@
 <template>
-  <div class="LanguageSelector">
-    <div class="LanguageSelector-Background">
+  <div class="SelectPrefecture">
+    <div class="SelectPrefecture-Background">
       <earth-icon class="EarthIcon" aria-hidden="true" />
       <select-menu-icon class="SelectMenuIcon" aria-hidden="true" />
     </div>
     <select
-      id="LanguageSelector"
+      id="SelectPrefecture"
       v-model="selectedPref"
-      class="LanguageSelector-Menu"
+      class="SelectPrefecture-Menu"
     >
       <option
         v-for="item in prefList"
@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch } from '@nuxtjs/composition-api'
+import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { convertPrefCodeNumberToString } from '~/composition/resas-api/formatResas'
-import { GlobalState, StateKey } from '~/composition/useGlobalState'
-import { Pref } from '~/types/resas'
 import { useChangeRouter } from '~/composition/useChangeRouter'
+import { usePrefecture } from '~/composition/resas-api/usePrefecture'
+import { Pref } from '~/types/resas'
 
 type LocalData = {
   currentLocaleCode: string
@@ -40,16 +40,15 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // globalState
-    const { getCurrentPref, getPrefList } = inject(StateKey) as GlobalState
-
-    // 市区町村リストの設定
-    const prefList = getPrefList()
+    // 都道府県リストの設定
+    const { getPrefList, getCurrentPref, setCurrentPref } = usePrefecture()
+    const prefList = ref<Pref[]>(getPrefList())
     const selectedPref = ref<Pref>(getCurrentPref())
 
-    watch(selectedPref, () => changePref())
+    watch(selectedPref, () => change())
     const { changeRoute } = useChangeRouter()
-    const changePref = () => {
+    const change = () => {
+      setCurrentPref(selectedPref.value)
       const code = convertPrefCodeNumberToString(selectedPref.value.prefCode)
 
       changeRoute(code)
@@ -64,11 +63,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.LanguageSelector {
+.SelectPrefecture {
   position: relative;
 }
 
-.LanguageSelector-Background {
+.SelectPrefecture-Background {
   display: flex;
   align-items: center;
   padding: 0 6px;
@@ -96,7 +95,7 @@ export default defineComponent({
   // }
 }
 
-.LanguageSelector-Menu {
+.SelectPrefecture-Menu {
   // select 要素のリセット
   -webkit-appearance: none;
   -moz-appearance: none;

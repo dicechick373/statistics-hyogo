@@ -1,23 +1,19 @@
 <template>
-  <div class="SideNavigation-Language">
+  <div class="SelectCity">
     <label
-      ref="LanguageLabel"
-      class="SideNavigation-LanguageLabel"
-      for="LanguageSelector"
+      ref="CityLabel"
+      class="SelectCityLabel"
+      for="SelectCity"
       tabindex="-1"
     >
       {{ '市区町村を選択' }}
     </label>
-    <div class="LanguageSelector">
-      <div class="LanguageSelector-Background">
+    <div class="SelectCity">
+      <div class="SelectCity-Background">
         <earth-icon class="EarthIcon" aria-hidden="true" />
         <select-menu-icon class="SelectMenuIcon" aria-hidden="true" />
       </div>
-      <select
-        id="LanguageSelector"
-        v-model="selectedCity"
-        class="LanguageSelector-Menu"
-      >
+      <select id="SelectCity" v-model="selectedCity" class="SelectCity-Menu">
         <option
           v-for="item in cityList"
           :key="item.cityCode"
@@ -32,23 +28,12 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  inject,
-  onBeforeMount,
-  ref,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
 import EarthIcon from '@/static/earth.svg'
 import SelectMenuIcon from '@/static/selectmenu.svg'
 import { useChangeRouter } from '~/composition/useChangeRouter'
-import { GlobalState, StateKey } from '~/composition/useGlobalState'
+import { useCity } from '~/composition/resas-api/useCity'
 import { City } from '~/types/resas'
-
-type Menu = {
-  menuId: string
-  menuTitle: string
-}
 
 export default defineComponent({
   components: {
@@ -56,23 +41,16 @@ export default defineComponent({
     SelectMenuIcon,
   },
   setup() {
-    // セレクトメニューのアイテム
-    const cityList = ref<City[]>()
-    const selectedCity = ref<City>()
-
-    // GlobalStateからアイテムを取得
-    const { getCurrentCity, getCurrentCityList } = inject(
-      StateKey
-    ) as GlobalState
-    onBeforeMount(() => {
-      cityList.value = getCurrentCityList('join')
-      selectedCity.value = getCurrentCity()
-    })
+    // 市区町村リストの設定
+    const { getCityList, getCurrentCity, setCurrentCity } = useCity()
+    const cityList = ref<City[]>(getCityList())
+    const selectedCity = ref<City>(getCurrentCity())
 
     // 選択時の処理
     watch(selectedCity, () => change())
     const { changeRouterCity } = useChangeRouter()
     const change = () => {
+      setCurrentCity(selectedCity.value)
       changeRouterCity.value(selectedCity)
     }
 
@@ -85,11 +63,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.LanguageSelector {
+.SelectCity {
   position: relative;
 }
 
-.LanguageSelector-Background {
+.SelectCity-Background {
   display: flex;
   align-items: center;
   padding: 0 6px;
@@ -105,7 +83,7 @@ export default defineComponent({
   }
 }
 
-.LanguageSelector-Menu {
+.SelectCity-Menu {
   // select 要素のリセット
   -webkit-appearance: none;
   -moz-appearance: none;

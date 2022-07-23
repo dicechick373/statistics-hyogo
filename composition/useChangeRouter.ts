@@ -1,47 +1,41 @@
 import {
   computed,
-  inject,
+  // inject,
+  reactive,
   // reactive,
   Ref,
   useAsync,
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
-import { generateFieldListAsync, Menu } from '@/composition/utils/contentful'
-import {
-  convertCodeToGovType,
-  convertPrefCodeNumberToString,
-} from '@/composition/utils/formatResas'
-import { GlobalState, StateKey } from './useGlobalState'
+import { usePrefecture } from './resas-api/usePrefecture'
+import { useCity } from './resas-api/useCity'
 import { City } from '~/types/resas'
+import { useStatisticsField } from '~/composition/route-param/useStatisticsField'
+import {
+  GovernmentType,
+  useGovernmentType,
+} from '~/composition/route-param/useGovernmentType'
+
+type State = {
+  governmentType: string
+  code: string
+  fieldId: string
+  menuId: string
+}
 
 export const useChangeRouter = () => {
-  // パスパラメータの取得
+  // routeパラメータの取得
   const route = useRoute()
-  const params = route.value.params
-  const { governmentType, code, fieldId, menuId } = params
+  const { governmentType, code, fieldId, menuId } = route.value.params
 
-  // const state = reactive<any>({
-  //   governmentType,
-  //   code,
-  //   fieldId,
-  //   menuId,
-  // })
-
-  // GlobalState
-  const {
-    currentGovType,
-    currentCode,
-    currentFieldId,
-    currentMenuId,
-    currentPref,
-    currentCity,
-    // setCurrentMenu,
-  } = inject(StateKey) as GlobalState
-
-  // 都道府県コード、市区町村コード
-  const prefCode = convertPrefCodeNumberToString(currentPref.value.prefCode)
-  const cityCode = currentCity.value.cityCode
+  // state
+  const state = reactive<any>({
+    governmentType,
+    code,
+    fieldId,
+    menuId,
+  })
 
   const router = useRouter()
 
@@ -71,39 +65,39 @@ export const useChangeRouter = () => {
   })
 
   const changeRoute = (code: string): void => {
-    const governmentType = convertCodeToGovType(code)
     router.push(
-      `/${governmentType}/${code}/${currentFieldId.value}/${currentMenuId.value}`
+      `/${state.governmentType}/${code}/${state.fieldId}/${state.menuId}`
     )
   }
 
-  // 統計項目（Menu）の初期値設定
-  const initMenuList = useAsync(() => generateFieldListAsync())
-  // console.log(generateFieldListAsync())
-  const initMenu = (fieldId: string) => {
-    const menu = initMenuList.value.find((f) => f.fieldId === fieldId)
-    if (currentGovType.value === 'prefecture') {
-      return menu.prefecture
-    } else {
-      return menu.city
-    }
-  }
+  const { getFieldListAsync } = useStatisticsField()
+  const fieldList = useAsync(() => getFieldListAsync())
+  const { getCurrentGovernmentType } = useGovernmentType()
 
-  // SideNavigationのリンク設定
-  const getSideNaviLink = computed(() => {
+  // SideNavigationの初期値設定
+  const generateSideNavigationLink = computed(() => {
     return function (fieldId: string) {
-      const path = `/${currentGovType.value}/${currentCode.value}/${fieldId}`
-      const menuId = initMenu(fieldId).menuId
-      return `${path}/${menuId}`
+      const matchField = fieldList.value.find((f) => f.fieldId === fieldId)
+      const initMenuId =
+        getCurrentGovernmentType() === 'prefecture'
+          ? matchField.initialMenuIdPref
+          : matchField.initialMenuIdCity
+      return `/${getCurrentGovernmentType()}/28000/${fieldId}/${initMenuId}`
     }
   })
 
+  // const { currentCode } = useCode()
+  const { getCurrentPrefCodeString } = usePrefecture()
+  const { getCurrentCityCode } = useCity()
   // 都道府県・市区町村タブのリンク設定
-  const getGovTabLink = computed(() => {
-    return function (governmentType: string) {
-      const code = governmentType === 'city' ? cityCode : prefCode
-      const menuId = initMenu(fieldId, governmentType).menuId
-      return `/${governmentType}/${code}/${fieldId}/${menuId}`
+  const generateTabGovernmentTypeLink = computed(() => {
+    return function (governmentType: GovernmentType) {
+      const code =
+        governmentType === 'prefecture'
+          ? getCurrentPrefCodeString()
+          : getCurrentCityCode()
+
+      return `/${governmentType}/${code}/${state.fieldId}/${state.menuId}`
     }
   })
 
@@ -111,7 +105,7 @@ export const useChangeRouter = () => {
     changeRouterCity,
     changeRoute,
     changeRouterMenu,
-    getSideNaviLink,
-    getGovTabLink,
+    generateSideNavigationLink,
+    generateTabGovernmentTypeLink,
   }
 }

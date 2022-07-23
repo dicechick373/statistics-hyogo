@@ -18,13 +18,13 @@ export const useStatisticsMenu = () => {
     currentMenu: null,
   })
 
-  const { getGovernmentType } = useGovernmentType()
+  const { getCurrentGovernmentType } = useGovernmentType()
   const { getCurrentFieldAsync } = useStatisticsField()
 
   // setter
   const setMenuList = async () => {
     const contentfulMenuList = await getContentfulMenuList(
-      getGovernmentType(),
+      getCurrentGovernmentType(),
       getCurrentFieldAsync().fieldId
     )
     state.menuList = contentfulMenuList
